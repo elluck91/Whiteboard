@@ -1,10 +1,9 @@
 package CS151;
 
+// Application launcher
 public class Whiteboard {
-
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		WhiteboardGUI wb = new WhiteboardGUI(new WhiteboardPresenter());
 	}
 
 }
