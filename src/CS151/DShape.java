@@ -1,15 +1,17 @@
 package CS151;
 
-import javafx.scene.paint.Color;
-
 public class DShape {
 
 	private DShapeModel model;
 	
 	DShape() {
-		model = new DShapeModel(0, 0, 0, 0, Color.GRAY);
+		model = new DShapeModel();
 	}
 	
+	public DShapeModel getModel() {
+		return model;
+	}
+
 	public void draw() {
 		// TODO Auto-generated method stub
 		
