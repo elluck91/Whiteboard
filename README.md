@@ -1,5 +1,5 @@
 
-
+ss
 test
 # Whiteboard
 Collaborative painting tool
@@ -15,4 +15,4 @@ Test commit
 =======
 Lukasz made a change.
 >>>>>>> a860ee30e61b156343c4fd80b976905da8db9900
-sean made another change
+
