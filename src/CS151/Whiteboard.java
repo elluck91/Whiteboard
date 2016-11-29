@@ -60,7 +60,7 @@ public class Whiteboard extends Application {
 		public void handle(ActionEvent event) {
 		    DRect rect = new DRect();
 		    rect.randomize(400);
-		    canvas.addShapes(rect);
+		    canvas.addShapes(rect);                    
 		}
 	    });
 
