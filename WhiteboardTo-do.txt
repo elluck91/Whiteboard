@@ -1,0 +1,17 @@
+﻿1. Add it to repo
+2. Does the new shape use set color or uses default gray color?
+3. Set up the listener for the shapes
+4. Fix the getShapes() method to get the last
+5. Resizing 
+
+
+When resolving the merge conflict:
+
+
+1. First “git pull”
+2. The file with the merge conflict has a section starting with “<<<<<<< HEAD” and the first line below it contains what my version has. Then after the “========” line, there is a content from the remote repo.
+3. Edit the section.
+4. “Git add .”
+5. “Git commit -m “Message”
+6. “Git push origin master”
+Conflict should be resolved.
