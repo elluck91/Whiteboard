@@ -9,3 +9,4 @@ Sean Schlaefli
 Lukasz Juraszek
 >>>>>>> f3ff47ba4caa0576e7bc281ea50402f93a6f359e
 Test commit
+Lukasz made a change.
