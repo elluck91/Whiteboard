@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 Making some of Mikes changes
+=======
+
+>>>>>>> origin/master
 test
 # Whiteboard
 Collaborative painting tool
