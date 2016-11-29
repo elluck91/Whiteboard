@@ -15,4 +15,8 @@ Test commit
 =======
 Lukasz made a change.
 >>>>>>> a860ee30e61b156343c4fd80b976905da8db9900
+<<<<<<< HEAD
 
+=======
+No, Lukasz made the last change.
+>>>>>>> 3ca4f78d43c37fb800be9f1ba22e903f85178ab4
