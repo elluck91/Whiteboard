@@ -1,5 +1,5 @@
 
-Making some changes
+Making some of Mikes changes
 test
 # Whiteboard
 Collaborative painting tool
