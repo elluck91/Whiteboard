@@ -1,15 +1,21 @@
 package CS151;
 
 import javafx.scene.shape.Shape;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Ellipse;
 
 public class DOval extends DShape{
 
-    public void draw(){
+    private Ellipse oval;
+    
+    public DOval() {
+	oval = new Ellipse();
+    }
+    
+    public void draw() {
 
     }
 
     public Shape getShape() {
-	return new Rectangle();
+	return new Ellipse();
     }
 }
