@@ -61,6 +61,10 @@ public class Whiteboard extends Application {
 		    DRect rect = new DRect();
 		    rect.randomize(400);
 		    canvas.addShapes(rect);
+		    // change this line to update tv for the newly added
+		    // shape instead of updating the entire tableview
+		    tv.setItems(canvas.getShapeModels());
+				    
 		}
 	    });
 

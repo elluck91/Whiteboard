@@ -45,7 +45,7 @@ import javafx.scene.layout.Pane;
 		}
 
 		public void addShapes(DShape shape) {
-			this.shapes.add(shape);
+			shapes.add(shape);
 			paintComponent();
 			this.getChildren().add(shape.getShape());			
 		}
