@@ -1,5 +1,15 @@
 package CS151;
 
-public class DLine extends DShape {
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.Rectangle;
 
+public class DLine extends DShape {
+    
+    public void draw(){
+
+    }
+
+    public Shape getShape() {
+	return new Rectangle();
+    }
 }

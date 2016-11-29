@@ -1,20 +1,21 @@
 package CS151;
 
-public class DShape {
+import javafx.scene.shape.Shape;
 
-	private DShapeModel model;
-	
-	DShape() {
-		model = new DShapeModel();
-	}
-	
-	public DShapeModel getModel() {
-		return model;
-	}
+public abstract class DShape {
 
-	public void draw() {
-		// TODO Auto-generated method stub
-		
-	}
+    protected DShapeModel model;
+    
+    DShape() {
+	model = new DShapeModel();
+    }
 	
+    public DShapeModel getModel() {
+	return model;
+    }
+
+    public abstract void draw();
+    public abstract Shape getShape();
+
+
 }
