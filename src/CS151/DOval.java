@@ -26,6 +26,11 @@ public class DOval extends DShape{
 	oval.setRadiusY(yRadius);	    
     }
 
+    public void randomize(int max) {
+	model.randomize(max);
+	( (DOvalModel) model).defineEllipse();
+    }
+    
     public Shape getShape() {
 	return oval;
     }

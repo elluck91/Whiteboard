@@ -61,11 +61,23 @@ public class DShapeModel {
 	this.color = color;
     }
 
+    // generate a random model
     public void randomize(int max) {
 	Random rand = new Random();
-	setX(rand.nextInt(max)+1);
-	setY(rand.nextInt(max)+1);
-	setWidth(rand.nextInt(max)+1);
-	setHeight(rand.nextInt(max)+1);
+	int maxWidth = 0;
+	int maxHeight = 0;
+	int newX = 0;
+	int newY = 0;
+	while(maxWidth == 0 || maxHeight == 0){
+	    newX = rand.nextInt(max)+1;
+	    newY = rand.nextInt(max)+1;
+	    maxWidth = max - newX;
+	    maxHeight = max - newY;
+	}
+	setX(newX);
+	setY(newY);
+	setWidth(rand.nextInt(maxWidth)+1);
+	setHeight(rand.nextInt(maxHeight)+1);
     }
+    
 }

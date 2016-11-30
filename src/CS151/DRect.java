@@ -22,6 +22,7 @@ public class DRect extends DShape {
     public void randomize(int max) {
 	model.randomize(max);
     }
+    
     @Override
     public Rectangle getShape() {
 	return rectangle;
