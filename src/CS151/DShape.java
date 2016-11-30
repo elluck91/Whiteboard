@@ -14,8 +14,13 @@ public abstract class DShape {
 	return model;
     }
 
+    public void randomize(int max) {
+	model.randomize(max);
+    }
+    
     public abstract void draw();
     public abstract Shape getShape();
+    
 
 
 }

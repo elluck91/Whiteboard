@@ -7,7 +7,7 @@ public class DRect extends DShape {
     private Rectangle rectangle;
     
     public DRect() {
-	super();
+	model = new DRectModel();
 	rectangle = new Rectangle();
     }
 

@@ -63,9 +63,9 @@ public class DShapeModel {
 
     public void randomize(int max) {
 	Random rand = new Random();
-	setX(rand.nextInt(400)+1);
-	setY(rand.nextInt(400)+1);
-	setWidth(rand.nextInt(400)+1);
-	setHeight(rand.nextInt(400)+1);
+	setX(rand.nextInt(max)+1);
+	setY(rand.nextInt(max)+1);
+	setWidth(rand.nextInt(max)+1);
+	setHeight(rand.nextInt(max)+1);
     }
 }

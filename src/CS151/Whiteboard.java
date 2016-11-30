@@ -70,7 +70,7 @@ public class Whiteboard extends Application {
 	oval.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    DOval oval = new DOval();
-		    //oval.randomize(400);
+		    oval.randomize(400);
 		    canvas.addShapes(oval);
 		    // change function call below
 		    tv.setItems(canvas.getShapeModels());
