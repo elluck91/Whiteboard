@@ -93,7 +93,11 @@ public class Whiteboard extends Application {
 
 	line.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-
+		    DLine line = new DLine();
+		    line.randomize(400);
+		    line.setColor(color);
+		    canvas.addShape(line);
+		    tv.setItems(canvas.getShapeModels());
 		}
 	    });
 
