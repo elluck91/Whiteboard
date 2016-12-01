@@ -23,7 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import java.awt.Point;
 
 public class Whiteboard extends Application {
 
@@ -57,6 +57,16 @@ public class Whiteboard extends Application {
 	GridPane gp = new GridPane();
 	VBox leftColumn = getLeftColumn();
 
+	// gather the location in the canvas where a user clicked
+	// use this information to select the correct shape in the
+	// view 
+	canvas.setOnMouseClicked(e -> {
+		Point location = new Point((int)e.getX(), (int)e.getY());
+		// output for testing
+		System.out.println("x: " + location.getX() + " y: " + location.getY());
+		canvas.makeSelection(location);
+	    });
+	
 	rect.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    DRect rect = new DRect();
@@ -96,7 +106,9 @@ public class Whiteboard extends Application {
 	ColorPickerWindow colorPick = new ColorPickerWindow();
 	colorPicker.setOnAction(new EventHandler() {
 		public void handle(Event t) {
-		    //		    ColorPickerWindow colorPick = new ColorPickerWindow();
+		    // why create a new object each click? previous color is no longer saved
+		    // when doing this?
+		    //ColorPickerWindow colorPick = new ColorPickerWindow();		    
 		    color = colorPick.display();
 		    System.out.println(color.toString());
 		}
