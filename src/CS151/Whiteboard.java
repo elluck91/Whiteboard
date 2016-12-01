@@ -50,6 +50,7 @@ public class Whiteboard extends Application {
 	presenter = new WhiteboardPresenter();
 	presenter.attachView(this);
 	canvas = new Canvas();
+	color = Color.GRAY; // default
 	
 	VBox main = new VBox();
 	VBox menu = getMenu();
@@ -60,6 +61,8 @@ public class Whiteboard extends Application {
 		public void handle(ActionEvent event) {
 		    DRect rect = new DRect();
 		    rect.randomize(400);
+		    rect.setColor(color);
+		    System.out.println(color.toString());
 		    canvas.addShape(rect);
 		    // change this line to update tv for the newly added
 		    // shape instead of updating the entire tableview
@@ -71,6 +74,7 @@ public class Whiteboard extends Application {
 		public void handle(ActionEvent event) {
 		    DOval oval = new DOval();
 		    oval.randomize(400);
+		    oval.setColor(color);
 		    canvas.addShape(oval);
 		    // change function call below
 		    tv.setItems(canvas.getShapeModels());
@@ -89,9 +93,10 @@ public class Whiteboard extends Application {
 		}
 	    });
 
+	ColorPickerWindow colorPick = new ColorPickerWindow();
 	colorPicker.setOnAction(new EventHandler() {
 		public void handle(Event t) {
-		    ColorPickerWindow colorPick = new ColorPickerWindow();
+		    //		    ColorPickerWindow colorPick = new ColorPickerWindow();
 		    color = colorPick.display();
 		    System.out.println(color.toString());
 		}

@@ -1,6 +1,7 @@
 package CS151;
 
 import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 public class DRect extends DShape {
 
@@ -12,6 +13,7 @@ public class DRect extends DShape {
     }
 
     public void draw(){
+	//	System.out.println(model.getColor().toString());
 	rectangle.setFill(model.getColor());
 	rectangle.setX((double) model.getX());
 	rectangle.setY((double) model.getY());

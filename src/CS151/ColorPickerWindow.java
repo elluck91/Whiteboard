@@ -13,16 +13,14 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class ColorPickerWindow {
-	static Color finalColor = Color.GRAY;
-	public static Color display() {
-		
-		
-		Stage stage = new Stage();
+
+    static Color finalColor = Color.GRAY;
+
+    public static Color display() {		
+	Stage stage = new Stage();
         stage.setTitle("Color Picker");
         final ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setValue(Color.RED);
-        
- 
+        colorPicker.setValue(Color.RED);         
         final Circle circle = new Circle(50);
         circle.setFill(colorPicker.getValue());
  
@@ -49,6 +47,7 @@ public class ColorPickerWindow {
         Scene scene = new Scene(root, 200, 200); 
         stage.setScene(scene);
         stage.showAndWait();
+	System.out.println(finalColor.toString());
         return finalColor;
-	}
+    }
 }
