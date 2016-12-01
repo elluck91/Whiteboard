@@ -65,8 +65,7 @@ public class DShapeModel {
     /**
      * generate a random rectangle to serve as the bounds
      * for a DShape
-     */
-    
+     */    
     public void randomize(int max) { 
 	Random rand = new Random();
 	int maxWidth = 0;

@@ -60,7 +60,7 @@ public class Whiteboard extends Application {
 		public void handle(ActionEvent event) {
 		    DRect rect = new DRect();
 		    rect.randomize(400);
-		    canvas.addShapes(rect);
+		    canvas.addShape(rect);
 		    // change this line to update tv for the newly added
 		    // shape instead of updating the entire tableview
 		    tv.setItems(canvas.getShapeModels());				    
@@ -71,7 +71,7 @@ public class Whiteboard extends Application {
 		public void handle(ActionEvent event) {
 		    DOval oval = new DOval();
 		    oval.randomize(400);
-		    canvas.addShapes(oval);
+		    canvas.addShape(oval);
 		    // change function call below
 		    tv.setItems(canvas.getShapeModels());
 		}
@@ -152,7 +152,7 @@ public class Whiteboard extends Application {
 		    return;
 	    });
 	
-	stage.setScene(new Scene(main, 900, 420));
+	stage.setScene(new Scene(main, 900, 450));
 	stage.setTitle("Whiteboard - Collaborative");
 	stage.show();
 	
