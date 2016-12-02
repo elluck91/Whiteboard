@@ -34,8 +34,8 @@ public class DLine extends DShape {
     public void randomize(int max) {
 	model.randomize(max);
 	Random rand = new Random();
-	int startY = rand.nextInt(model.getHeight());
-	int endY = rand.nextInt(model.getHeight());
+	int startY = rand.nextInt(model.getHeight()) + model.getY();
+	int endY = rand.nextInt(model.getHeight()) + model.getY();
 	Point start = new Point(model.getX(), startY);
 	Point end = new Point(model.getX() + model.getWidth(), endY);
 	( (DLineModel) model).setStart(start);

@@ -10,7 +10,7 @@ public class DOvalModel extends DShapeModel {
      * @return double
      */
     public double getXCenter() {
-	return (double)( ( getX() + getWidth() ) / 2 );
+	return (double)( ( getX() + (getX() + getWidth()) ) / 2 );
     }
 
     
@@ -18,7 +18,7 @@ public class DOvalModel extends DShapeModel {
      * Calculate and return the y-coordinate of the center.
      */
     public double getYCenter() {
-	return (double)( ( getY() + getHeight() ) / 2);
+	return (double)( ( getY() + (getY() + getHeight()) ) / 2);
     }
 
 
