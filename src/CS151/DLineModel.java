@@ -7,13 +7,7 @@ public class DLineModel extends DShapeModel {
 
     private Point start;
     private Point end;
-
     
-    public void randomize(int max) {
-	Random rand = new Random();
-	start = new Point(rand.nextInt(max)+1, rand.nextInt(max)+1);
-	end = new Point(rand.nextInt(max)+1, rand.nextInt(max)+1);	
-    }
     
     public Point getStart() {
 	return start;
@@ -21,5 +15,13 @@ public class DLineModel extends DShapeModel {
 
     public Point getEnd() {
 	return end;
+    }
+
+    public void setStart(Point start) {
+	this.start = new Point(start);
+    }
+
+    public void setEnd(Point end) {
+	this.end = new Point(end);
     }
 }

@@ -2,6 +2,7 @@ package CS151;
 
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
+import java.awt.Rectangle;
 
 public abstract class DShape {
 
@@ -15,6 +16,10 @@ public abstract class DShape {
 	return model;
     }
 
+    public Rectangle getBounds() {
+	return model.getBounds();
+    }
+    
     public void randomize(int max) {
 	model.randomize(max);
     }
@@ -22,10 +27,17 @@ public abstract class DShape {
     public void setColor(Color c) {
 	model.setColor(c);
     }
+
+    public void drawKnobs() {
+
+    }
+    
+    public void removeKnobs() {
+
+    }
     
     public abstract void draw();
     public abstract Shape getShape();
     
-
 
 }

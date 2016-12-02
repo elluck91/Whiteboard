@@ -26,8 +26,6 @@ public class WhiteboardPresenter
 {
 
     Whiteboard gui;
-    Canvas canvas;
-    javafx.scene.paint.Color color;
 
     public void attachView(Whiteboard gui)
     {
@@ -36,8 +34,16 @@ public class WhiteboardPresenter
 
     WhiteboardPresenter()
     {
-        canvas = new Canvas();
-        color = javafx.scene.paint.Color.GRAY;
+	// nothing to instantiate?
     }
 
+
+    /**
+     * Add a new DShape to the view
+     */
+    public void addDShape(DShape shape) {
+	shape.randomize(400);	
+	gui.updateView(shape);
+    }
+    
 }

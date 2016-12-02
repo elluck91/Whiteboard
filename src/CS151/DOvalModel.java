@@ -4,38 +4,37 @@ import java.util.Random;
 
 public class DOvalModel extends DShapeModel {
 
-    // stored as integers to make randomize work appropriately
-    // consider changing in the future? Javafx shapes use doubles
-    // to define size
-    private int xCenter;
-    private int yCenter;
-    private int xRadius;
-    private int yRadius;
-
-    /** 
-     * set the center and radius of the ellipse using the defined
-     * model
+    
+    /**
+     * Calculate and return the x-coordinate of the center.
+     * @return double
      */
-    public void defineEllipse() {
-	xCenter = ( getX() + getWidth() ) / 2;
-	yCenter = ( getY() + getHeight() ) / 2;
-	xRadius = getWidth()/2;
-	yRadius = getHeight()/2;
-    }
-
     public double getXCenter() {
-	return (double) xCenter;
+	return (double)( ( getX() + getWidth() ) / 2 );
     }
 
+    
+    /**
+     * Calculate and return the y-coordinate of the center.
+     */
     public double getYCenter() {
-	return (double) yCenter;
+	return (double)( ( getY() + getHeight() ) / 2);
     }
 
-    public double getXRadius() {
-	return (double) xRadius;	
+
+    /**
+     * Calculate and return the radius in the x-direction
+     */
+    public double getXRadius() {	
+	return (double)( getWidth() / 2 );
     }
 
+
+    /**
+     * Calculate and return the radius in the y-direction
+     */
     public double getYRadius() {
-	return (double) yRadius;
+	return (double)( getHeight() / 2);
     }
+
 }

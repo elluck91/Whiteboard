@@ -61,6 +61,13 @@ public class DShapeModel {
 	this.color = color;
     }
 
+    /**
+     * create and return a copy of the rectangle model
+     */
+    public Rectangle getBounds() {       
+	return new Rectangle(rectangle);
+    }
+
     
     /**
      * generate a random rectangle to serve as the bounds

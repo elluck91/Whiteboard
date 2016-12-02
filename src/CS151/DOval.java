@@ -11,11 +11,12 @@ public class DOval extends DShape{
 	model = new DOvalModel();
 	oval = new Ellipse();
     }
-    
+
+    // Draw the oval
     public void draw() {
 	oval.setFill(model.getColor());
-	// casts are necessary because model does not know it's 
-	// a DOvalModel. it only knows it is a DShapeModel
+	// Casts are necessary because model does not know it's 
+	// a DOvalModel. It only knows it is a DShapeModel
 	double x = ( (DOvalModel) model).getXCenter();
 	double y = ( (DOvalModel) model).getYCenter();
 	double xRadius = ( (DOvalModel) model).getXRadius();
@@ -24,11 +25,6 @@ public class DOval extends DShape{
 	oval.setCenterY(y);
 	oval.setRadiusX(xRadius);
 	oval.setRadiusY(yRadius);	    
-    }
-
-    public void randomize(int max) {
-	model.randomize(max);
-	( (DOvalModel) model).defineEllipse();
     }
     
     public Shape getShape() {

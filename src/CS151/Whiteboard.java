@@ -50,7 +50,6 @@ public class Whiteboard extends Application {
 	presenter = new WhiteboardPresenter();
 	presenter.attachView(this);
 	canvas = new Canvas();
-	color = Color.GRAY; // default
 	
 	VBox main = new VBox();
 	VBox menu = getMenu();
@@ -63,41 +62,26 @@ public class Whiteboard extends Application {
 	canvas.setOnMouseClicked(e -> {
 		Point location = new Point((int)e.getX(), (int)e.getY());
 		// output for testing
-		System.out.println("x: " + location.getX() + " y: " + location.getY());
+		System.out.print("x click: " + location.getX());
+		System.out.print(" y click : " + location.getY() + '\n');
 		canvas.makeSelection(location);
 	    });
 	
 	rect.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    DRect rect = new DRect();
-		    rect.randomize(400);
-		    rect.setColor(color);
-		    System.out.println(color.toString());
-		    canvas.addShape(rect);
-		    // change this line to update tv for the newly added
-		    // shape instead of updating the entire tableview
-		    tv.setItems(canvas.getShapeModels());				    
+		    presenter.addDShape(new DRect());
 		}
 	    });
 
 	oval.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    DOval oval = new DOval();
-		    oval.randomize(400);
-		    oval.setColor(color);
-		    canvas.addShape(oval);
-		    // change function call below
-		    tv.setItems(canvas.getShapeModels());
+		    presenter.addDShape(new DOval());
 		}
 	    });
 
 	line.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    DLine line = new DLine();
-		    line.randomize(400);
-		    line.setColor(color);
-		    canvas.addShape(line);
-		    tv.setItems(canvas.getShapeModels());
+		    presenter.addDShape(new DLine());
 		}
 	    });
 
@@ -107,14 +91,10 @@ public class Whiteboard extends Application {
 		}
 	    });
 
-	ColorPickerWindow colorPick = new ColorPickerWindow();
 	colorPicker.setOnAction(new EventHandler() {
 		public void handle(Event t) {
-		    // why create a new object each click? previous color is no longer saved
-		    // when doing this?
-		    //ColorPickerWindow colorPick = new ColorPickerWindow();		    
+		    ColorPickerWindow colorPick = new ColorPickerWindow();		    
 		    color = colorPick.display();
-		    System.out.println(color.toString());
 		}
 	    });
 	
@@ -178,6 +158,28 @@ public class Whiteboard extends Application {
 	stage.show();
 	
     }
+
+
+    /**
+     * Add a new DShape to the canvas and update the GUI.
+     * Consider changing the function call to setItems
+     * because this will update the entire table when 
+     * we just need to update one row
+     * @param DShape shape
+     */
+    public void updateView(DShape shape) {
+	canvas.addShape(shape);
+	tv.setItems(canvas.getShapeModels());
+    }
+
+    
+    /**
+     * Return the current color set in the GUI
+     */
+    public Color getColor() {
+	return color;
+    }
+
     
     public VBox getTopLeft() {
 	final int BOX_SIZE = 10;
