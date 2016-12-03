@@ -60,36 +60,13 @@ public class Canvas extends Pane implements Observer{
      * Add the shape to the list of shapes and
      * draw it on the canvas
      */
-    public void addShape(DShapeModel shape) {
-	/*
+    public void addShape(DShape shape) {
 	shapes.add(shape);
 	updateSelection(shape);
 	shape.draw();
 	this.getChildren().add(shape.getShape());			
-	*/
-	DShape s = getDShape(shape);
-	s.setModel(shape);
-	shapes.add(s);
-	s.draw();
-	updateSelection(s);
-	this.getChildren().add(s.getShape());
     }
 
-
-    public DShape getDShape(DShapeModel shape) {
-	if(shape instanceof DRectModel)
-	    return new DRect();
-	if(shape instanceof DOvalModel)
-	    return new DOval();
-	if(shape instanceof DLineModel)
-	    return new DLine();
-	if(shape instanceof DTextModel)
-	    return new DText();
-	return null; // this is necessary to compile
-	// maybe there is another solution, but this
-	// was a quick fix
-    }
-    
     /**
      * Update the color of the currently selected shape
      */

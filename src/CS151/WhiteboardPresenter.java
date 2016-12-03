@@ -25,8 +25,12 @@ import javafx.scene.paint.Color;
 public class WhiteboardPresenter
 {
 
-    Whiteboard gui;
-
+    private Whiteboard gui;
+    private final int defaultX = 10;
+    private final int defaultY = 10;
+    private final int defaultWidth = 20;
+    private final int defaultHeight = 20;
+    
     public void attachView(Whiteboard gui)
     {
         this.gui = gui;
@@ -41,8 +45,11 @@ public class WhiteboardPresenter
     /**
      * Add a new DShape to the view
      */
-    public void addDShape(DShape shape) {
-	shape.randomize(400);	
+    public void addDShape(DShapeModel shape) {
+	shape.setX(defaultX);
+	shape.setY(defaultY);
+	shape.setWidth(defaultWidth);
+	shape.setHeight(defaultHeight);
 	gui.updateView(shape);
     }
     

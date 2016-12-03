@@ -69,25 +69,25 @@ public class Whiteboard extends Application {
 	
 	rect.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    presenter.addDShape(new DRect());
+		    presenter.addDShape(new DRectModel());
 		}
 	    });
 
 	oval.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    presenter.addDShape(new DOval());
+		    presenter.addDShape(new DOvalModel());
 		}
 	    });
 
 	line.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    presenter.addDShape(new DLine());
+		    presenter.addDShape(new DLineModel());
 		}
 	    });
 
 	text.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-
+		    presenter.addDShape(new DTextModel());
 		}
 	    });
 
@@ -95,6 +95,7 @@ public class Whiteboard extends Application {
 		public void handle(Event t) {
 		    ColorPickerWindow colorPick = new ColorPickerWindow();		    
 		    color = colorPick.display();
+		    canvas.updateColor(color);
 		}
 	    });
 	
@@ -167,7 +168,7 @@ public class Whiteboard extends Application {
      * we just need to update one row
      * @param DShape shape
      */
-    public void updateView(DShape shape) {
+    public void updateView(DShapeModel shape) {
 	canvas.addShape(shape);
 	tv.setItems(canvas.getShapeModels());
     }

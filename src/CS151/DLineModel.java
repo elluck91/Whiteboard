@@ -7,7 +7,11 @@ public class DLineModel extends DShapeModel {
 
     private Point start;
     private Point end;
-    
+
+    public DLineModel() {
+	start = new Point(getX(), getY());
+	end = new Point(getX() + getWidth(), getY() + getHeight());
+    }
     
     public Point getStart() {
 	return start;

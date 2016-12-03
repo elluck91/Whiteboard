@@ -27,6 +27,15 @@ public class DLine extends DShape {
 	line.setEndY(endY);
     }
 
+    public void setModel(DShapeModel model) {
+	this.model = model;
+	Point start = new Point(model.getX(), model.getY());
+	Point end = new Point(model.getX()+model.getWidth(), model.getY()+model.getWidth());
+	((DLineModel) model).setStart(start);
+	((DLineModel) model).setEnd(end);
+    }
+
+    
     public Shape getShape() {
 	return line;
     }

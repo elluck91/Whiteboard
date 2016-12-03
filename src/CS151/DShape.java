@@ -16,6 +16,10 @@ public abstract class DShape {
 	return model;
     }
 
+    public void setModel(DShapeModel model) {
+	this.model = model;
+    }
+    
     public Rectangle getBounds() {
 	return model.getBounds();
     }
