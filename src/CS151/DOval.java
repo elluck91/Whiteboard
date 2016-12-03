@@ -3,7 +3,7 @@ package CS151;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Ellipse;
 
-public class DOval extends DShape{
+public class DOval extends DShape implements ModelListener {
 
     private Ellipse oval;
     

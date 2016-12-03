@@ -6,7 +6,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.Line;
 import javafx.scene.paint.Color;
 
-public class DLine extends DShape {
+public class DLine extends DShape implements ModelListener {
 
     private Line line;
 

@@ -31,17 +31,11 @@ public class WhiteboardPresenter
     private final int defaultWidth = 20;
     private final int defaultHeight = 20;
     
-    public void attachView(Whiteboard gui)
-    {
+    public void attachView(Whiteboard gui) {
         this.gui = gui;
     }
 
-    WhiteboardPresenter()
-    {
-	// nothing to instantiate?
-    }
-
-
+    
     /**
      * Add a new DShape to the view
      */

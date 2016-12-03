@@ -4,7 +4,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 
-public class DRect extends DShape {
+public class DRect extends DShape implements ModelListener { 
 
     private Rectangle rectangle;
 

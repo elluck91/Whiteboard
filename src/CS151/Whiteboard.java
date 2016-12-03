@@ -96,6 +96,7 @@ public class Whiteboard extends Application {
 		    ColorPickerWindow colorPick = new ColorPickerWindow();		    
 		    color = colorPick.display();
 		    canvas.updateColor(color);
+		    canvas.paintComponent();
 		}
 	    });
 	
@@ -119,7 +120,10 @@ public class Whiteboard extends Application {
 
 	remove.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-
+		    DShape deleted = canvas.deleteSelected();
+		    if(deleted != null) {
+			tv.setItems(canvas.getShapeModels());
+		    }
 		}
 	    });
 

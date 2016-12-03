@@ -34,10 +34,20 @@ public class Canvas extends Pane implements Observer{
     }
 
     
-    // loops through the list of shapes and draws them
+    /**
+     * Loops through the list of shapes and draws them. 
+     * This code might be worth thinking about again. The 
+     * call to clear the canvas is necessary to get shapes
+     * that have been modified to reappear in the canvas with
+     * the modifications made. This was a hack and not necessarily
+     * good design. 
+     */
     public void paintComponent() {
-	for (int i = 0; i < shapes.size(); i++)
+	this.getChildren().clear();
+	for (int i = 0; i < shapes.size(); i++){
 	    shapes.get(i).draw();
+	    this.getChildren().add(shapes.get(i).getShape());
+	}
     }
 
     
@@ -55,47 +65,54 @@ public class Canvas extends Pane implements Observer{
 	return models;
 	
     }
+
     
     /**
      * Add the shape to the list of shapes and
      * draw it on the canvas
+     * @param DShapeModel model
      */
-    public void addShape(DShapeModel shape) {
-	/*
+    public void addShape(DShapeModel model) {
+	DShape shape = getDShape(model);
+	shape.setModel(model);
 	shapes.add(shape);
-	updateSelection(shape);
 	shape.draw();
-	this.getChildren().add(shape.getShape());			
-	*/
-	DShape s = getDShape(shape);
-	s.setModel(shape);
-	shapes.add(s);
-	s.draw();
-	updateSelection(s);
-	this.getChildren().add(s.getShape());
+	updateSelection(shape);
+	this.getChildren().add(shape.getShape());
     }
 
 
+    /**
+     * Create a new DShape given a DShapeModel
+     * @param DShapeModel shape
+     * @return DShape
+     */
     public DShape getDShape(DShapeModel shape) {
 	if(shape instanceof DRectModel)
 	    return new DRect();
+	
 	if(shape instanceof DOvalModel)
 	    return new DOval();
+	
 	if(shape instanceof DLineModel)
 	    return new DLine();
+	
 	if(shape instanceof DTextModel)
 	    return new DText();
+	
 	return null; // this is necessary to compile
 	// maybe there is another solution, but this
 	// was a quick fix
     }
+
     
     /**
      * Update the color of the currently selected shape
+     * @param Color color
      */
-    public void updateColor(Color c) {
+    public void updateColor(Color color) {
 	if(selected != null) {
-	    selected.setColor(c);
+	    selected.setColor(color);
 	}
     }
 
@@ -136,12 +153,32 @@ public class Canvas extends Pane implements Observer{
 
     
     /**
-     * Remove the currently selected shape
+     * Set the selected shape to null.
      */
     public void removeSelection() {
 	if(selected != null) {
 	    selected.removeKnobs();
 	    selected = null;
+	}
+    }
+
+
+    /**
+     * Delete the currently selected shape and return the
+     * model that was deleted to the GUI. The GUI will then 
+     * know to update the table of coordinates. If there
+     * is no shape selected, do nothing.
+     */
+    public DShape deleteSelected() {
+	if(selected != null) {
+	    DShape delete = selected;
+	    shapes.removeAll(delete);	    
+	    selected.getModel().removeListener(delete);
+	    this.getChildren().remove(delete.getShape());
+	    selected = null;	    
+	    return delete;
+	} else {
+	    return null;
 	}
     }
 

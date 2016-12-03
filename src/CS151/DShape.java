@@ -4,7 +4,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import java.awt.Rectangle;
 
-public abstract class DShape {
+public abstract class DShape implements ModelListener {
 
     protected DShapeModel model;
     
@@ -38,6 +38,11 @@ public abstract class DShape {
     
     public void removeKnobs() {
 
+    }
+
+    public void modelChanged(DShapeModel model) {
+	setModel(model); // set the new changes
+	draw(); // redraw
     }
     
     public abstract void draw();
