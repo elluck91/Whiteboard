@@ -119,7 +119,52 @@ public class DShapeModel {
 	return new Rectangle(rectangle);
     }
 
+
+    /**
+     * Get the top left corner point of the shape bounds
+     * @return Point
+     */
+    public Point getTopLeft() {
+	System.out.println("top left x: " + getX() + " top right y: " + getY());
+	return new Point(point);
+    }
+
     
+    /**
+     * Get the top right corner point of the shape bounds
+     * @return Point
+     */
+    public Point getTopRight() {
+	int topX = getX() + getWidth();
+	// testing output
+	System.out.println("top right x: " + topX + " top right y: " + getY());
+	return new Point(topX, getY());	
+    }
+
+
+    /**
+     * Get the bottom left corner point of the shape bounds
+     * @return Point
+     */
+    public Point getBottomLeft() {
+	int bottomY = getY() + getHeight();
+	System.out.println("bottom left x: " + getX() + "bottom left y: " + bottomY);
+	return new Point(getX(), bottomY);
+    }
+
+
+    /**
+     * Get the bottom right corner point of the shape bounds
+     * @return Point
+     */
+    public Point getBottomRight() {
+	int bottomX = getX() + getWidth();
+	int bottomY = getY() + getHeight();
+	System.out.println("bottom right x: " + bottomX + " bottom left y: " + bottomY);
+	return new Point(bottomX, bottomY);
+    }
+
+
     /**
      * generate a random rectangle to serve as the bounds
      * for a DShape

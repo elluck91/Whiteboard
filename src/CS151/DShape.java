@@ -3,6 +3,8 @@ package CS151;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import java.awt.Rectangle;
+import java.awt.Point;
+import java.util.ArrayList;
 
 public abstract class DShape implements ModelListener {
 
@@ -32,6 +34,21 @@ public abstract class DShape implements ModelListener {
 	model.setColor(c);
     }
 
+
+    /**
+     * Calculate a list of points representing
+     * the four corners of the model
+     * @return ArrayList<Point> 
+     */
+    public ArrayList<Point> getKnobs() {
+	ArrayList<Point> knob = new ArrayList<Point>();
+	knob.add(model.getTopLeft());
+	knob.add(model.getTopRight());
+	knob.add(model.getBottomLeft());
+	knob.add(model.getBottomRight());
+	return knob;
+    }
+    
     public void drawKnobs() {
 
     }

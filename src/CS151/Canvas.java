@@ -149,6 +149,7 @@ public class Canvas extends Pane implements Observer{
 	// output for testing
 	System.out.print("x: " +selection.getModel().getX());
 	System.out.print(" y: " + selection.getModel().getY() + '\n');
+	selected.getKnobs();
     }
 
     
