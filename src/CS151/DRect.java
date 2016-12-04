@@ -8,46 +8,51 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 
 public class DRect extends DShape implements ModelListener
 {
 
     private Rectangle rect;
+    private Rectangle resizeHandleNW;
+    private Rectangle resizeHandleNE;
+    private Rectangle resizeHandleSE;
+    private Rectangle resizeHandleSW;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
 
     public DRect()
     {
-
+       
         model = new DRectModel();
         rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight());
         rect.setFill(model.getColor());
         // top left resize handle:
-        Rectangle resizeHandleNW = new Rectangle(handleWidth, handleWidth, Color.GOLD);
+        resizeHandleNW = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         // bind to top left corner of Rectangle:
         resizeHandleNW.xProperty().bind(rect.xProperty().subtract(handleCenter));
         resizeHandleNW.yProperty().bind(rect.yProperty().subtract(handleCenter));
 
         // top right resize handle:
-        Rectangle resizeHandleNE = new Rectangle(handleWidth, handleWidth, Color.BLACK);
+        resizeHandleNE = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         // bind to top right corner of Rectangle:
         resizeHandleNE.xProperty().bind(rect.xProperty().add(rect.widthProperty().subtract(handleCenter)));
         resizeHandleNE.yProperty().bind(rect.yProperty().subtract(handleCenter));
 
         // bottom right resize handle:
-        Rectangle resizeHandleSE = new Rectangle(handleWidth, handleWidth, Color.BLACK);
+        resizeHandleSE = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         // bind to bottom right corner of Rectangle:
         resizeHandleSE.xProperty().bind(rect.xProperty().add(rect.widthProperty().subtract(handleCenter)));
         resizeHandleSE.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
 
         // bottom left resize handle:
-        Rectangle resizeHandleSW = new Rectangle(handleWidth, handleWidth, Color.BLACK);
+        resizeHandleSW = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         resizeHandleSW.xProperty().bind(rect.xProperty().subtract(handleCenter));
         resizeHandleSW.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
-
+        
         // force circles to live in same parent as rectangle:
         rect.parentProperty().addListener((obs, oldParent, newParent) -> {
-            for (Rectangle r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW)) {
+            for (Shape r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW)) {
                 Pane currentParent = (Pane) r.getParent();
                 if (currentParent != null) {
                     currentParent.getChildren().remove(r);
@@ -106,6 +111,8 @@ public class DRect extends DShape implements ModelListener
 
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
+                moveToFront();
+
             }
         });
 
@@ -125,6 +132,7 @@ public class DRect extends DShape implements ModelListener
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
+                moveToFront();
 
             }
         });
@@ -147,6 +155,7 @@ public class DRect extends DShape implements ModelListener
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
+                moveToFront();
 
             }
 
@@ -170,6 +179,7 @@ public class DRect extends DShape implements ModelListener
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
+                moveToFront();
 
             }
 
@@ -195,7 +205,17 @@ public class DRect extends DShape implements ModelListener
     {
         model.setX(rect.xProperty().intValue());
         model.setY(rect.yProperty().intValue());
+        model.setHeight(rect.heightProperty().intValue());
+        model.setWidth(rect.widthProperty().intValue());
+    }
 
+    private void moveToFront()
+    {
+        rect.toFront();
+        resizeHandleNE.toFront();
+        resizeHandleNW.toFront();
+        resizeHandleSE.toFront();
+        resizeHandleSW.toFront();
     }
 
     static class Wrapper<T>
