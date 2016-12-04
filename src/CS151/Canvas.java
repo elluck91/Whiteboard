@@ -43,10 +43,10 @@ public class Canvas extends Pane implements Observer{
      * good design. 
      */
     public void paintComponent() {
-	this.getChildren().clear();
+    	// this.getChildren().clear();
 	for (int i = 0; i < shapes.size(); i++){
 	    shapes.get(i).draw();
-	    this.getChildren().add(shapes.get(i).getShape());
+	    //this.getChildren().add(shapes.get(i).getShape());
 	}
     }
 
