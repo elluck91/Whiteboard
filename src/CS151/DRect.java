@@ -45,8 +45,6 @@ public class DRect extends DShape implements ModelListener
         resizeHandleSW.xProperty().bind(rect.xProperty().subtract(handleCenter));
         resizeHandleSW.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
 
-        
-
         // force circles to live in same parent as rectangle:
         rect.parentProperty().addListener((obs, oldParent, newParent) -> {
             for (Rectangle r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW)) {
@@ -107,6 +105,7 @@ public class DRect extends DShape implements ModelListener
                 }
 
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                updateRectModel();
             }
         });
 
@@ -125,6 +124,8 @@ public class DRect extends DShape implements ModelListener
                     rect.setHeight(rect.getHeight() + deltaY);
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                updateRectModel();
+
             }
         });
 
@@ -145,6 +146,8 @@ public class DRect extends DShape implements ModelListener
                     rect.setHeight(rect.getHeight() + deltaY);
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                updateRectModel();
+
             }
 
         });
@@ -166,6 +169,8 @@ public class DRect extends DShape implements ModelListener
                     rect.setY(newY);
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                updateRectModel();
+
             }
 
         });
@@ -184,6 +189,13 @@ public class DRect extends DShape implements ModelListener
             r.getParent().setCursor(Cursor.DEFAULT);
             mouseLocation.value = null;
         });
+    }
+
+    private void updateRectModel()
+    {
+        model.setX(rect.xProperty().intValue());
+        model.setY(rect.yProperty().intValue());
+
     }
 
     static class Wrapper<T>
