@@ -5,4 +5,24 @@ public class DTextModel extends DShapeModel {
     private String text;
     private String font;
 
+    public DTextModel() {
+	text = "Hello";
+	font = "Dialog";	    
+    }
+
+    public String getText() {
+	return text;
+    }
+
+    public String getFont() {
+	return font;
+    }
+
+    public void setText(String text) {
+	this.text = text;
+    }
+
+    public void setFont(String font) {
+	this.font = font;
+    }
 }

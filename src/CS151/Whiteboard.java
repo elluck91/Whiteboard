@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -38,7 +39,7 @@ public class Whiteboard extends Application {
     private Button toBack;
     private Button remove;
     private TextField textInput;
-    private Button edScript;
+    private Button font;
     private TableView<DShapeModel> tv;
     private MenuItem save;
     private MenuItem open;
@@ -56,6 +57,7 @@ public class Whiteboard extends Application {
 	GridPane gp = new GridPane();
 	VBox leftColumn = getLeftColumn();
 
+
 	// gather the location in the canvas where a user clicked
 	// use this information to select the correct shape in the
 	// view 
@@ -65,29 +67,42 @@ public class Whiteboard extends Application {
 		System.out.print("x click: " + location.getX());
 		System.out.print(" y click : " + location.getY() + '\n');
 		canvas.makeSelection(location);
+		if(canvas.getSelected() instanceof DText) {
+		    disableTextControls(false);
+		    DShape text = canvas.getSelected();
+		    setTextInput( ((DText) text).getText());
+		} else {
+		    disableTextControls(true);
+		}
 	    });
 	
 	rect.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    presenter.addDShape(new DRectModel());
+		    disableTextControls(true);
 		}
 	    });
 
 	oval.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    presenter.addDShape(new DOvalModel());
+		    disableTextControls(true);
 		}
 	    });
 
 	line.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    presenter.addDShape(new DLineModel());
+		    disableTextControls(true);		    
 		}
 	    });
 
 	text.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 		    presenter.addDShape(new DTextModel());
+		    disableTextControls(false);
+		    DShape text = canvas.getSelected();
+		    setTextInput( ((DText) text).getText());
 		}
 	    });
 
@@ -100,7 +115,7 @@ public class Whiteboard extends Application {
 		}
 	    });
 	
-	edScript.setOnAction(new EventHandler<ActionEvent>() {
+	font.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 
 		}
@@ -208,11 +223,12 @@ public class Whiteboard extends Application {
 	HBox line2 = new HBox(BOX_SIZE);
 	line2.getChildren().add(colorPicker);
 
-	textInput = new TextField("Enter text...");
-	edScript = new Button("Edwardian Script");
+	textInput = new TextField("");
+	font = new Button("Font Type");
+	disableTextControls(true);
 
 	HBox line3 = new HBox(BOX_SIZE);
-	line3.getChildren().addAll(textInput, edScript);
+	line3.getChildren().addAll(textInput, font);
 
 	toFront = new Button("Move to Front");
 	toBack = new Button("Move to Back");
@@ -284,6 +300,29 @@ public class Whiteboard extends Application {
 	return menu;
     }
 
+    
+    /**
+     * Enable or disable the text controls
+     */
+    public void disableTextControls(boolean set) {
+	font.setDisable(set);
+	textInput.setDisable(set);
+	setTextInput("");
+    }
+
+
+    /**
+     * Set the text of the textfield
+     * @param String text
+     */
+    public void setTextInput(String text) {
+	textInput.setText(text);
+    }
+
+    public void setFontBox() {
+
+    }
+    
     public static void main(String[] args) {
 	launch(args);
     }

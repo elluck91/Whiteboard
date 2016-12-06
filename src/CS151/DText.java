@@ -13,6 +13,10 @@ public class DText extends DShape implements ModelListener {
 
     }
 
+    public String getText() {
+	return ((DTextModel) model).getText();
+    }
+    
     public Shape getShape() {
 	return new Rectangle();
     }

@@ -149,7 +149,7 @@ public class Canvas extends Pane implements Observer{
 	// output for testing
 	System.out.print("x: " +selection.getModel().getX());
 	System.out.print(" y: " + selection.getModel().getY() + '\n');
-	selected.getKnobs();
+	selected.getKnobs();	
     }
 
     
@@ -175,7 +175,7 @@ public class Canvas extends Pane implements Observer{
 	    DShape delete = selected;
 	    shapes.removeAll(delete);	    
 	    selected.getModel().removeListener(delete);
-	    this.getChildren().remove(delete.getShape());
+	    //this.getChildren().remove(delete.getShape());
 	    selected = null;	    
 	    return delete;
 	} else {
@@ -183,6 +183,14 @@ public class Canvas extends Pane implements Observer{
 	}
     }
 
+
+    /**
+     * Get the selected shape
+     * @return DShape
+     */
+    public DShape getSelected() {
+	return selected;
+    }
     
     @Override
     public void update(Observable arg0, Object arg1) {
