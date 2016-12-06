@@ -20,4 +20,16 @@ public class DText extends DShape implements ModelListener {
     public Shape getShape() {
 	return new Rectangle();
     }
+
+    @Override
+    public void drawKnobs()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeKnobs()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

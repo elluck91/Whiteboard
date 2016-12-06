@@ -1,8 +1,10 @@
 package CS151;
 
 import java.util.Arrays;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -15,10 +17,6 @@ public class DOval extends DShape implements ModelListener
 
     private Ellipse oval;
     private Rectangle rect;
-    private Rectangle resizeHandleNW;
-    private Rectangle resizeHandleNE;
-    private Rectangle resizeHandleSE;
-    private Rectangle resizeHandleSW;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
 
@@ -67,6 +65,7 @@ public class DOval extends DShape implements ModelListener
                 }
                 ((Pane) newParent).getChildren().add(r);
             }
+            moveToFront();
         });
 
         Wrapper<Point2D> mouseLocation = new Wrapper<>();
@@ -163,15 +162,20 @@ public class DOval extends DShape implements ModelListener
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
+                DOval.this.removeKnobs();
                 moveToFront();
 
             }
 
         });
-        
-        rect.setOnMouseClicked(event -> {
-            moveToFront();
-            
+
+        rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                moveToFront();
+                DOval.this.drawKnobs();
+            }
         });
 
         rect.setOnMouseDragged(event -> {
@@ -233,6 +237,24 @@ public class DOval extends DShape implements ModelListener
         resizeHandleSW.toFront();
     }
 
+
+    @Override
+    public void drawKnobs()
+    {
+        resizeHandleNE.setVisible(true);
+        resizeHandleNW.setVisible(true);
+        resizeHandleSE.setVisible(true);
+        resizeHandleSW.setVisible(true);
+    }
+
+    @Override
+    public void removeKnobs()
+    {
+        resizeHandleNE.setVisible(false);
+        resizeHandleNW.setVisible(false);
+        resizeHandleSE.setVisible(false);
+        resizeHandleSW.setVisible(false);    }
+
     static class Wrapper<T>
     {
 
@@ -256,4 +278,5 @@ public class DOval extends DShape implements ModelListener
     {
         return rect;
     }
+
 }

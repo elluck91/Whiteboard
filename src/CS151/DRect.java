@@ -14,10 +14,6 @@ public class DRect extends DShape implements ModelListener
 {
 
     private Rectangle rect;
-    private Rectangle resizeHandleNW;
-    private Rectangle resizeHandleNE;
-    private Rectangle resizeHandleSE;
-    private Rectangle resizeHandleSW;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
 
@@ -221,6 +217,23 @@ public class DRect extends DShape implements ModelListener
         resizeHandleNW.toFront();
         resizeHandleSE.toFront();
         resizeHandleSW.toFront();
+    }
+
+    @Override
+    public void drawKnobs()
+    {
+        resizeHandleNE.setVisible(true);
+        resizeHandleNW.setVisible(true);
+        resizeHandleSE.setVisible(true);
+        resizeHandleSW.setVisible(true);    }
+
+    @Override
+    public void removeKnobs()
+    {
+        resizeHandleNE.setVisible(false);
+        resizeHandleNW.setVisible(false);
+        resizeHandleSE.setVisible(false);
+        resizeHandleSW.setVisible(false);  
     }
 
     static class Wrapper<T>

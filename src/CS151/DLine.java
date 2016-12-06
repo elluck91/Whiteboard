@@ -16,8 +16,6 @@ public class DLine extends DShape implements ModelListener
 
     private Rectangle rect = new Rectangle();
     private Line line;
-    private Rectangle resizeHandleLeft;
-    private Rectangle resizeHandleRight;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
 
@@ -141,6 +139,20 @@ public class DLine extends DShape implements ModelListener
         resizeHandleLeft.toFront();
         resizeHandleRight.toFront();
         updateModel();
+    }
+
+    @Override
+    public void drawKnobs()
+    {
+        resizeHandleLeft.setVisible(true);
+        resizeHandleRight.setVisible(true);
+    }
+
+    @Override
+    public void removeKnobs()
+    {
+        resizeHandleRight.setVisible(false);
+        resizeHandleLeft.setVisible(false);
     }
 
     static class Wrapper<T>

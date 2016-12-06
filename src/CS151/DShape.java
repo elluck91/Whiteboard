@@ -13,6 +13,12 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class DShape implements ModelListener
 {
+    protected Rectangle resizeHandleNW;
+    protected Rectangle resizeHandleNE;
+    protected Rectangle resizeHandleSE;
+    protected Rectangle resizeHandleSW;
+    protected Rectangle resizeHandleLeft;
+    protected Rectangle resizeHandleRight;
 
     protected DShapeModel model;
 
@@ -63,15 +69,11 @@ public abstract class DShape implements ModelListener
         return knob;
     }
 
-    public void drawKnobs()
-    {
+    public abstract void drawKnobs();
 
-    }
 
-    public void removeKnobs()
-    {
+    public abstract void removeKnobs();
 
-    }
 
     public void modelChanged(DShapeModel model)
     {
