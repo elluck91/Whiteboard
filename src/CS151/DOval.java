@@ -28,12 +28,10 @@ public class DOval extends DShape implements ModelListener
 
         model = new DOvalModel();
 
-        model = new DRectModel();
-
         rect = new Rectangle();
 
         oval.centerXProperty().bind(rect.xProperty().add(rect.widthProperty().divide(2)));
-        oval.centerYProperty().bind(rect.yProperty().add(rect.widthProperty().divide(2)));
+        oval.centerYProperty().bind(rect.yProperty().add(rect.heightProperty().divide(2)));
         oval.radiusXProperty().bind(rect.widthProperty().divide(2));
         oval.radiusYProperty().bind(rect.heightProperty().divide(2));
 
@@ -169,6 +167,11 @@ public class DOval extends DShape implements ModelListener
 
             }
 
+        });
+        
+        rect.setOnMouseClicked(event -> {
+            moveToFront();
+            
         });
 
         rect.setOnMouseDragged(event -> {

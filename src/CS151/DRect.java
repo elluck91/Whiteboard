@@ -23,7 +23,7 @@ public class DRect extends DShape implements ModelListener
 
     public DRect()
     {
-       
+
         model = new DRectModel();
         rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight());
         rect.setFill(model.getColor());
@@ -49,7 +49,7 @@ public class DRect extends DShape implements ModelListener
         resizeHandleSW = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         resizeHandleSW.xProperty().bind(rect.xProperty().subtract(handleCenter));
         resizeHandleSW.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
-        
+
         // force circles to live in same parent as rectangle:
         rect.parentProperty().addListener((obs, oldParent, newParent) -> {
             for (Shape r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW)) {
@@ -182,6 +182,11 @@ public class DRect extends DShape implements ModelListener
                 moveToFront();
 
             }
+
+        });
+
+        rect.setOnMouseClicked(event -> {
+            moveToFront();
 
         });
 
