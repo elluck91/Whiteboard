@@ -23,8 +23,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import java.awt.Point;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Control;
 
 public class Whiteboard extends Application {
 
@@ -39,7 +45,8 @@ public class Whiteboard extends Application {
     private Button toBack;
     private Button remove;
     private TextField textInput;
-    private Button font;
+    private Button fontButton;
+    private ComboBox<String> fonts;
     private TableView<DShapeModel> tv;
     private MenuItem save;
     private MenuItem open;
@@ -56,7 +63,7 @@ public class Whiteboard extends Application {
 	VBox menu = getMenu();
 	GridPane gp = new GridPane();
 	VBox leftColumn = getLeftColumn();
-
+	setFontBox();
 
 	// gather the location in the canvas where a user clicked
 	// use this information to select the correct shape in the
@@ -71,6 +78,7 @@ public class Whiteboard extends Application {
 		    disableTextControls(false);
 		    DShape text = canvas.getSelected();
 		    setTextInput( ((DText) text).getText());
+		    setFontText( ((DText) text).getFont());
 		} else {
 		    disableTextControls(true);
 		}
@@ -103,21 +111,38 @@ public class Whiteboard extends Application {
 		    disableTextControls(false);
 		    DShape text = canvas.getSelected();
 		    setTextInput( ((DText) text).getText());
+		    setFontText( ((DText) text).getFont());
 		}
 	    });
 
 	colorPicker.setOnAction(new EventHandler() {
 		public void handle(Event t) {
-		    ColorPickerWindow colorPick = new ColorPickerWindow();		    
+		    ColorPickerWindow colorPick = new ColorPickerWindow();
 		    color = colorPick.display();
 		    canvas.updateColor(color);
 		    canvas.paintComponent();
 		}
 	    });
-	
-	font.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
 
+       
+	fontButton.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {		    	       
+		    final Stage fontSelection = new Stage();
+		    fontSelection.initModality(Modality.APPLICATION_MODAL);
+		    fontSelection.initOwner(stage);
+		    VBox box = new VBox();
+		    box.setAlignment(Pos.CENTER);
+		    box.setSpacing(10);
+		    Button confirm = new Button("Set Font");
+		    confirm.setOnMouseClicked(e -> {
+			    System.out.println(fonts.getValue());
+			    fontSelection.close();
+			});
+		    box.getChildren().addAll(fonts, confirm); 
+		    Scene selection = new Scene(box, 300, 100);
+		    fontSelection.setScene(selection);
+		    fontSelection.setTitle("Fonts");
+		    fontSelection.show();		    
 		}
 	    });
 
@@ -195,6 +220,7 @@ public class Whiteboard extends Application {
     
     /**
      * Return the current color set in the GUI
+     * @return Color
      */
     public Color getColor() {
 	return color;
@@ -224,11 +250,11 @@ public class Whiteboard extends Application {
 	line2.getChildren().add(colorPicker);
 
 	textInput = new TextField("");
-	font = new Button("Font Type");
+	fontButton = new Button("Font Type");
 	disableTextControls(true);
 
 	HBox line3 = new HBox(BOX_SIZE);
-	line3.getChildren().addAll(textInput, font);
+	line3.getChildren().addAll(textInput, fontButton);
 
 	toFront = new Button("Move to Front");
 	toBack = new Button("Move to Back");
@@ -305,7 +331,7 @@ public class Whiteboard extends Application {
      * Enable or disable the text controls
      */
     public void disableTextControls(boolean set) {
-	font.setDisable(set);
+	fontButton.setDisable(set);
 	textInput.setDisable(set);
 	setTextInput("");
     }
@@ -319,11 +345,32 @@ public class Whiteboard extends Application {
 	textInput.setText(text);
     }
 
-    public void setFontBox() {
 
+    /**
+     * Set the text of the font button
+     * @param String font
+     */
+    public void setFontText(String font) {
+	fontButton.setText(font);
     }
-    
-    public static void main(String[] args) {
+
+    public void setFontBox() {
+	fonts = new ComboBox<String>();
+	List<String> systemFonts = Font.getFamilies();
+	ObservableList<String> fontModel = FXCollections.observableArrayList();
+	for(int i = 0; i < systemFonts.size(); i++) {
+	    fontModel.add(systemFonts.get(i));
+	}
+	fonts.setItems(fontModel);
+	fonts.setPrefHeight(20);
+	fonts.setPrefWidth(200);
+	//fonts.setMaxHeight(Control.USE_PREF_SIZE);
+	fonts.setMaxWidth(Control.USE_PREF_SIZE);
+	
+    }
+
+
+public static void main(String[] args) {
 	launch(args);
     }
 
