@@ -82,6 +82,7 @@ public class Whiteboard extends Application {
 		    setFontText( ((DText) text).getFont());
 		} else {
 		    disableTextControls(true);
+		    setFontText("Font Type");
 		}
 	    });
 	
