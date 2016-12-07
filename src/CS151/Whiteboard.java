@@ -31,6 +31,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
+import javafx.scene.input.KeyEvent;
 
 public class Whiteboard extends Application {
 
@@ -179,8 +180,8 @@ public class Whiteboard extends Application {
 		}
 	    });
 
-	textInput.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
+	textInput.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		public void handle(KeyEvent event) {
 		    DShape selected = canvas.getSelected();
 		    if(selected != null) {
 			if(selected instanceof DText) {
