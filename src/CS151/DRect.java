@@ -207,8 +207,7 @@ public class DRect extends DShape implements ModelListener
         model.setX(rect.xProperty().intValue());
         model.setY(rect.yProperty().intValue());
         model.setHeight(rect.heightProperty().intValue());
-        model.setWidth(rect.widthProperty().intValue());
-        
+        model.setWidth(rect.widthProperty().intValue());        
         model.update(rect.getWidth(), rect.getHeight());
     }
 
@@ -253,8 +252,7 @@ public class DRect extends DShape implements ModelListener
      * Draw the rectangle defined by the model
      */
     public void draw()
-    {
-        
+    {        
         rect.setFill(model.getColor());
         rect.setX((double) model.getX());
         rect.setY((double) model.getY());

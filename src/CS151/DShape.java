@@ -69,22 +69,19 @@ public abstract class DShape implements ModelListener
         return knob;
     }
 
+    
     public abstract void drawKnobs();
-
-
     public abstract void removeKnobs();
 
 
     public void modelChanged(DShapeModel model)
     {
-        setModel(model); // set the new changes
+        setModel(model); // set the new changes maybe unnecessary
         draw(); // redraw
     }
 
     public abstract void draw();
-
     public abstract Shape getShape();
-
 
 
 }

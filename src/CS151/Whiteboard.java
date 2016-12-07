@@ -134,8 +134,8 @@ public class Whiteboard extends Application {
 
        
 	fontButton.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {		    	       
-		    displayFonts(stage);
+		public void handle(ActionEvent event) {		    
+		    displayFonts(stage);		    
 		}
 	    });
 
@@ -176,6 +176,18 @@ public class Whiteboard extends Application {
 	close.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
 
+		}
+	    });
+
+	textInput.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+		    DShape selected = canvas.getSelected();
+		    if(selected != null) {
+			if(selected instanceof DText) {
+			    ((DText)selected).setText(textInput.getText());
+			    canvas.paintComponent();
+			}
+		    }
 		}
 	    });
 	
@@ -246,6 +258,8 @@ public class Whiteboard extends Application {
 
 	textInput = new TextField("");
 	fontButton = new Button("Font Type");
+	fontButton.setMinWidth(100);
+	fontButton.setMaxWidth(100);	
 	disableTextControls(true);
 
 	HBox line3 = new HBox(BOX_SIZE);
@@ -351,6 +365,10 @@ public class Whiteboard extends Application {
 	fontButton.setText(font);
     }
 
+
+    /**
+     * Initialize the combo box used to display fonts
+     */
     public void setFontBox() {
 	fonts = new ComboBox<String>();
 	List<String> systemFonts = Font.getFamilies();
@@ -361,9 +379,7 @@ public class Whiteboard extends Application {
 	fonts.setItems(fontModel);
 	fonts.setPrefHeight(20);
 	fonts.setPrefWidth(200);
-	//fonts.setMaxHeight(Control.USE_PREF_SIZE);
-	fonts.setMaxWidth(Control.USE_PREF_SIZE);
-	
+	fonts.setMaxWidth(Control.USE_PREF_SIZE);	
     }
 
 
@@ -375,8 +391,11 @@ public class Whiteboard extends Application {
     public void setFont(String font) {
 	DShape selected = canvas.getSelected();
 	if(selected != null) {
-	    if(selected instanceof DText) 
+	    if(selected instanceof DText) {
 		( (DText) selected).setFont(font);
+		canvas.paintComponent();
+	    }
+	    
 	}
     }
     
@@ -385,7 +404,14 @@ public class Whiteboard extends Application {
     }
 
 
+    /**
+     * Create a popup window that displays the available
+     * font types to the user
+     * @param Stage primaryStage
+     */
     public void displayFonts(Stage primaryStage) {
+	DShape selected = canvas.getSelected();	
+	fonts.setValue( ((DText)selected).getFont());
 	Stage fontSelection = new Stage();
 	fontSelection.initModality(Modality.APPLICATION_MODAL);
 	fontSelection.initOwner(primaryStage);
@@ -394,7 +420,6 @@ public class Whiteboard extends Application {
 	box.setSpacing(10);
 	Button confirm = new Button("Set Font");
 	confirm.setOnMouseClicked(e -> {
-		System.out.println(fonts.getValue());
 		String selectedFont = fonts.getValue();
 		if(selectedFont != null) {
 		    setFontText(selectedFont);
