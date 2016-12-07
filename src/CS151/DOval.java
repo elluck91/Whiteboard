@@ -162,7 +162,6 @@ public class DOval extends DShape implements ModelListener
                 }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateRectModel();
-                DOval.this.removeKnobs();
                 moveToFront();
 
             }

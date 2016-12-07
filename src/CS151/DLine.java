@@ -63,12 +63,19 @@ public class DLine extends DShape implements ModelListener
                 double deltaX = event.getSceneX() - mouseLocation.value.getX();
                 double deltaY = event.getSceneY() - mouseLocation.value.getY();
                 double newMaxX = line.getStartX() + deltaX;
+                double newMaxY = line.getStartY() + deltaY;
+
                 double newX = line.getStartX() + deltaX;
                 double newY = line.getStartY() + deltaY;
 
-                line.setStartX(newX);
-                line.setStartY(newY);
+                if (line.getParent().getBoundsInLocal().getMaxX() - handleWidth >= newMaxX
+                        && line.getParent().getBoundsInLocal().getMaxY() - handleWidth >= newMaxY
+                        && line.getParent().getBoundsInLocal().getMinY() + handleWidth <= newMaxY
+                        && line.getParent().getBoundsInLocal().getMinX() + handleWidth <= newMaxX) {
+                    line.setStartX(newX);
+                    line.setStartY(newY);
 
+                }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateModel();
                 moveToFront();
@@ -80,18 +87,24 @@ public class DLine extends DShape implements ModelListener
             if (mouseLocation.value != null) {
                 double deltaX = event.getSceneX() - mouseLocation.value.getX();
                 double deltaY = event.getSceneY() - mouseLocation.value.getY();
-                double newMaxX = line.getStartX() + deltaX;
+                double newMaxX = line.getEndX() + deltaX;
+                double newMaxY = line.getEndY() + deltaY;
+
                 double newX = line.getEndX() + deltaX;
                 double newY = line.getEndY() + deltaY;
 
-                line.setEndX(newX);
-                line.setEndY(newY);
+                if (line.getParent().getBoundsInLocal().getMaxX() - handleWidth >= newMaxX
+                        && line.getParent().getBoundsInLocal().getMaxY() - handleWidth >= newMaxY
+                        && line.getParent().getBoundsInLocal().getMinY() + handleWidth <= newMaxY
+                        && line.getParent().getBoundsInLocal().getMinX() + handleWidth <= newMaxX) {
+                    line.setEndX(newX);
+                    line.setEndY(newY);
 
+                }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateModel();
                 moveToFront();
             }
-
         });
 
         line.setOnMouseClicked(event -> {
@@ -114,6 +127,11 @@ public class DLine extends DShape implements ModelListener
                 moveToFront();
 
             }
+
+        });
+
+        line.setOnMouseClicked(event -> {
+            moveToFront();
 
         });
 
@@ -151,8 +169,8 @@ public class DLine extends DShape implements ModelListener
     @Override
     public void removeKnobs()
     {
-        resizeHandleRight.setVisible(false);
-        resizeHandleLeft.setVisible(false);
+        //resizeHandleRight.setVisible(false);
+        //resizeHandleLeft.setVisible(false);
     }
 
     static class Wrapper<T>

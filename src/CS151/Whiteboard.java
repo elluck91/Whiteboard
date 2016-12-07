@@ -163,6 +163,7 @@ public class Whiteboard extends Application {
 		    DShape deleted = canvas.deleteSelected();
 		    if(deleted != null) {
 			tv.setItems(canvas.getShapeModels());
+                        canvas.deleteSelected();
 		    }
 		}
 	    });

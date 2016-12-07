@@ -149,7 +149,6 @@ public class Canvas extends Pane implements Observer{
 	// output for testing
 	System.out.print("x: " +selection.getModel().getX());
 	System.out.print(" y: " + selection.getModel().getY() + '\n');
-	selected.getKnobs();	
     }
 
     
@@ -157,7 +156,7 @@ public class Canvas extends Pane implements Observer{
      * Set the selected shape to null.
      */
     public void removeSelection() {
-	if(selected != null) {
+	if(selected != null) {    
 	    selected.removeKnobs();
 	    selected = null;
 	}
@@ -175,8 +174,8 @@ public class Canvas extends Pane implements Observer{
 	    DShape delete = selected;
 	    shapes.removeAll(delete);	    
 	    selected.getModel().removeListener(delete);
-	    //this.getChildren().remove(delete.getShape());
-	    selected = null;	    
+	    this.getChildren().remove(delete.getShape());
+	    selected = null;
 	    return delete;
 	} else {
 	    return null;
