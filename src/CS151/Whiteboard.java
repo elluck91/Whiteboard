@@ -116,8 +116,14 @@ public class Whiteboard extends Application {
 	    });
 
 	colorPicker.setOnAction(new EventHandler() {
+		ColorPickerWindow colorPick;
+		DShape selected;
 		public void handle(Event t) {
-		    ColorPickerWindow colorPick = new ColorPickerWindow();
+			selected = canvas.getSelected();
+			if (selected != null)
+				colorPick = new ColorPickerWindow(selected.getModel().getColor());
+			else
+				colorPick = new ColorPickerWindow(Color.GRAY);
 		    color = colorPick.display();
 		    canvas.updateColor(color);
 		    canvas.paintComponent();

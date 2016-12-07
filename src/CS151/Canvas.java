@@ -23,6 +23,8 @@ public class Canvas extends Pane implements Observer{
     
     // the shape currently selected
     private DShape selected;
+    
+    
 
     
     Canvas() {
