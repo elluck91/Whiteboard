@@ -47,4 +47,8 @@ public class WhiteboardPresenter
 	gui.updateView(shape);
     }
     
+    public void updateShape() {
+    	
+    }
+    
 }

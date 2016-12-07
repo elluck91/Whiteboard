@@ -57,11 +57,12 @@ public class Whiteboard extends Application {
     public void start(Stage stage) throws Exception {
 	presenter = new WhiteboardPresenter();
 	presenter.attachView(this);
-	canvas = new Canvas();
+	
 	
 	VBox main = new VBox();
 	VBox menu = getMenu();
 	GridPane gp = new GridPane();
+	canvas = new Canvas(main);
 	VBox leftColumn = getLeftColumn();
 	setFontBox();
 
@@ -194,6 +195,7 @@ public class Whiteboard extends Application {
 	
 	gp.addColumn(0, leftColumn);
 	gp.addColumn(1, canvas);
+	
 	
 	main.getChildren().addAll(menu, gp);
 		
