@@ -284,25 +284,25 @@ public class Whiteboard extends Application {
 	tv = new TableView();
 	
 
-	TableColumn xColumn = new TableColumn("x");
+	TableColumn<DShapeModel, Integer> xColumn = new TableColumn("x");
 	xColumn.setMinWidth(100);
 	xColumn.setCellValueFactory(
-		        new PropertyValueFactory<DShapeModel, String>("x"));
+		        new PropertyValueFactory<DShapeModel, Integer>("x"));
 
-	TableColumn yColumn = new TableColumn("y");
+	TableColumn<DShapeModel, Integer> yColumn = new TableColumn("y");
 	yColumn.setMinWidth(100);
 	yColumn.setCellValueFactory(
-			     new PropertyValueFactory<DShapeModel, String>("y"));
+			     new PropertyValueFactory<DShapeModel, Integer>("y"));
 
-	TableColumn widthColumn = new TableColumn("width");
+	TableColumn<DShapeModel, Integer> widthColumn = new TableColumn("width");
 	widthColumn.setMinWidth(100);
 	widthColumn.setCellValueFactory(
-			    new PropertyValueFactory<DShapeModel, String>("width"));
+			    new PropertyValueFactory<DShapeModel, Integer>("width"));
 
-	TableColumn heightColumn = new TableColumn("height");
+	TableColumn<DShapeModel, Integer> heightColumn = new TableColumn("height");
 	heightColumn.setMinWidth(100);
 	heightColumn.setCellValueFactory(
-			     new PropertyValueFactory<DShapeModel, String>("height"));
+			     new PropertyValueFactory<DShapeModel, Integer>("height"));
 
 	tv.getColumns().addAll(xColumn, yColumn, widthColumn, heightColumn);
 
@@ -378,6 +378,10 @@ public class Whiteboard extends Application {
 	//fonts.setMaxHeight(Control.USE_PREF_SIZE);
 	fonts.setMaxWidth(Control.USE_PREF_SIZE);
 	
+    }
+    
+    public TableView<DShapeModel> getTv() {
+    	return tv;
     }
 
 

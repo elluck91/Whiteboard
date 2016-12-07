@@ -208,6 +208,8 @@ public class DRect extends DShape implements ModelListener
         model.setY(rect.yProperty().intValue());
         model.setHeight(rect.heightProperty().intValue());
         model.setWidth(rect.widthProperty().intValue());
+        
+        model.update(rect.getWidth(), rect.getHeight());
     }
 
     private void moveToFront()

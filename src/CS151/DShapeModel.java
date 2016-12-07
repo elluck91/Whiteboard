@@ -1,12 +1,17 @@
 package CS151;
 
-import javafx.scene.paint.Color;
-import java.awt.Rectangle;
 import java.awt.Point;
-import java.util.Random;
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Random;
 
-public class DShapeModel {
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.paint.Color;
+
+public class DShapeModel implements Observer {
 
 	/*
       I changed the variables because the file assignment
@@ -16,10 +21,14 @@ public class DShapeModel {
 	protected Point point;
 	protected Color color;
 	protected ArrayList<DShape> listeners;
-
-
+	DoubleProperty width;
+	DoubleProperty height;
+	WhiteboardPresenter presenter;
+	
 	public DShapeModel() {
 		rectangle = new Rectangle(0, 0, 0, 0);
+		width = new SimpleDoubleProperty(rectangle.getWidth());
+		height = new SimpleDoubleProperty(rectangle.getHeight());
 		point = new Point(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<DShape>();
@@ -66,6 +75,7 @@ public class DShapeModel {
 
 	public void setHeight(int height) {
 		this.rectangle.height = height;
+		
 		notifyListeners();
 	}
 
@@ -185,6 +195,25 @@ public class DShapeModel {
 		setY(newY);
 		setWidth(rand.nextInt(maxWidth)+1);
 		setHeight(rand.nextInt(maxHeight)+1);
+	}
+
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void update(double wid, double hei) {
+		this.width.setValue(wid);
+		this.height.setValue(hei);
+		presenter.getGui().getTv().refresh();
+	}
+
+
+	public void attachPresenter(WhiteboardPresenter whiteboardPresenter) {
+		presenter = whiteboardPresenter;
+		
 	}
 
 }
