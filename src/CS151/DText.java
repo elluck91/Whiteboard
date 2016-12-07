@@ -33,6 +33,14 @@ public class DText extends DShape implements ModelListener {
     public String getFont() {
 	return ((DTextModel) model).getFont();
     }
+
+    public void setText(String text) {
+	((DTextModel) model).setText(text);
+    }
+
+    public void setFont(String font) {
+	((DTextModel) model).setFont(font);
+    }
     
     public Text getShape() {
 	return text;

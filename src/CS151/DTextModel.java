@@ -20,9 +20,11 @@ public class DTextModel extends DShapeModel {
 
     public void setText(String text) {
 	this.text = text;
+	//notifyListeners();
     }
 
     public void setFont(String font) {
 	this.font = font;
+	//notifyListeners();
     }
 }

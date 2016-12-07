@@ -65,7 +65,7 @@ public class Whiteboard extends Application {
 	GridPane gp = new GridPane();
 	canvas = new Canvas(main);
 	VBox leftColumn = getLeftColumn(main);
-
+	setFontBox();
 	// gather the location in the canvas where a user clicked
 	// use this information to select the correct shape in the
 	// view 
@@ -135,22 +135,7 @@ public class Whiteboard extends Application {
        
 	fontButton.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {		    	       
-		    final Stage fontSelection = new Stage();
-		    fontSelection.initModality(Modality.APPLICATION_MODAL);
-		    fontSelection.initOwner(stage);
-		    VBox box = new VBox();
-		    box.setAlignment(Pos.CENTER);
-		    box.setSpacing(10);
-		    Button confirm = new Button("Set Font");
-		    confirm.setOnMouseClicked(e -> {
-			    System.out.println(fonts.getValue());
-			    fontSelection.close();
-			});
-		    box.getChildren().addAll(fonts, confirm); 
-		    Scene selection = new Scene(box, 300, 100);
-		    fontSelection.setScene(selection);
-		    fontSelection.setTitle("Fonts");
-		    fontSelection.show();		    
+		    displayFonts(stage);
 		}
 	    });
 
@@ -380,13 +365,52 @@ public class Whiteboard extends Application {
 	fonts.setMaxWidth(Control.USE_PREF_SIZE);
 	
     }
+
+
+    /**
+     * Set the font of the selected shape if it's
+     * a DText shape. 
+     * @param String font
+     */
+    public void setFont(String font) {
+	DShape selected = canvas.getSelected();
+	if(selected != null) {
+	    if(selected instanceof DText) 
+		( (DText) selected).setFont(font);
+	}
+    }
     
     public TableView<DShapeModel> getTv() {
     	return tv;
     }
 
 
-public static void main(String[] args) {
+    public void displayFonts(Stage primaryStage) {
+	Stage fontSelection = new Stage();
+	fontSelection.initModality(Modality.APPLICATION_MODAL);
+	fontSelection.initOwner(primaryStage);
+	VBox box = new VBox();
+	box.setAlignment(Pos.CENTER);
+	box.setSpacing(10);
+	Button confirm = new Button("Set Font");
+	confirm.setOnMouseClicked(e -> {
+		System.out.println(fonts.getValue());
+		String selectedFont = fonts.getValue();
+		if(selectedFont != null) {
+		    setFontText(selectedFont);
+		    setFont(selectedFont);
+		    fontSelection.close();
+		}
+	    });
+	box.getChildren().addAll(fonts, confirm);
+	Scene selection = new Scene(box, 300, 100);
+	fontSelection.setScene(selection);
+	fontSelection.setTitle("Fonts");
+	fontSelection.show();
+    }
+
+    
+    public static void main(String[] args) {
 	launch(args);
     }
 
