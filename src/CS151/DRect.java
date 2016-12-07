@@ -91,7 +91,6 @@ public class DRect extends DShape implements ModelListener
                 double deltaX = event.getSceneX() - mouseLocation.value.getX();
                 double deltaY = event.getSceneY() - mouseLocation.value.getY();
                 double newMaxX = rect.getX() + rect.getWidth() + deltaX;
-
                 if (newMaxX >= rect.getX()
                         && newMaxX <= rect.getParent().getBoundsInLocal().getWidth() - handleWidth) {
                     rect.setWidth(rect.getWidth() + deltaX);
@@ -183,6 +182,7 @@ public class DRect extends DShape implements ModelListener
 
         rect.setOnMouseClicked(event -> {
             moveToFront();
+            DRect.this.drawKnobs();
 
         });
 
@@ -235,6 +235,11 @@ public class DRect extends DShape implements ModelListener
         resizeHandleSE.setVisible(false);
         resizeHandleSW.setVisible(false);  
     }
+    
+   public void removeShape() {
+       rect = null;
+       
+   }
 
     static class Wrapper<T>
     {
@@ -247,6 +252,7 @@ public class DRect extends DShape implements ModelListener
      */
     public void draw()
     {
+        
         rect.setFill(model.getColor());
         rect.setX((double) model.getX());
         rect.setY((double) model.getY());
