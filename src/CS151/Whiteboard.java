@@ -60,11 +60,11 @@ public class Whiteboard extends Application {
 	
 	
 	VBox main = new VBox();
+	main.setPrefSize(950, 400);
 	VBox menu = getMenu();
 	GridPane gp = new GridPane();
 	canvas = new Canvas(main);
-	VBox leftColumn = getLeftColumn();
-	setFontBox();
+	VBox leftColumn = getLeftColumn(main);
 
 	// gather the location in the canvas where a user clicked
 	// use this information to select the correct shape in the
@@ -280,9 +280,9 @@ public class Whiteboard extends Application {
 	return topLeft;	
     }
 
-    public VBox getBottomLeft() {
+    public VBox getBottomLeft(VBox main) {
 	tv = new TableView();
-	tv.setMaxHeight(200);
+	
 
 	TableColumn xColumn = new TableColumn("x");
 	xColumn.setMinWidth(100);
@@ -307,16 +307,18 @@ public class Whiteboard extends Application {
 	tv.getColumns().addAll(xColumn, yColumn, widthColumn, heightColumn);
 
 	tv.setItems(canvas.getShapeModels());
-	tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
+	tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+	tv.prefHeightProperty().bind(main.heightProperty());
 	VBox table = new VBox();
+	table.setMinWidth(400);
+	//table.prefHeightProperty().bind(main.heightProperty());
 	table.getChildren().add(tv);
 	return table;	
     }
 
-    public VBox getLeftColumn() {
+    public VBox getLeftColumn(VBox main) {
 	VBox left = new VBox();
-	left.getChildren().addAll(getTopLeft(), getBottomLeft());
+	left.getChildren().addAll(getTopLeft(), getBottomLeft(main));
 	return left;
     }
 
