@@ -1,5 +1,7 @@
 package CS151;
 
+import javafx.scene.control.TableView;
+
 // Presenter creates the elements to be displayed in the GUI
 
 public class WhiteboardPresenter
@@ -34,6 +36,10 @@ public class WhiteboardPresenter
 	
 	public Whiteboard getGui() {
 		return gui;
+	}
+	
+	public TableView<DShapeModel> getTable() {
+		return gui.getTv();
 	}
 
 }
