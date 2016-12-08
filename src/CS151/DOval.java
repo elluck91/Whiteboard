@@ -1,6 +1,8 @@
 package CS151;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -15,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 public class DOval extends DShape implements ModelListener
 {
 
+    ChangeListener listener;
     private Ellipse oval;
     private Rectangle rect;
     private final double handleWidth = 8;
@@ -57,16 +60,17 @@ public class DOval extends DShape implements ModelListener
         resizeHandleSW.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
 
         // force circles to live in same parent as rectangle:
-        rect.parentProperty().addListener((obs, oldParent, newParent) -> {
-            for (Shape r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW, oval)) {
+        listener = (obs, oldParent, newParent) -> {
+            for (Shape r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW ,oval)) {
                 Pane currentParent = (Pane) r.getParent();
                 if (currentParent != null) {
                     currentParent.getChildren().remove(r);
                 }
                 ((Pane) newParent).getChildren().add(r);
             }
-            moveToFront();
-        });
+        };
+
+        rect.parentProperty().addListener(listener);
 
         Wrapper<Point2D> mouseLocation = new Wrapper<>();
 
@@ -168,7 +172,8 @@ public class DOval extends DShape implements ModelListener
 
         });
 
-        rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        rect.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
             @Override
             public void handle(MouseEvent event)
             {
@@ -237,7 +242,6 @@ public class DOval extends DShape implements ModelListener
         resizeHandleSW.toFront();
     }
 
-
     @Override
     public void drawKnobs()
     {
@@ -253,7 +257,8 @@ public class DOval extends DShape implements ModelListener
         resizeHandleNE.setVisible(false);
         resizeHandleNW.setVisible(false);
         resizeHandleSE.setVisible(false);
-        resizeHandleSW.setVisible(false);    }
+        resizeHandleSW.setVisible(false);
+    }
 
     static class Wrapper<T>
     {
@@ -278,6 +283,26 @@ public class DOval extends DShape implements ModelListener
     {
         return rect;
     }
+
+    public ArrayList<Rectangle> getKnob()
+    {
+        ArrayList<Rectangle> a = new ArrayList<Rectangle>();
+
+        a.add(resizeHandleNW);
+        a.add(resizeHandleNE);
+        a.add(resizeHandleSE);
+        a.add(resizeHandleSW);
+        a.add(rect);
+
+        return a;
+    }
     
+    public Ellipse getOvalShape() {
+        return oval;
+    }
+    
+        public ChangeListener getListener() {
+        return listener;
+    }
 
 }

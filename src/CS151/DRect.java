@@ -1,5 +1,6 @@
 package CS151;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Point2D;
@@ -14,7 +15,6 @@ import javafx.scene.shape.Ellipse;
 public class DRect extends DShape implements ModelListener
 {
     ChangeListener listener;
-    Pane shapePane = new Pane();
     private Rectangle rect;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
@@ -247,6 +247,20 @@ public class DRect extends DShape implements ModelListener
        
    }
 
+       public ArrayList<Rectangle> getKnob() {
+        ArrayList <Rectangle> a = new  ArrayList<Rectangle>();
+        
+        a.add(resizeHandleNW);
+        a.add(resizeHandleNE);
+        a.add(resizeHandleSE);
+        a.add(resizeHandleSW);
+        a.add(resizeHandleLeft);
+        a.add(resizeHandleRight);
+        
+        
+        
+        return a;
+    }
     static class Wrapper<T>
     {
 
@@ -275,8 +289,6 @@ public class DRect extends DShape implements ModelListener
     }
     
     
-    public Pane getShapePane() {
-        return shapePane;
-    }
+    
 
 }
