@@ -9,8 +9,8 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import java.awt.Point;
-import java.awt.Rectangle;
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 
 public class Canvas extends Pane implements Observer{
 
@@ -126,7 +126,7 @@ public class Canvas extends Pane implements Observer{
 	 * Given a point, determine which shape should be selected
 	 * if no shapes are selected, should we set selection to null?
 	 */
-	public void makeSelection(Point location) {
+	public void makeSelection(Point2D location) {
 		DShape newSelection = null;
 		for(DShape shape: shapes) {
 			Rectangle area = shape.getBounds();

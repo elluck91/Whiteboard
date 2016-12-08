@@ -26,7 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
-import java.awt.Point;
+import javafx.geometry.Point2D;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,7 +71,7 @@ public class Whiteboard extends Application {
 	// use this information to select the correct shape in the
 	// view 
 	canvas.setOnMouseClicked(e -> {
-		Point location = new Point((int)e.getX(), (int)e.getY());
+		Point2D location = new Point2D(e.getX(), e.getY());
 		// output for testing
 		System.out.print("x click: " + location.getX());
 		System.out.print(" y click : " + location.getY() + '\n');

@@ -1,6 +1,5 @@
 package CS151;
 
-import java.awt.Point;
 import java.util.Arrays;
 import java.util.Random;
 import javafx.geometry.Point2D;
@@ -23,9 +22,10 @@ public class DLine extends DShape implements ModelListener
     {
         model = new DLineModel();
 
-        line = new Line(((DLineModel) model).getStart().x, ((DLineModel) model).getStart().y, ((DLineModel) model).getEnd().x, ((DLineModel) model).getEnd().y);
+        line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
+			((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
         line.setStroke(Color.BLACK);
-        line.setStrokeWidth(5);
+        //line.setStrokeWidth(5);
 
         // top left resize handle:
         resizeHandleLeft = new Rectangle(handleWidth, handleWidth, Color.BLACK);
@@ -197,8 +197,8 @@ public class DLine extends DShape implements ModelListener
     private void updateModel()
     {
 
-        Point start = new Point((int) line.getStartX(), (int) line.getStartY());
-        Point end = new Point((int) line.getEndX(), (int) line.getEndY());
+        Point2D start = new Point2D(line.getStartX(), line.getStartY());
+        Point2D end = new Point2D(line.getEndX(), line.getEndY());
 
         ((DLineModel) model).setStart(start);
         ((DLineModel) model).setEnd(end);
@@ -208,8 +208,8 @@ public class DLine extends DShape implements ModelListener
     public void setModel(DShapeModel model)
     {
         this.model = model;
-        Point start = new Point(model.getX(), model.getY());
-        Point end = new Point(model.getX() + model.getWidth(), model.getY() + model.getWidth());
+        Point2D start = new Point2D(model.getX(), model.getY());
+        Point2D end = new Point2D(model.getX() + model.getWidth(), model.getY() + model.getWidth());
         ((DLineModel) model).setStart(start);
         ((DLineModel) model).setEnd(end);
     }
@@ -219,6 +219,7 @@ public class DLine extends DShape implements ModelListener
         return line;
     }
 
+    /*
     public void randomize(int max)
     {
         model.randomize(max);
@@ -230,4 +231,5 @@ public class DLine extends DShape implements ModelListener
         ((DLineModel) model).setStart(start);
         ((DLineModel) model).setEnd(end);
     }
+    */
 }

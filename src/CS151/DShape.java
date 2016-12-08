@@ -2,7 +2,6 @@ package CS151;
 
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.geometry.Point2D;
@@ -37,16 +36,18 @@ public abstract class DShape implements ModelListener
         this.model = model;
     }
 
-    public java.awt.Rectangle getBounds()
+    public Rectangle getBounds()
     {
         return model.getBounds();
     }
 
+    /*
     public void randomize(int max)
     {
         model.randomize(max);
     }
-
+    */
+    
     public void setColor(Color c)
     {
         model.setColor(c);
@@ -57,11 +58,11 @@ public abstract class DShape implements ModelListener
     /**
      * Calculate a list of points representing the four corners of the model
      *
-     * @return ArrayList<Point>
+     * @return ArrayList<Point2D>
      */
-    public ArrayList<Point> getKnobs()
+    public ArrayList<Point2D> getKnobs()
     {
-        ArrayList<Point> knob = new ArrayList<Point>();
+        ArrayList<Point2D> knob = new ArrayList<Point2D>();
         knob.add(model.getTopLeft());
         knob.add(model.getTopRight());
         knob.add(model.getBottomLeft());
