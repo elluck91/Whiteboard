@@ -1,7 +1,7 @@
 package CS151;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -18,7 +18,7 @@ public class DShapeModel implements Observer {
      * document recommended using Rectangle & Point classes
     */
     protected Rectangle rectangle;
-    protected Point point;
+    protected Point2D point;
     protected Color color;
     protected ArrayList<ModelListener> listeners;
     DoubleProperty width;
@@ -29,52 +29,52 @@ public class DShapeModel implements Observer {
 	rectangle = new Rectangle(0, 0, 0, 0);
 	width = new SimpleDoubleProperty(rectangle.getWidth());
 	height = new SimpleDoubleProperty(rectangle.getHeight());
-	point = new Point(0, 0);
+	point = new Point2D(0, 0);
 	color = Color.GRAY;
 	listeners = new ArrayList<ModelListener>();
     }
 
 
-    public int getX() {
-	return rectangle.x;
+    public double getX() {
+	return rectangle.getX();
     }
 
 
-    public void setX(int x) {
-	this.rectangle.x = x;
+    public void setX(double x) {
+	rectangle.setX(x);
 	notifyListeners();
     }
 
 
-    public int getY() {
-	return rectangle.y;
+    public double getY() {
+	return rectangle.getY();
     }
 
 
-    public void setY(int y) {
-	this.rectangle.y = y;
+    public void setY(double y) {
+	rectangle.setY(y);
 	notifyListeners();
     }
     
 
-    public int getWidth() {
-	return rectangle.width;
+    public double getWidth() {
+	return rectangle.getWidth();
     }
 
 
-    public void setWidth(int width) {
-	this.rectangle.width = width;
+    public void setWidth(double width) {
+	rectangle.setWidth(width);
 	notifyListeners();
     }
 
 
-    public int getHeight() {
-	return rectangle.height;
+    public double getHeight() {
+	return rectangle.getHeight();
     }
 
 
-    public void setHeight(int height) {
-	this.rectangle.height = height;	
+    public void setHeight(double height) {
+	rectangle.setHeight(height);
 	notifyListeners();
     }
 
@@ -125,59 +125,61 @@ public class DShapeModel implements Observer {
      * create and return a copy of the rectangle model
      */
     public Rectangle getBounds() {       
-	return new Rectangle(rectangle);
+	return new Rectangle(rectangle.getX(), rectangle.getY(),
+			     rectangle.getWidth(), rectangle.getHeight());
     }
     
 
     /**
      * Get the top left corner point of the shape bounds
-     * @return Point
+     * @return Point2D
      */
-    public Point getTopLeft() {
+    public Point2D getTopLeft() {
 	System.out.println("top left x: " + getX() + " top right y: " + getY());
-	return new Point(point);
+	return new Point2D(point.getX(), point.getY());
     }
 
 
     /**
      * Get the top right corner point of the shape bounds
-     * @return Point
+     * @return Point2D
      */
-    public Point getTopRight() {
-	int topX = getX() + getWidth();
+    public Point2D getTopRight() {
+	double topX = getX() + getWidth();
 	// testing output
 	System.out.println("top right x: " + topX + " top right y: " + getY());
-	return new Point(topX, getY());	
+	return new Point2D(topX, getY());	
     }
 
 
     /**
      * Get the bottom left corner point of the shape bounds
-     * @return Point
+     * @return Point2D
      */
-    public Point getBottomLeft() {
-	int bottomY = getY() + getHeight();
+    public Point2D getBottomLeft() {
+	double bottomY = getY() + getHeight();
 	System.out.println("bottom left x: " + getX() + "bottom left y: " + bottomY);
-	return new Point(getX(), bottomY);
+	return new Point2D(getX(), bottomY);
     }
 
 
     /**
      * Get the bottom right corner point of the shape bounds
-     * @return Point
+     * @return Point2D
      */
-    public Point getBottomRight() {
-	int bottomX = getX() + getWidth();
-	int bottomY = getY() + getHeight();
+    public Point2D getBottomRight() {
+	double bottomX = getX() + getWidth();
+	double bottomY = getY() + getHeight();
 	System.out.println("bottom right x: " + bottomX + " bottom left y: " + bottomY);
-	return new Point(bottomX, bottomY);
+	return new Point2D(bottomX, bottomY);
     }
 
 
     /**
      * generate a random rectangle to serve as the bounds
      * for a DShape
-     */    
+     */
+    /*
     public void randomize(int max) { 
 	Random rand = new Random();
 	int maxWidth = 0;
@@ -195,7 +197,7 @@ public class DShapeModel implements Observer {
 	setWidth(rand.nextInt(maxWidth)+1);
 	setHeight(rand.nextInt(maxHeight)+1);
     }
-    
+    */
 
     @Override
     public void update(Observable arg0, Object arg1) {
