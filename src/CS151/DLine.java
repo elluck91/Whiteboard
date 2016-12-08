@@ -125,7 +125,6 @@ public class DLine extends DShape implements ModelListener
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 updateModel();
                 moveToFront();
-
             }
 
         });
@@ -169,8 +168,8 @@ public class DLine extends DShape implements ModelListener
     @Override
     public void removeKnobs()
     {
-        //resizeHandleRight.setVisible(false);
-        //resizeHandleLeft.setVisible(false);
+        resizeHandleRight.setVisible(false);
+        resizeHandleLeft.setVisible(false);
     }
 
     static class Wrapper<T>
@@ -182,6 +181,7 @@ public class DLine extends DShape implements ModelListener
     @Override
     public void draw()
     {
+	System.out.println(model.getColor().toString());
         line.setStroke(model.getColor());
         double startX = ((DLineModel) model).getStart().getX();
         double startY = ((DLineModel) model).getStart().getY();

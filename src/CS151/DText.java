@@ -20,9 +20,12 @@ public class DText extends DShape implements ModelListener {
 				       model.getWidth(), model.getHeight());
 	text.setClip(clip);
 	text.setText( ((DTextModel) model).getText());
-	double fontSize = computeFontSize();
-	Font f = new Font( ((DTextModel) model).getFont(), fontSize);
+	//	double fontSize = computeFontSize();
+	//	System.out.println(fontSize);
+	Font f = new Font( ((DTextModel) model).getFont(), 30);
 	text.setFont(f);
+	System.out.println("height: " +
+			   text.getBoundsInLocal().getHeight());
 	text.setX(model.getX());
 	text.setY(model.getY()+model.getHeight());
     }
