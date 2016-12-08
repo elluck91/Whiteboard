@@ -20,7 +20,7 @@ public class DShapeModel implements Observer {
     protected Rectangle rectangle;
     protected Point point;
     protected Color color;
-    protected ArrayList<DShape> listeners;
+    protected ArrayList<ModelListener> listeners;
     DoubleProperty width;
     DoubleProperty height;
     WhiteboardPresenter presenter;
@@ -31,7 +31,7 @@ public class DShapeModel implements Observer {
 	height = new SimpleDoubleProperty(rectangle.getHeight());
 	point = new Point(0, 0);
 	color = Color.GRAY;
-	listeners = new ArrayList<DShape>();
+	listeners = new ArrayList<ModelListener>();
     }
 
 
@@ -94,8 +94,8 @@ public class DShapeModel implements Observer {
      * Register a shape as a listener of the model.
      * @param DShape shape
      */
-    public void addListener(DShape shape) {
-	listeners.add(shape);
+    public void addListener(ModelListener listener) {
+	listeners.add(listener);
     }
 
 
@@ -103,8 +103,8 @@ public class DShapeModel implements Observer {
      * Remove a shape as a listener of the model.
      * @param DShape shape
      */
-    public void removeListener(DShape shape) {
-	listeners.remove(shape);
+    public void removeListener(ModelListener listener) {
+	listeners.remove(listener);
     }
 
 
@@ -115,8 +115,8 @@ public class DShapeModel implements Observer {
      * methods of the model
      */
     protected void notifyListeners() {
-	for(DShape shape: listeners) {
-	    shape.modelChanged(this);
+	for(ModelListener listener: listeners) {
+	    listener.modelChanged(this);
 	}
     }
 
