@@ -72,6 +72,23 @@ public abstract class DShape implements ModelListener
     
     public abstract void drawKnobs();
     public abstract void removeKnobs();
+    
+    public ArrayList<Rectangle> getKnob() {
+        ArrayList <Rectangle> a = new  ArrayList<Rectangle>();
+        
+        a.add(resizeHandleNW);
+        a.add(resizeHandleNE);
+        a.add(resizeHandleSE);
+        a.add(resizeHandleSW);
+        a.add(resizeHandleLeft);
+        a.add(resizeHandleRight);
+        
+        
+        
+        return a;
+    }
+    
+
 
 
     public void modelChanged(DShapeModel model)

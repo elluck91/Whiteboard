@@ -179,6 +179,11 @@ public class Canvas extends Pane implements Observer{
 			DShape delete = selected;
 			shapes.removeAll(delete);	    
 			selected.getModel().removeListener(delete);
+                        delete.getShape().parentProperty().removeListener(((DRect) delete).getListener());
+                        
+                        for (javafx.scene.shape.Rectangle knob : delete.getKnob()) {
+                            this.getChildren().remove(knob);
+                        }
 			this.getChildren().remove(delete.getShape());
 			selected = null;
 			return delete;

@@ -1,6 +1,7 @@
 package CS151;
 
 import java.util.Arrays;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
@@ -12,7 +13,8 @@ import javafx.scene.shape.Ellipse;
 
 public class DRect extends DShape implements ModelListener
 {
-
+    ChangeListener listener;
+    Pane shapePane = new Pane();
     private Rectangle rect;
     private final double handleWidth = 8;
     private final double handleCenter = handleWidth / 2;
@@ -45,17 +47,20 @@ public class DRect extends DShape implements ModelListener
         resizeHandleSW = new Rectangle(handleWidth, handleWidth, Color.BLACK);
         resizeHandleSW.xProperty().bind(rect.xProperty().subtract(handleCenter));
         resizeHandleSW.yProperty().bind(rect.yProperty().add(rect.heightProperty().subtract(handleCenter)));
-
+        //shapePane.getChildren().addAll(resizeHandleNE,resizeHandleNW,resizeHandleSE,resizeHandleSW);
+        
         // force circles to live in same parent as rectangle:
-        rect.parentProperty().addListener((obs, oldParent, newParent) -> {
+        listener = (obs, oldParent, newParent) -> {
             for (Shape r : Arrays.asList(resizeHandleNW, resizeHandleSE, resizeHandleNE, resizeHandleSW)) {
                 Pane currentParent = (Pane) r.getParent();
                 if (currentParent != null) {
                     currentParent.getChildren().remove(r);
                 }
-                ((Pane) newParent).getChildren().add(r);
+                 ((Pane) newParent).getChildren().add(r);
             }
-        });
+        };
+        
+        rect.parentProperty().addListener(listener);
 
         Wrapper<Point2D> mouseLocation = new Wrapper<>();
 
@@ -263,6 +268,15 @@ public class DRect extends DShape implements ModelListener
     public Shape getShape()
     {
         return rect;
+    }
+    
+    public ChangeListener getListener() {
+        return listener;
+    }
+    
+    
+    public Pane getShapePane() {
+        return shapePane;
     }
 
 }
