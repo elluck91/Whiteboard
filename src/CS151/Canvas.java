@@ -1,98 +1,65 @@
 package CS151;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
-public class Canvas extends Pane implements Observer
+public class Canvas extends Pane
 {
-
-	/*
-	 * The shapes list in the canvas is effectively the "document"
-	 * the user is editing; whatever is in that list, it is being
-	 * edited. Removing a shape from this list removes it from the
-	 * document as well.
-	 */
-    private ObservableList<DShape> shapes;
-
-	// the shape currently selected
+	private ArrayList<DShape> shapes;
+	private ObservableList<DShapeModel> models;
 	private DShape selected;
-	WhiteboardPresenter presenter;
+	Whiteboard gui;
+	ArrayList<DRect> knobs;
+	double orgSceneX;
+	double orgSceneY;
+	double orgTranslateX;
+	double orgTranslateY;
+	Wrapper<Point2D> mouseLocation;
 
-	Canvas(VBox main)
+	Canvas(VBox main, Whiteboard gui)
 	{
-	       	super();
-	        this.setStyle("-fx-background-color: white;");
-	        this.setMinSize(400, 400);
-	        this.prefHeightProperty().bind(main.heightProperty());
-	        this.prefWidthProperty().bind(main.widthProperty());
-	        shapes = FXCollections.observableArrayList();
-	        selected = null;
-	}
-	
-	public void attachPresenter(WhiteboardPresenter presenter) {
-		this.presenter = presenter;
-	}
-
-	/**
-	 * Loops through the list of shapes and draws them. This code might be worth
-	 * thinking about again. The call to clear the canvas is necessary to get
-	 * shapes that have been modified to reappear in the canvas with the
-	 * modifications made. This was a hack and not necessarily good design.
-	 */
-	public void paintComponent()
-	{
-		// this.getChildren().clear();
-		for (int i = 0; i < shapes.size(); i++) {
-			shapes.get(i).draw();
-			//this.getChildren().add(shapes.get(i).getShape());
-		}
+		this.setStyle("-fx-background-color: white;");
+		this.setMinSize(400, 400);
+		this.prefHeightProperty().bind(main.heightProperty());
+		this.prefWidthProperty().bind(main.widthProperty());
+		shapes = new ArrayList<DShape>();
+		models = FXCollections.observableArrayList();
+		this.gui = gui;
+		selected = null;
+		mouseLocation =  new Wrapper<>();
+		knobs = new ArrayList<DRect>();
 	}
 
-	public ObservableList<DShape> getShapes()
+	public ObservableList<DShapeModel> getShapeModels() {
+		return models;
+	}
+
+	public ArrayList<DShape> getShapes()
 	{
 		return shapes;
 	}
 
-	public ObservableList<DShapeModel> getShapeModels()
-	{
-		ObservableList<DShapeModel> models = FXCollections.observableArrayList();
-
-		for (DShape each : shapes) {
-			models.add(each.getModel());
-		}
-
-		return models;
-
-	}
-
-	/**
-	 * Add the shape to the list of shapes and draw it on the canvas
-	 *
-	 * @param DShapeModel model
-	 */
 	public void addShape(DShapeModel model)
 	{
 		DShape shape = getDShape(model);
 		shape.setModel(model);
 		shapes.add(shape);
+		models.add(model);
 		shape.draw();
-		updateSelection(shape);
 		this.getChildren().add(shape.getShape());
+		//updateSelection(shape, shape.getBounds());
+		updateSelection(shape);
+
 	}
 
-	/**
-	 * Create a new DShape given a DShapeModel
-	 *
-	 * @param DShapeModel shape
-	 * @return DShape
-	 */
 	public DShape getDShape(DShapeModel shape)
 	{
 		if (shape instanceof DRectModel) {
@@ -116,11 +83,15 @@ public class Canvas extends Pane implements Observer
 		// was a quick fix
 	}
 
-	/**
-	 * Update the color of the currently selected shape
-	 *
-	 * @param Color color
-	 */
+	public void paintComponent()
+	{
+
+		for (int i = 0; i < shapes.size(); i++) {
+			shapes.get(i).draw();	
+
+		}
+	}
+
 	public void updateColor(Color color)
 	{
 		if (selected != null) {
@@ -128,15 +99,12 @@ public class Canvas extends Pane implements Observer
 		}
 	}
 
-	/**
-	 * Given a point, determine which shape should be selected if no shapes are
-	 * selected, should we set selection to null?
-	 */
 	public void makeSelection(Point2D location)
 	{
+		Rectangle area = new Rectangle();
 		DShape newSelection = null;
 		for (DShape shape : shapes) {
-			javafx.scene.shape.Rectangle area = shape.getBounds();
+			area = shape.getBounds();
 			if (area.contains(location)) {
 				newSelection = shape;
 
@@ -149,96 +117,231 @@ public class Canvas extends Pane implements Observer
 			updateSelection(newSelection);
 		}
 	}
-
-	/**
-	 * Update the currently selected shape to
-	 *
-	 * @param DShape selection
-	 */
 	public void updateSelection(DShape selection)
 	{
 		removeSelection();
+
 		selected = selection;
-		selected.drawKnobs();
 		shapes.remove(selection);
 		shapes.add(selection);
-		presenter.updateTable();
+
+		
+		//paintComponent();
+		//gui.updateTable();
+		addKnobs(selection.getModel().getBounds());
+		setUpDragging(selected, mouseLocation);
+
+		selected.getShape().setOnMouseDragged(event -> {
+			if (mouseLocation.value != null && selected != null) {
+				double deltaX = event.getSceneX() - mouseLocation.value.getX();
+				double deltaY = event.getSceneY() - mouseLocation.value.getY();
+				double newX = selected.getModel().getX() + deltaX;
+				double newMaxX = newX + selected.getModel().getWidth();
+
+						selected.getModel().setX(newX);
+						knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+						knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+						knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+						knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+				
+				double newY = selected.getModel().getY() + deltaY;
+				double newMaxY = newY + selected.getModel().getHeight();
+
+						selected.getModel().setY(newY);
+						knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+						knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+						knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+						knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+				
+				mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+
+				paintComponent();
+				gui.updateTable();
+			}
+		});
+
 		// output for testing
 		System.out.print("x: " + selection.getModel().getX());
 		System.out.print(" y: " + selection.getModel().getY() + '\n');
 	}
 
-	/**
-	 * Set the selected shape to null.
-	 */
 	public void removeSelection()
 	{
 		if (selected != null) {
-			selected.removeKnobs();
 			selected = null;
+			removeKnobs();
 		}
 	}
 
-	/**
-	 * Delete the currently selected shape and return the model that was deleted
-	 * to the GUI. The GUI will then know to update the table of coordinates. If
-	 * there is no shape selected, do nothing.
-	 */
-	public DShape deleteSelected()
+	public void deleteSelected()
 	{
 		if (selected != null) {
-			DShape delete = selected;
-			shapes.removeAll(delete);
-			selected.getModel().removeListener(delete);
-
-			if (selected instanceof DRect) {
-				// delete rectangle stuff
-				delete.getShape().parentProperty().removeListener(((DRect) delete).getListener());
-				for (javafx.scene.shape.Rectangle knob : ((DRect) delete).getKnob()) {
-					this.getChildren().remove(knob);
-					this.getChildren().remove(delete.getShape());
-
-				}
-				selected = null;
-
-			}
-
-			//
-			if (selected instanceof DOval) {
-				// delete ellipse stuff
-				delete.getShape().parentProperty().removeListener(((DOval) delete).getListener());
-				for (javafx.scene.shape.Rectangle knob : ((DOval) delete).getKnob()) {
-					this.getChildren().remove(knob);
-					this.getChildren().remove(delete.getShape());
-					this.getChildren().remove(((DOval) delete).getOvalShape());
-
-				}
-				selected = null;
-
-			}
-			//
-
-			return delete;
-		} else {
-			return null;
+			shapes.remove(selected);
+			models.remove(selected.getModel());
+			this.getChildren().remove(selected.getShape());
+			removeKnobs();
 		}
 	}
 
-	/**
-	 * Get the selected shape
-	 *
-	 * @return DShape
-	 */
+
+
+	class Wrapper<T> {
+		T value;
+	}
+
+	private void addKnobs(Rectangle area) {
+		DRect topLeft = new DRect(area.getX()-4.5, area.getY()-4.5, 9, 9);
+		
+		DRect topRight = new DRect(area.getX()-4.5+area.getWidth(), area.getY()-4.5, 9, 9);
+		
+		DRect bottomLeft = new DRect(area.getX()-4.5, area.getY()-4.5+area.getHeight(), 9, 9);
+		
+		DRect bottomRight = new DRect(area.getX()+area.getWidth()-4.5, area.getY()+area.getHeight()-5.6, 9, 9);
+		
+		setUpDragging(topLeft, mouseLocation);
+		topLeft.getShape().setOnMouseDragged(event -> {
+            if (mouseLocation.value != null) {
+                double deltaX = event.getSceneX() - mouseLocation.value.getX();
+                double deltaY = event.getSceneY() - mouseLocation.value.getY();
+                double newX = Math.abs(selected.getModel().getX() + deltaX);    
+                	selected.getModel().setX(newX);
+                	selected.getModel().setWidth(Math.abs(selected.getModel().getWidth()) - deltaX);
+                	knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+
+                
+                double newY = selected.getModel().getY() + deltaY;
+                	selected.getModel().setY(newY);
+                	selected.getModel().setHeight(Math.abs(selected.getModel().getHeight()) - deltaY);
+                	knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+
+                paintComponent();
+				gui.updateTable();
+                mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+            }
+        });
+		
+        setUpDragging(topRight, mouseLocation);
+        topRight.getShape().setOnMouseDragged(event -> {
+
+            if (mouseLocation.value != null) {
+                double deltaX = event.getSceneX() - mouseLocation.value.getX();
+                double deltaY = event.getSceneY() - mouseLocation.value.getY();
+                double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
+                	selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
+					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+
+                double newY = selected.getModel().getY() + deltaY;
+
+                	selected.getModel().setY(newY);
+                	selected.getModel().setHeight(selected.getModel().getHeight() - deltaY);
+                	knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+
+
+                mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                paintComponent();
+				gui.updateTable();
+
+            }
+        });
+        
+        setUpDragging(bottomLeft, mouseLocation);
+        bottomLeft.getShape().setOnMouseDragged(event -> {
+            if (mouseLocation.value != null) {
+
+                double deltaX = event.getSceneX() - mouseLocation.value.getX();
+                double deltaY = event.getSceneY() - mouseLocation.value.getY();
+                double newX = selected.getModel().getX() + deltaX;
+                
+                	selected.getModel().setX(newX);
+                	selected.getModel().setWidth(selected.getModel().getWidth() - deltaX);
+                	knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+
+                double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
+
+                	selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
+                	knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+
+                mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                paintComponent();
+				gui.updateTable();
+
+            }
+
+        });
+        
+        setUpDragging(bottomRight, mouseLocation);
+        bottomRight.getShape().setOnMouseDragged(event -> {
+            if (mouseLocation.value != null) {
+                double deltaX = event.getSceneX() - mouseLocation.value.getX();
+                double deltaY = event.getSceneY() - mouseLocation.value.getY();
+                double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
+                if (newMaxX >= selected.getModel().getX()
+                        && newMaxX <= selected.getShape().getParent().getBoundsInLocal().getWidth() - 9) {
+                	selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
+                	
+					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+					
+					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+                }
+                double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
+                if (newMaxY >= selected.getModel().getY()
+                        && newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9) {
+                	selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
+					
+					
+					knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+                }
+                mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+                paintComponent();
+				gui.updateTable();
+
+            }
+        });
+
+		knobs.add(topLeft);
+		knobs.add(topRight);
+		knobs.add(bottomLeft);
+		knobs.add(bottomRight);
+
+		for (int i = 0; i < knobs.size(); i++) {
+			this.getChildren().add(knobs.get(i).getShape());
+		}
+	}
+
+	private void setUpDragging(DShape r, Wrapper<Point2D> mouseLocation)
+	{
+
+		r.getShape().setOnDragDetected(event -> {
+			r.getShape().getParent().setCursor(Cursor.CLOSED_HAND);
+			mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+		});
+
+		r.getShape().setOnMouseReleased(event -> {
+			r.getShape().getParent().setCursor(Cursor.DEFAULT);
+			mouseLocation.value = null;
+		});
+	}
+
+
+
+	private void removeKnobs() {
+		for (int i = 0; i < knobs.size(); i++) {
+			this.getChildren().remove(knobs.get(i).getShape());
+		}
+		knobs.clear();
+	}
+
 	public DShape getSelected()
 	{
 		return selected;
 	}
 
-	@Override
-	public void update(Observable arg0, Object arg1)
-	{
-		// TODO Auto-generated method stub
-
-	}
 
 }

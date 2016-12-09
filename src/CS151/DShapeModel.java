@@ -11,7 +11,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 
-public class DShapeModel implements Observer {
+public class DShapeModel {
 
 	/**
 	 * I changed the variables because the file assignment
@@ -23,12 +23,15 @@ public class DShapeModel implements Observer {
 	protected ArrayList<ModelListener> listeners;
 	DoubleProperty width;
 	DoubleProperty height;
-	WhiteboardPresenter presenter;
+	DoubleProperty x;
+	DoubleProperty y;
 
 	public DShapeModel() {
-		rectangle = new Rectangle(0, 0, 0, 0);
+		rectangle = new Rectangle(10, 10, 20, 20);
 		width = new SimpleDoubleProperty(rectangle.getWidth());
 		height = new SimpleDoubleProperty(rectangle.getHeight());
+		x = new SimpleDoubleProperty(rectangle.getX());
+		y = new SimpleDoubleProperty(rectangle.getY());
 		point = new Point2D(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
@@ -129,91 +132,12 @@ public class DShapeModel implements Observer {
 				rectangle.getWidth(), rectangle.getHeight());
 	}
 
-
-	/**
-	 * Get the top left corner point of the shape bounds
-	 * @return Point2D
-	 */
-	public Point2D getTopLeft() {
-		System.out.println("top left x: " + getX() + " top right y: " + getY());
-		return new Point2D(point.getX(), point.getY());
-	}
-
-
-	/**
-	 * Get the top right corner point of the shape bounds
-	 * @return Point2D
-	 */
-	public Point2D getTopRight() {
-		double topX = getX() + getWidth();
-		// testing output
-		System.out.println("top right x: " + topX + " top right y: " + getY());
-		return new Point2D(topX, getY());	
-	}
-
-
-	/**
-	 * Get the bottom left corner point of the shape bounds
-	 * @return Point2D
-	 */
-	public Point2D getBottomLeft() {
-		double bottomY = getY() + getHeight();
-		System.out.println("bottom left x: " + getX() + "bottom left y: " + bottomY);
-		return new Point2D(getX(), bottomY);
-	}
-
-
-	/**
-	 * Get the bottom right corner point of the shape bounds
-	 * @return Point2D
-	 */
-	public Point2D getBottomRight() {
-		double bottomX = getX() + getWidth();
-		double bottomY = getY() + getHeight();
-		System.out.println("bottom right x: " + bottomX + " bottom left y: " + bottomY);
-		return new Point2D(bottomX, bottomY);
-	}
-
-
-	/**
-	 * generate a random rectangle to serve as the bounds
-	 * for a DShape
-	 */
-	/*
-    public void randomize(int max) { 
-	Random rand = new Random();
-	int maxWidth = 0;
-	int maxHeight = 0;
-	int newX = 0;
-	int newY = 0;
-	while(maxWidth == 0 || maxHeight == 0){
-	    newX = rand.nextInt(max)+1;
-	    newY = rand.nextInt(max)+1;
-	    maxWidth = max - newX;
-	    maxHeight = max - newY;
-	}
-	setX(newX);
-	setY(newY);
-	setWidth(rand.nextInt(maxWidth)+1);
-	setHeight(rand.nextInt(maxHeight)+1);
-    }
-	 */
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void update(double wid, double hei) {
+		System.out.println("UPDATING");
 		this.width.setValue(wid);
 		this.height.setValue(hei);
-		presenter.getGui().getTv().refresh();
-	}
-
-
-	public void attachPresenter(WhiteboardPresenter whiteboardPresenter) {
-		presenter = whiteboardPresenter;	
+		this.x.setValue(getX());
+		this.y.setValue(getY());
 	}
 
 }

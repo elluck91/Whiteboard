@@ -35,7 +35,6 @@ import javafx.stage.Stage;
 
 public class Whiteboard extends Application {
 
-	private WhiteboardPresenter presenter;
 	private Canvas canvas;
 	private Button rect;
 	private Button oval;
@@ -56,17 +55,12 @@ public class Whiteboard extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		presenter = new WhiteboardPresenter();
-		presenter.attachView(this);
-
 
 		VBox main = new VBox();
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
 		GridPane gp = new GridPane();
-		canvas = new Canvas(main);
-		canvas.attachPresenter(presenter);
-		presenter.attachCanvas(canvas);
+		canvas = new Canvas(main, this);
 		VBox leftColumn = getLeftColumn(main);
 		setFontBox();
 		// gather the location in the canvas where a user clicked
@@ -91,28 +85,28 @@ public class Whiteboard extends Application {
 
 		rect.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				presenter.addDShape(new DRectModel());
-				disableTextControls(true);
+				canvas.addShape(new DRectModel());
+				tv.setItems(canvas.getShapeModels());
 			}
 		});
 
 		oval.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				presenter.addDShape(new DOvalModel());
+				canvas.addShape(new DOvalModel());
 				disableTextControls(true);
 			}
 		});
 
 		line.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				presenter.addDShape(new DLineModel());
+				canvas.addShape(new DLineModel());
 				disableTextControls(true);		    
 			}
 		});
 
 		text.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				presenter.addDShape(new DTextModel());
+				canvas.addShape(new DTextModel());
 				disableTextControls(false);
 				DShape text = canvas.getSelected();
 				setTextInput( ((DText) text).getText());
@@ -120,18 +114,18 @@ public class Whiteboard extends Application {
 			}
 		});
 
-		colorPicker.setOnAction(new EventHandler() {
-			ColorPickerWindow colorPick;
-			DShape selected;
-			public void handle(Event t) {
-				selected = canvas.getSelected();
-				if (selected != null)
-					colorPick = new ColorPickerWindow(selected.getModel().getColor());
+		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				ColorPickerWindow colorPick;
+				if (canvas.getSelected() != null)
+					colorPick = new ColorPickerWindow(canvas.getSelected().getModel().getColor());
 				else
 					colorPick = new ColorPickerWindow(Color.GRAY);
 				color = colorPick.display();
 				canvas.updateColor(color);
 				canvas.paintComponent();
+				
 			}
 		});
 
@@ -174,11 +168,7 @@ public class Whiteboard extends Application {
 
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				DShape deleted = canvas.deleteSelected();
-				if(deleted != null) {
-					tv.setItems(canvas.getShapeModels());
-					canvas.deleteSelected();
-				}
+				canvas.deleteSelected();
 			}
 		});
 
@@ -206,7 +196,7 @@ public class Whiteboard extends Application {
 				if(selected != null) {
 					if(selected instanceof DText) {
 						((DText)selected).setText(textInput.getText());
-						canvas.paintComponent();
+						selected.draw();
 					}
 				}
 			}
@@ -231,20 +221,6 @@ public class Whiteboard extends Application {
 		stage.show();
 
 	}
-
-
-	/**
-	 * Add a new DShape to the canvas and update the GUI.
-	 * Consider changing the function call to setItems
-	 * because this will update the entire table when 
-	 * we just need to update one row
-	 * @param DShape shape
-	 */
-	public void updateView(DShapeModel shape) {
-		canvas.addShape(shape);
-		tv.setItems(canvas.getShapeModels());
-	}
-
 
 	/**
 	 * Return the current color set in the GUI
@@ -420,9 +396,10 @@ public class Whiteboard extends Application {
 
 		}
 	}
-
-	public TableView<DShapeModel> getTv() {
-		return tv;
+	
+	public void updateTable() {
+		tv.setItems(canvas.getShapeModels());
+		tv.refresh();
 	}
 
 
