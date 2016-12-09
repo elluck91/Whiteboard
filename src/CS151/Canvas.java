@@ -128,33 +128,35 @@ public class Canvas extends Pane
 		models.add(selection.getModel());
 		gui.updateTable();
 		setUpDragging(selection, mouseLocation);
-		
+
 		addKnobs(selection.getModel().getBounds());
-		
 
-
-		
 
 		selected.getShape().setOnMouseDragged(event -> {
 			if (mouseLocation.value != null && selected != null) {
 				double deltaX = event.getSceneX() - mouseLocation.value.getX();
 				double deltaY = event.getSceneY() - mouseLocation.value.getY();
 				double newX = selected.getModel().getX() + deltaX;
-
-				selected.getModel().setX(newX);
-				knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
-				knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
-				knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
-				knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
-
+				System.out.println(newX);
+				System.out.println(selected.getShape().getParent().getBoundsInParent().getWidth());
+				if (newX >= 9
+						&& 9 <= selected.getShape().getParent().getBoundsInParent().getWidth() - 9)  {
+					selected.getModel().setX(newX);
+					knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+				}
 				double newY = selected.getModel().getY() + deltaY;
-
-				selected.getModel().setY(newY);
-				knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
-				knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
-				knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
-				knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
-
+				double newMaxY = newY + selected.getModel().getHeight();
+				if (newY >= 9
+						&& newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9) {
+					selected.getModel().setY(newY);
+					knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+					knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+				}
 				mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
 
 				paintComponent();
@@ -205,21 +207,23 @@ public class Canvas extends Pane
 			if (mouseLocation.value != null) {
 				double deltaX = event.getSceneX() - mouseLocation.value.getX();
 				double deltaY = event.getSceneY() - mouseLocation.value.getY();
-				double newX = Math.abs(selected.getModel().getX() + deltaX);  
-
-				selected.getModel().setX(newX);
-				selected.getModel().setWidth(Math.abs(selected.getModel().getWidth()) - deltaX);
-
-				knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
-				knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
-
+				double newX = Math.abs(selected.getModel().getX() + deltaX);
+				if (newX >= 9
+						&& newX <= selected.getModel().getX() + selected.getModel().getWidth() - 9) {
+					selected.getModel().setX(newX);
+					selected.getModel().setWidth(Math.abs(selected.getModel().getWidth()) - deltaX);
+					knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+				}
 
 				double newY = selected.getModel().getY() + deltaY;
-				selected.getModel().setY(newY);
-				selected.getModel().setHeight(Math.abs(selected.getModel().getHeight()) - deltaY);
-				knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
-				knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
-
+				if (newY >= 9
+						&& newY <= selected.getModel().getY() + selected.getModel().getHeight() - 9) {
+					selected.getModel().setY(newY);
+					selected.getModel().setHeight(Math.abs(selected.getModel().getHeight()) - deltaY);
+					knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+				}
 
 				paintComponent();
 				gui.updateTable();
@@ -233,17 +237,21 @@ public class Canvas extends Pane
 			if (mouseLocation.value != null) {
 				double deltaX = event.getSceneX() - mouseLocation.value.getX();
 				double deltaY = event.getSceneY() - mouseLocation.value.getY();
-				selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
-				knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
-				knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
-
+				double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
+				if (newMaxX >= selected.getModel().getX()
+						&& newMaxX <= selected.getShape().getParent().getBoundsInLocal().getWidth() - 9) {
+					selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
+					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+				}
 				double newY = selected.getModel().getY() + deltaY;
-
-				selected.getModel().setY(newY);
-				selected.getModel().setHeight(selected.getModel().getHeight() - deltaY);
-				knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
-				knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
-
+				if (newY >= 9
+						&& newY <= selected.getModel().getY() + selected.getModel().getHeight() - 9) {
+					selected.getModel().setY(newY);
+					selected.getModel().setHeight(selected.getModel().getHeight() - deltaY);
+					knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
+					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
+				}
 
 				mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
 				paintComponent();
@@ -260,14 +268,20 @@ public class Canvas extends Pane
 				double deltaY = event.getSceneY() - mouseLocation.value.getY();
 				double newX = selected.getModel().getX() + deltaX;
 
-				selected.getModel().setX(newX);
-				selected.getModel().setWidth(selected.getModel().getWidth() - deltaX);
-				knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
-				knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
-				selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
-				knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
-				knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
-
+				if (newX >= 9
+						&& newX <= selected.getModel().getX() + selected.getModel().getWidth() - 9) {
+					selected.getModel().setX(newX);
+					selected.getModel().setWidth(selected.getModel().getWidth() - deltaX);
+					knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
+					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
+				}
+				double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
+				if (newMaxY >= selected.getModel().getY()
+						&& newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9) {
+					selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
+					knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+				}
 				mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
 				paintComponent();
 				gui.updateTable();
@@ -281,12 +295,20 @@ public class Canvas extends Pane
 			if (mouseLocation.value != null) {
 				double deltaX = event.getSceneX() - mouseLocation.value.getX();
 				double deltaY = event.getSceneY() - mouseLocation.value.getY();
-				selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
-				knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
-				knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
-				selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
-				knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
-				knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+				double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
+				if (newMaxX >= selected.getModel().getX()
+						&& newMaxX <= selected.getShape().getParent().getBoundsInLocal().getWidth() - 9) {
+					selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
+					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
+					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
+				}
+				double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
+				if (newMaxY >= selected.getModel().getY()
+						&& newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9) {
+					selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
+					knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
+					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
+				}
 				mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
 				paintComponent();
 				gui.updateTable();
