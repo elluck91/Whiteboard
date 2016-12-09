@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 
 public class Canvas extends Pane
 {
@@ -55,7 +56,6 @@ public class Canvas extends Pane
 		models.add(model);
 		shape.draw();
 		this.getChildren().add(shape.getShape());
-		//updateSelection(shape, shape.getBounds());
 		updateSelection(shape);
 
 	}
@@ -228,7 +228,6 @@ public class Canvas extends Pane
             if (mouseLocation.value != null) {
                 double deltaX = event.getSceneX() - mouseLocation.value.getX();
                 double deltaY = event.getSceneY() - mouseLocation.value.getY();
-                double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
                 	selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
 					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
 					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
@@ -260,9 +259,6 @@ public class Canvas extends Pane
                 	selected.getModel().setWidth(selected.getModel().getWidth() - deltaX);
                 	knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 					knobs.get(2).getShape().setX(knobs.get(2).getShape().getX() + deltaX);
-
-                double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
-
                 	selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
                 	knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
 					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
@@ -280,24 +276,12 @@ public class Canvas extends Pane
             if (mouseLocation.value != null) {
                 double deltaX = event.getSceneX() - mouseLocation.value.getX();
                 double deltaY = event.getSceneY() - mouseLocation.value.getY();
-                double newMaxX = selected.getModel().getX() + selected.getModel().getWidth() + deltaX;
-                if (newMaxX >= selected.getModel().getX()
-                        && newMaxX <= selected.getShape().getParent().getBoundsInLocal().getWidth() - 9) {
                 	selected.getModel().setWidth(selected.getModel().getWidth() + deltaX);
-                	
 					knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
-					
 					knobs.get(3).getShape().setX(knobs.get(3).getShape().getX() + deltaX);
-                }
-                double newMaxY = selected.getModel().getY() + selected.getModel().getHeight() + deltaY;
-                if (newMaxY >= selected.getModel().getY()
-                        && newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9) {
                 	selected.getModel().setHeight(selected.getModel().getHeight() + deltaY);
-					
-					
 					knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
 					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
-                }
                 mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
                 paintComponent();
 				gui.updateTable();
