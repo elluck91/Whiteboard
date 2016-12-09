@@ -65,6 +65,8 @@ public class Whiteboard extends Application {
 		VBox menu = getMenu();
 		GridPane gp = new GridPane();
 		canvas = new Canvas(main);
+		canvas.attachPresenter(presenter);
+		presenter.attachCanvas(canvas);
 		VBox leftColumn = getLeftColumn(main);
 		setFontBox();
 		// gather the location in the canvas where a user clicked

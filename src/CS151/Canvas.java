@@ -23,16 +23,21 @@ public class Canvas extends Pane implements Observer
 
 	// the shape currently selected
 	private DShape selected;
+	WhiteboardPresenter presenter;
 
 	Canvas(VBox main)
 	{
-	       super();
+	       	super();
 	        this.setStyle("-fx-background-color: white;");
 	        this.setMinSize(400, 400);
 	        this.prefHeightProperty().bind(main.heightProperty());
 	        this.prefWidthProperty().bind(main.widthProperty());
 	        shapes = FXCollections.observableArrayList();
 	        selected = null;
+	}
+	
+	public void attachPresenter(WhiteboardPresenter presenter) {
+		this.presenter = presenter;
 	}
 
 	/**
@@ -155,6 +160,9 @@ public class Canvas extends Pane implements Observer
 		removeSelection();
 		selected = selection;
 		selected.drawKnobs();
+		shapes.remove(selection);
+		shapes.add(selection);
+		presenter.updateTable();
 		// output for testing
 		System.out.print("x: " + selection.getModel().getX());
 		System.out.print(" y: " + selection.getModel().getY() + '\n');

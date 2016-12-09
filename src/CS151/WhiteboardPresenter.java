@@ -8,6 +8,7 @@ public class WhiteboardPresenter
 {
 
 	private Whiteboard gui;
+	Canvas canvas;
 	private final int defaultX = 10;
 	private final int defaultY = 10;
 	private final int defaultWidth = 20;
@@ -40,6 +41,17 @@ public class WhiteboardPresenter
 	
 	public TableView<DShapeModel> getTable() {
 		return gui.getTv();
+	}
+
+
+	public void updateTable() {
+		getTable().setItems(canvas.getShapeModels());
+		getTable().refresh();
+		
+	}
+	
+	public void attachCanvas(Canvas canvas) {
+		this.canvas = canvas;
 	}
 
 }
