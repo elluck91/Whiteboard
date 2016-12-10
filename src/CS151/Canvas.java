@@ -101,22 +101,32 @@ public class Canvas extends Pane
 
 	public void makeSelection(Point2D location)
 	{
-		Rectangle area = new Rectangle();
-		DShape newSelection = null;
-		for (DShape shape : shapes) {
-			area = shape.getBounds();
-			if (area.contains(location)) {
-				newSelection = shape;
-
-			}
+	    if(selected != null) {
+		if(detectKnobClick(location))
+		    return;
+	    }
+	    
+	    DShape newSelection = null;
+	    for (DShape shape : shapes) {
+		if(shape.getBounds().contains(location)) {
+		    newSelection = shape;
 		}
-		if (newSelection == null) {
-			removeSelection();
-		}
-		else
-			updateSelection(newSelection);
-
+	    }
+	    
+	    if (newSelection == null) 
+		removeSelection();	    
+	    else
+		updateSelection(newSelection);
 	}
+
+    public boolean detectKnobClick(Point2D location) {
+	for(DRect knob: knobs) {
+	    if(knob.getShape().contains(location)){
+		return true;
+	    }
+	}
+	return false;
+    }
 	public void updateSelection(DShape selection)
 	{
 		removeKnobs();
