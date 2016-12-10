@@ -550,6 +550,14 @@ public class Canvas extends Pane
 	public DShape getSelected() {
 		return selected;
 	}
+	
+	public void clearCanvas() {
+		shapes.clear();
+		models.clear();
+		this.getChildren().remove(selected.getShape());
+		removeKnobs();
+		selected = null;
+	}
 
 
 }

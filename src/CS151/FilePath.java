@@ -12,15 +12,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FilePath {
-	public static String display() {
+	public static String display(String title, String instr, String btnTxt) {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setMinWidth(250);
-		stage.setTitle("Save File");
+		stage.setTitle(title);
 		Label instruction = new Label();
-		instruction.setText("Enter file name:");
+		instruction.setText(instr);
 
-		Button save = new Button("Save");
+		Button save = new Button(btnTxt);
 		Button cancel = new Button("Cancel");
 		TextField input = new TextField();
 
