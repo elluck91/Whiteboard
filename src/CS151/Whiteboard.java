@@ -153,7 +153,7 @@ public class Whiteboard extends Application {
 	
 	save.setOnAction(new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent event) {
-		    
+		    FilePath.display();
 		}
 	    });
 	
