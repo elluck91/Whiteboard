@@ -1,5 +1,13 @@
 package CS151;
 
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,25 +19,40 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class FilePath {
-	public static String display(String title, String instr, String btnTxt) {
+public class SaveFile {
+	Whiteboard gui;
+	Canvas canvas;
+	private ObservableList<DShapeModel> models;
+
+	public SaveFile(Whiteboard gui) {
+		this.gui = gui;
+		canvas = gui.getCanvas();
+		display();
+	}
+
+	private void display() {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setMinWidth(250);
-		stage.setTitle(title);
+		stage.setTitle("Open File");
 		Label instruction = new Label();
-		instruction.setText(instr);
+		instruction.setText("Enter file name:");
 
-		Button save = new Button(btnTxt);
+		Button save = new Button("Save");
 		Button cancel = new Button("Cancel");
 		TextField input = new TextField();
 
 		save.setOnAction(e -> {
+
 			if (input.getText().length() == 0) {
 				Warning.display();
 			}	
-			else
+			else {
+				models = canvas.getShapeModels();
+				File f = new File(input.getText());
+				save(f);
 				stage.close();
+			}
 		});
 
 		cancel.setOnAction(e -> {
@@ -53,11 +76,28 @@ public class FilePath {
 
 		stage.setScene(scene);
 		stage.showAndWait();
-
-		return null;
-
-
 	}
+
+
+	public void save(File file) {
+		try {
+			XMLEncoder xmlOut = new XMLEncoder(
+					new BufferedOutputStream(
+							new FileOutputStream(file)));
+
+			DShapeModel[] shapeModels = models.toArray(new DShapeModel[0]);
+			// Dump that whole array
+			xmlOut.writeObject(shapeModels);
+			// And we're done!
+			xmlOut.close();
+			
+			System.out.println("DONE");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 
 }

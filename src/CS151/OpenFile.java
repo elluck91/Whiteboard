@@ -51,7 +51,7 @@ public class OpenFile {
 				} catch (IOException e1) {
 					Warning.display();
 				}
-				//stage.close();
+				stage.close();
 			}
 
 		});
@@ -107,6 +107,7 @@ public class OpenFile {
 
 	public void doAdd(DShapeModel shapeModel) {
 		canvas.addShape(shapeModel);
+		canvas.removeSelection();
 	}
 
 	public void clear() {

@@ -554,7 +554,7 @@ public class Canvas extends Pane
 	public void clearCanvas() {
 		shapes.clear();
 		models.clear();
-		this.getChildren().remove(selected.getShape());
+		this.getChildren().removeAll();
 		removeKnobs();
 		selected = null;
 	}
