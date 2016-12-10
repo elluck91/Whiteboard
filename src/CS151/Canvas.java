@@ -87,8 +87,7 @@ public class Canvas extends Pane
 	{
 
 		for (int i = 0; i < shapes.size(); i++) {
-			shapes.get(i).draw();	
-
+			shapes.get(i).draw();
 		}
 	}
 
@@ -131,7 +130,7 @@ public class Canvas extends Pane
     }
 	public void updateSelection(DShape selection)
 	{
-		removeKnobs();
+		
 		mouseLocation =  new Wrapper<>();
 		selected = selection;
 		shapes.remove(selection);
@@ -141,7 +140,7 @@ public class Canvas extends Pane
 		gui.updateTable();
 		setUpDragging(selection, mouseLocation);
 
-		addKnobs(selection.getModel().getBounds());
+		moveToFront();
 
 
 		selected.getShape().setOnMouseDragged(event -> {
@@ -371,6 +370,32 @@ public class Canvas extends Pane
 	public DShape getSelected()
 	{
 		return selected;
+	}
+
+	public void moveToFront() {
+		shapes.remove(selected);
+		models.remove(selected.getModel());
+		shapes.add(selected);
+		models.add(selected.getModel());
+		this.getChildren().remove(selected.getShape());
+		this.getChildren().add(selected.getShape());
+		removeKnobs();
+		addKnobs(selected.getBounds());
+		gui.updateTable();
+		
+	}
+	
+	public void moveToBack() {
+		shapes.remove(selected);
+		models.remove(selected.getModel());
+		shapes.add(0, selected);
+		models.add(0, selected.getModel());
+		this.getChildren().remove(selected.getShape());
+		this.getChildren().add(0, selected.getShape());
+		removeKnobs();
+		addKnobs(selected.getBounds());
+		gui.updateTable();
+		
 	}
 
 
