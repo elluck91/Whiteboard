@@ -1,15 +1,13 @@
 package CS151;
 
-import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Random;
+import java.util.UUID;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class DShapeModel {
 
@@ -25,8 +23,10 @@ public class DShapeModel {
 	DoubleProperty height;
 	DoubleProperty x;
 	DoubleProperty y;
+	private String id;
 
 	public DShapeModel() {
+		id = UUID.randomUUID().toString();
 		rectangle = new Rectangle(10, 10, 20, 20);
 		width = new SimpleDoubleProperty(rectangle.getWidth());
 		height = new SimpleDoubleProperty(rectangle.getHeight());
@@ -35,6 +35,11 @@ public class DShapeModel {
 		point = new Point2D(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
+	}
+
+
+	public String getId() {
+		return id;
 	}
 
 

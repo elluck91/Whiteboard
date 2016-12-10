@@ -1,7 +1,5 @@
 package CS151;
 
-import java.util.Random;
-
 public class DOvalModel extends DShapeModel {
 
     

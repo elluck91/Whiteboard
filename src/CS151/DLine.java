@@ -1,66 +1,62 @@
 package CS151;
 
-import java.util.Random;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.Line;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Line;
 
 public class DLine extends DShape implements ModelListener
 {
 
-    private Rectangle rect = new Rectangle();
-    private Line line;
 
-    public DLine() {
-        model = new DLineModel();
+	private Line line;
 
-        line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
-			((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
-        line.setStroke(Color.BLACK);
-        //line.setStrokeWidth(5);
-    }
+	public DLine() {
+		model = new DLineModel();
 
-    @Override
-    public void draw()
-    {
-	System.out.println(model.getColor().toString());
-        line.setStroke(model.getColor());
-        double startX = ((DLineModel) model).getStart().getX();
-        double startY = ((DLineModel) model).getStart().getY();
-        double endX = ((DLineModel) model).getEnd().getX();
-        double endY = ((DLineModel) model).getEnd().getY();
-        line.setStartX(startX);
-        line.setStartY(startY);
-        line.setEndX(endX);
-        line.setEndY(endY);
-        updateModel();
-    }
+		line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
+				((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
+		line.setStroke(Color.BLACK);
+		line.setStrokeWidth(5);
+	}
 
-    private void updateModel()
-    {
+	@Override
+	public void draw()
+	{
+		line.setStroke(model.getColor());
+		double startX = ((DLineModel) model).getStart().getX();
+		double startY = ((DLineModel) model).getStart().getY();
+		double endX = ((DLineModel) model).getEnd().getX();
+		double endY = ((DLineModel) model).getEnd().getY();
+		line.setStartX(startX);
+		line.setStartY(startY);
+		line.setEndX(endX);
+		line.setEndY(endY);
+		updateModel();
+	}
 
-        Point2D start = new Point2D(line.getStartX(), line.getStartY());
-        Point2D end = new Point2D(line.getEndX(), line.getEndY());
+	private void updateModel()
+	{
 
-        ((DLineModel) model).setStart(start);
-        ((DLineModel) model).setEnd(end);
+		Point2D start = new Point2D(line.getStartX(), line.getStartY());
+		Point2D end = new Point2D(line.getEndX(), line.getEndY());
 
-    }
+		((DLineModel) model).setStart(start);
+		((DLineModel) model).setEnd(end);
 
-    public void setModel(DShapeModel model)
-    {
-        this.model = model;
-        Point2D start = new Point2D(model.getX(), model.getY());
-        Point2D end = new Point2D(model.getX() + model.getWidth(), model.getY() + model.getWidth());
-        ((DLineModel) model).setStart(start);
-        ((DLineModel) model).setEnd(end);
-    }
+	}
 
-    public Shape getShape()
-    {
-        return line;
-    }
+	public void setModel(DShapeModel model)
+	{
+		this.model = model;
+		Point2D start = new Point2D(model.getX(), model.getY());
+		Point2D end = new Point2D(model.getX() + model.getWidth(), model.getY() + model.getWidth());
+		((DLineModel) model).setStart(start);
+		((DLineModel) model).setEnd(end);
+	}
+
+	public Line getShape()
+	{
+		return line;
+	}
 
 }
