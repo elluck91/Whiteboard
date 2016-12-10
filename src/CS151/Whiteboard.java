@@ -140,12 +140,7 @@ public class Whiteboard extends Application {
 			public void handle(ActionEvent event) {
 					DShape selected = canvas.getSelected();
 					if(selected != null) {
-						canvas.getShapes().remove(selected);
-						canvas.getShapeModels().remove(selected.getModel());
-						canvas.getShapes().add(selected);
-						canvas.getShapeModels().add(selected.getModel());
-						tv.setItems(canvas.getShapeModels());
-						tv.refresh();
+						canvas.moveToFront();
 					}
 				
 			}
@@ -155,14 +150,7 @@ public class Whiteboard extends Application {
 			public void handle(ActionEvent event) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
-					
-					//canvas.deleteSelected();
-					canvas.getShapes().remove(selected);
-					canvas.getShapeModels().remove(selected.getModel());
-					canvas.getShapes().add(0, selected);
-					canvas.getShapeModels().add(0, selected.getModel());
-					tv.setItems(canvas.getShapeModels());
-					tv.refresh();
+					canvas.moveToBack();
 				}
 
 			}
