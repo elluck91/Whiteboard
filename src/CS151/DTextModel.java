@@ -6,7 +6,7 @@ public class DTextModel extends DShapeModel {
 	private String font;
 
 	public DTextModel() {
-		text = "Hylary";
+		text = "Hello";
 		font = "Dialog";	    
 	}
 
@@ -22,12 +22,13 @@ public class DTextModel extends DShapeModel {
 		this.text = text;
 		notifyListeners();
 	}
-	
+
+    /*
 	public void setHeight(double height) {
 		rectangle.setHeight(height);
 		notifyListeners();
 	}
-
+    */
 	public void setFont(String font) {
 		this.font = font;
 		notifyListeners();

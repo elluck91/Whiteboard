@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 public class DShapeModel {
 
+
 	/**
 	 * I changed the variables because the file assignment
 	 * document recommended using Rectangle & Point classes
@@ -25,6 +26,11 @@ public class DShapeModel {
 	DoubleProperty y;
 	private String id;
 
+	public String getId() {
+		return id;
+	}
+
+
 	public DShapeModel() {
 		id = UUID.randomUUID().toString();
 		rectangle = new Rectangle(10, 10, 20, 20);
@@ -35,11 +41,6 @@ public class DShapeModel {
 		point = new Point2D(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
-	}
-
-
-	public String getId() {
-		return id;
 	}
 
 
@@ -98,6 +99,17 @@ public class DShapeModel {
 	}
 
 
+	public void setBounds(Rectangle rect) {
+		// do something
+		notifyListeners();
+	}
+
+
+	public void moveBy(double dx, double dy) {
+
+	}
+
+
 	/**
 	 * Register a shape as a listener of the model.
 	 * @param DShape shape
@@ -144,5 +156,6 @@ public class DShapeModel {
 		this.x.setValue(getX());
 		this.y.setValue(getY());
 	}
+
 
 }
