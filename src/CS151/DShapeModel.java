@@ -13,131 +13,142 @@ import javafx.scene.paint.Color;
 
 public class DShapeModel {
 
-	/**
-	 * I changed the variables because the file assignment
-	 * document recommended using Rectangle & Point classes
-	 */
-	protected Rectangle rectangle;
-	protected Point2D point;
-	protected Color color;
-	protected ArrayList<ModelListener> listeners;
-	DoubleProperty width;
-	DoubleProperty height;
-	DoubleProperty x;
-	DoubleProperty y;
+    /**
+     * I changed the variables because the file assignment
+     * document recommended using Rectangle & Point classes
+     */
+    protected Rectangle rectangle;
+    protected Point2D point;
+    protected Color color;
+    protected ArrayList<ModelListener> listeners;
+    DoubleProperty width;
+    DoubleProperty height;
+    DoubleProperty x;
+    DoubleProperty y;
 
-	public DShapeModel() {
-		rectangle = new Rectangle(10, 10, 20, 20);
-		width = new SimpleDoubleProperty(rectangle.getWidth());
-		height = new SimpleDoubleProperty(rectangle.getHeight());
-		x = new SimpleDoubleProperty(rectangle.getX());
-		y = new SimpleDoubleProperty(rectangle.getY());
-		point = new Point2D(0, 0);
-		color = Color.GRAY;
-		listeners = new ArrayList<ModelListener>();
+    public DShapeModel() {
+	rectangle = new Rectangle(10, 10, 20, 20);
+	width = new SimpleDoubleProperty(rectangle.getWidth());
+	height = new SimpleDoubleProperty(rectangle.getHeight());
+	x = new SimpleDoubleProperty(rectangle.getX());
+	y = new SimpleDoubleProperty(rectangle.getY());
+	point = new Point2D(0, 0);
+	color = Color.GRAY;
+	listeners = new ArrayList<ModelListener>();
+    }
+    
+
+    public double getX() {
+	return rectangle.getX();
+    }
+
+    
+    public void setX(double x) {
+	rectangle.setX(x);
+	notifyListeners();
+    }
+    
+    
+    public double getY() {
+	return rectangle.getY();
+    }
+
+    
+    public void setY(double y) {
+	rectangle.setY(y);
+	notifyListeners();
+    }
+    
+    
+    public double getWidth() {
+	return rectangle.getWidth();
+    }
+    
+    
+    public void setWidth(double width) {
+	rectangle.setWidth(width);
+	notifyListeners();
+    }
+    
+    
+    public double getHeight() {
+	return rectangle.getHeight();
+    }
+    
+
+    public void setHeight(double height) {
+	rectangle.setHeight(height);
+	notifyListeners();
+    }
+
+
+    public Color getColor() {
+	return color;
+    }
+    
+    
+    public void setColor(Color color) {
+	this.color = color;
+	notifyListeners();
+    }
+        
+
+    public void setBounds(Rectangle rect) {
+	// do something
+	notifyListeners();
+    }
+
+    
+    public void moveBy(double dx, double dy) {
+	
+    }
+
+    
+    /**
+     * Register a shape as a listener of the model.
+     * @param DShape shape
+     */
+    public void addListener(ModelListener listener) {
+	listeners.add(listener);
+    }
+    
+    
+    /**
+     * Remove a shape as a listener of the model.
+     * @param DShape shape
+     */
+    public void removeListener(ModelListener listener) {
+	listeners.remove(listener);
+    }
+    
+    
+    /**
+     * Notify all DShapes of changes to the model
+     * private seems appropriate for now, I think
+     * this function will only be called from the set
+     * methods of the model
+     */
+    protected void notifyListeners() {
+	for(ModelListener listener: listeners) {
+	    listener.modelChanged(this);
 	}
+    }
+    
 
-
-	public double getX() {
-		return rectangle.getX();
-	}
-
-
-	public void setX(double x) {
-		rectangle.setX(x);
-		notifyListeners();
-	}
-
-
-	public double getY() {
-		return rectangle.getY();
-	}
-
-
-	public void setY(double y) {
-		rectangle.setY(y);
-		notifyListeners();
-	}
-
-
-	public double getWidth() {
-		return rectangle.getWidth();
-	}
-
-
-	public void setWidth(double width) {
-		rectangle.setWidth(width);
-		notifyListeners();
-	}
-
-
-	public double getHeight() {
-		return rectangle.getHeight();
-	}
-
-
-	public void setHeight(double height) {
-		rectangle.setHeight(height);
-		notifyListeners();
-	}
-
-
-	public Color getColor() {
-		return color;
-	}
-
-
-	public void setColor(Color color) {
-		this.color = color;
-		notifyListeners();
-	}
-
-
-	/**
-	 * Register a shape as a listener of the model.
-	 * @param DShape shape
-	 */
-	public void addListener(ModelListener listener) {
-		listeners.add(listener);
-	}
-
-
-	/**
-	 * Remove a shape as a listener of the model.
-	 * @param DShape shape
-	 */
-	public void removeListener(ModelListener listener) {
-		listeners.remove(listener);
-	}
-
-
-	/**
-	 * Notify all DShapes of changes to the model
-	 * private seems appropriate for now, I think
-	 * this function will only be called from the set
-	 * methods of the model
-	 */
-	protected void notifyListeners() {
-		for(ModelListener listener: listeners) {
-			listener.modelChanged(this);
-		}
-	}
-
-
-	/**
-	 * create and return a copy of the rectangle model
-	 */
-	public Rectangle getBounds() {       
-		return new Rectangle(rectangle.getX(), rectangle.getY(),
-				rectangle.getWidth(), rectangle.getHeight());
-	}
-
-	public void update(double wid, double hei) {
-		System.out.println("UPDATING");
-		this.width.setValue(wid);
-		this.height.setValue(hei);
-		this.x.setValue(getX());
-		this.y.setValue(getY());
-	}
-
+    /**
+     * create and return a copy of the rectangle model
+     */
+    public Rectangle getBounds() {       
+	return new Rectangle(rectangle.getX(), rectangle.getY(),
+			     rectangle.getWidth(), rectangle.getHeight());
+    }
+    
+    public void update(double wid, double hei) {
+	System.out.println("UPDATING");
+	this.width.setValue(wid);
+	this.height.setValue(hei);
+	this.x.setValue(getX());
+	this.y.setValue(getY());
+    }
+    
 }
