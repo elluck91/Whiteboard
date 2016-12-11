@@ -50,6 +50,7 @@ public class Whiteboard extends Application {
 	private TableView<DShapeModel> tv;
 	private MenuItem save;
 	private MenuItem open;
+	private MenuItem savePng;
 	private MenuItem close;
 	private Color color;
 	private Stage primaryStage;
@@ -159,6 +160,12 @@ public class Whiteboard extends Application {
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				new SaveFile(getGui());
+			}
+		});
+		
+		savePng.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				new savePngFile(getGui());
 			}
 		});
 
@@ -338,9 +345,10 @@ public class Whiteboard extends Application {
 
 		save = new MenuItem("Save");
 		open = new MenuItem("Open");
+		savePng = new MenuItem("Save to PNG");
 		close = new MenuItem("Close");
 
-		menuFile.getItems().addAll(save, open, close);
+		menuFile.getItems().addAll(save, open, savePng, close);
 		menuBar.getMenus().add(menuFile);
 		menu.getChildren().add(menuBar);
 		return menu;

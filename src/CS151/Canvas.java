@@ -280,7 +280,7 @@ public class Canvas extends Pane
 	 * Create knobs and add them to the list of knobs.
 	 * @param Rectangle area
 	 */
-	private void addKnobs(Rectangle area) {
+	void addKnobs(Rectangle area) {
 
 		// Knobs for DLine and the rest are differed, use instance of
 				if (selected instanceof DLine) {
@@ -514,7 +514,7 @@ public class Canvas extends Pane
 	/**
 	 * Remove the knobs from the pane.
 	 */
-	private void removeKnobs() {
+	public void removeKnobs() {
 		for (int i = 0; i < knobs.size(); i++) 
 			this.getChildren().remove(knobs.get(i).getShape());       
 		knobs.clear();
