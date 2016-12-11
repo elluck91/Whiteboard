@@ -2,7 +2,7 @@ package CS151;
 
 import java.awt.geom.Point2D;
 
-public class DLineModel extends DShapeModel {
+public class DLineModel extends DShapeModel implements java.io.Serializable {
 
 	private Point2D.Double start;
 	private Point2D.Double end;
@@ -12,12 +12,20 @@ public class DLineModel extends DShapeModel {
 		end = new Point2D.Double(getX() + getWidth(), getY() + getHeight());
 	}
 
-	public Point2D getStart() {
-		return start;	
+	public double getStartX() {
+		return start.getX();	
+	}
+	
+	public double getStartY() {
+		return start.getY();	
 	}
 
-	public Point2D getEnd() {
-		return end;
+	public double getEndX() {
+		return end.getX();
+	}
+	
+	public double getEndY() {
+		return end.getY();
 	}
 
 	public void setStart(Point2D.Double start) {
@@ -73,4 +81,6 @@ public class DLineModel extends DShapeModel {
 		setWidth(end.getX() - start.getX());
 		setHeight(end.getY() - start.getY());
 	}
+	
+	
 }

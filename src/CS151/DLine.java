@@ -13,8 +13,8 @@ public class DLine extends DShape implements ModelListener
 	public DLine() {
 		model = new DLineModel();
 
-		line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
-				((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
+		line = new Line(((DLineModel) model).getStartX(), ((DLineModel) model).getStartY(),
+				((DLineModel) model).getEndX(), ((DLineModel) model).getEndY());
 		line.setStroke(model.translateColor(Color.GRAY));
 		line.setStrokeWidth(5);
 	}
@@ -23,10 +23,10 @@ public class DLine extends DShape implements ModelListener
 	public void draw()
 	{
 		line.setStroke(model.translateColor(model.getColor()));
-		double startX = ((DLineModel) model).getStart().getX();
-		double startY = ((DLineModel) model).getStart().getY();
-		double endX = ((DLineModel) model).getEnd().getX();
-		double endY = ((DLineModel) model).getEnd().getY();
+		double startX = ((DLineModel) model).getStartX();
+		double startY = ((DLineModel) model).getStartY();
+		double endX = ((DLineModel) model).getEndX();
+		double endY = ((DLineModel) model).getEndY();
 		line.setStartX(startX);
 		line.setStartY(startY);
 		line.setEndX(endX);

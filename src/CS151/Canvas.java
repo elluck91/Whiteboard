@@ -169,11 +169,13 @@ public class Canvas extends Pane
 		moveToFront();
 
 		if (selected instanceof DLine && selected != null) {
+			
 			DLine selectedLine = (DLine) selected;
 			DLineModel lineModel = (DLineModel) selectedLine.getModel();
 			setUpDragging(selectedLine, mouseLocation);
 			selectedLine.getShape().setOnMouseDragged(event -> {
 				if (mouseLocation.value != null) {
+					System.out.println("HERE!!!!!!!!!!!!!!!!!!!!!");
 					double deltaX = event.getSceneX() - mouseLocation.value.getX();
 					double deltaY = event.getSceneY() - mouseLocation.value.getY();
 					double newX = selected.getModel().getX() + deltaX;
@@ -182,10 +184,10 @@ public class Canvas extends Pane
 					if (newX >= 9
 							&& 9 <= selected.getShape().getParent().getBoundsInParent().getWidth() - 9
 							&& newY >= 9 && newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9)  {
-						lineModel.setStart(new Point2D.Double(lineModel.getStart().getX() 
-								+ deltaX, lineModel.getStart().getY() + deltaY));
-						lineModel.setEnd(new Point2D.Double(lineModel.getEnd().getX() 
-								+ deltaX, lineModel.getEnd().getY() + deltaY));
+						lineModel.setStart(new Point2D.Double(lineModel.getStartX()
+								+ deltaX, lineModel.getStartY() + deltaY));
+						lineModel.setEnd(new Point2D.Double(lineModel.getEndX() 
+								+ deltaX, lineModel.getEndY() + deltaY));
 
 						knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 						knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
@@ -286,23 +288,23 @@ public class Canvas extends Pane
 				if (selected instanceof DLine) {
 					DLine selectedLine = (DLine)selected;
 					DLineModel lineModel = (DLineModel)selectedLine.getModel();
-					DRect topLeft = new DRect(lineModel.getStart().getX()-4.5, lineModel.getStart().getY()-4.5, 9, 9);
+					DRect topLeft = new DRect(lineModel.getStartX()-4.5, lineModel.getStartY()-4.5, 9, 9);
 					setUpDragging(topLeft, mouseLocation);
 					topLeft.getShape().setOnMouseDragged(event -> {
 						if (mouseLocation.value != null) {
 
 							double deltaX = event.getSceneX() - mouseLocation.value.getX();
 							double deltaY = event.getSceneY() - mouseLocation.value.getY();
-							double newMaxX = lineModel.getStart().getX() + deltaX;
-							double newMaxY = lineModel.getStart().getY() + deltaY;
+							double newMaxX = lineModel.getStartX() + deltaX;
+							double newMaxY = lineModel.getStartY() + deltaY;
 
 							if (selectedLine.getShape().getParent().getBoundsInLocal().getMaxX() - 9 >= newMaxX
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMaxY() -  9 >= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setStart(new Point2D.Double(lineModel.getStart().getX() + deltaX,
-										lineModel.getStart().getY() + deltaY));
+								lineModel.setStart(new Point2D.Double(lineModel.getStartX() + deltaX,
+										lineModel.getStartY() + deltaY));
 								knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 								knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
 
@@ -316,7 +318,7 @@ public class Canvas extends Pane
 						}
 					});
 
-					DRect bottomRight = new DRect(lineModel.getEnd().getX()-4.5, lineModel.getEnd().getY()-4.5, 9, 9);
+					DRect bottomRight = new DRect(lineModel.getEndX()-4.5, lineModel.getEndY()-4.5, 9, 9);
 					setUpDragging(bottomRight, mouseLocation);
 					bottomRight.getShape().setOnMouseDragged(event -> {
 
@@ -325,16 +327,16 @@ public class Canvas extends Pane
 
 							double deltaX = event.getSceneX() - mouseLocation.value.getX();
 							double deltaY = event.getSceneY() - mouseLocation.value.getY();
-							double newMaxX = lineModel.getEnd().getX() + deltaX;
-							double newMaxY = lineModel.getEnd().getY() + deltaY;
+							double newMaxX = lineModel.getEndX() + deltaX;
+							double newMaxY = lineModel.getEndY() + deltaY;
 
 							if (selectedLine.getShape().getParent().getBoundsInLocal().getMaxX() - 9 >= newMaxX
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMaxY() -  9 >= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setEnd(new Point2D.Double(lineModel.getEnd().getX() + deltaX,
-										lineModel.getEnd().getY() + deltaY));
+								lineModel.setEnd(new Point2D.Double(lineModel.getEndX() + deltaX,
+										lineModel.getEndY() + deltaY));
 								knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
 								knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
 

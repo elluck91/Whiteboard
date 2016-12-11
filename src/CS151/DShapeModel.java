@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 import java.awt.Color;
 
 import javafx.scene.paint.Paint;
@@ -40,7 +40,7 @@ public class DShapeModel {
 		height = new SimpleDoubleProperty(rectangle.getHeight());
 		x = new SimpleDoubleProperty(rectangle.getX());
 		y = new SimpleDoubleProperty(rectangle.getY());
-		point = new Point2D(0, 0);
+		point = new Point2D.Double(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
 	}
