@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,7 +28,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -50,12 +50,18 @@ public class Whiteboard extends Application {
 	private TableView<DShapeModel> tv;
 	private MenuItem save;
 	private MenuItem open;
+	private MenuItem savePng;
 	private MenuItem close;
 	private Color color;
+	private Stage primaryStage;
+
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-
+		primaryStage = stage;
 		VBox main = new VBox();
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
@@ -68,7 +74,7 @@ public class Whiteboard extends Application {
 		// use this information to select the correct shape in the
 		// view 
 		canvas.setOnMouseClicked(e -> {
-			handleClick(new Point2D(e.getX(), e.getY()));
+			handleClick(new Point2D.Double(e.getX(), e.getY()));
 		});
 
 		rect.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,9 +113,9 @@ public class Whiteboard extends Application {
 			public void handle(ActionEvent arg0) {
 				ColorPickerWindow colorPick;
 				if (canvas.getSelected() != null)
-					colorPick = new ColorPickerWindow(canvas.getSelected().getModel().getColor());
+					colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
 				else
-					colorPick = new ColorPickerWindow(Color.GRAY);
+					colorPick = new ColorPickerWindow(getGui(), Color.GRAY);
 				color = colorPick.display();
 				canvas.updateColor(color);
 				canvas.paintComponent();
@@ -153,7 +159,13 @@ public class Whiteboard extends Application {
 
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-
+				new SaveFile(getGui());
+			}
+		});
+		
+		savePng.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				new savePngFile(getGui());
 			}
 		});
 
@@ -333,9 +345,10 @@ public class Whiteboard extends Application {
 
 		save = new MenuItem("Save");
 		open = new MenuItem("Open");
+		savePng = new MenuItem("Save to PNG");
 		close = new MenuItem("Close");
 
-		menuFile.getItems().addAll(save, open, close);
+		menuFile.getItems().addAll(save, open, savePng, close);
 		menuBar.getMenus().add(menuFile);
 		menu.getChildren().add(menuBar);
 		return menu;

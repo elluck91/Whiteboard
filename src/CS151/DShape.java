@@ -1,9 +1,10 @@
 package CS151;
 
-import javafx.scene.paint.Color;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.geometry.Point2D;
+
 
 public abstract class DShape implements ModelListener
 {
@@ -37,21 +38,21 @@ public abstract class DShape implements ModelListener
 
 
     public Point2D getTopLeft() {
-	return new Point2D(model.getX(), model.getY());
+	return new Point2D.Double(model.getX(), model.getY());
     }
 
     public Point2D getTopRight() {
-	return new Point2D(model.getX()+model.getWidth(),
+	return new Point2D.Double(model.getX()+model.getWidth(),
 			   model.getY());
     }
 
     public Point2D getBottomLeft() {
-	return new Point2D(model.getX(),
+	return new Point2D.Double(model.getX(),
 			   model.getY()+model.getHeight());
     }
 
     public Point2D getBottomRight() {
-	return new Point2D(model.getX()+model.getWidth(),
+	return new Point2D.Double(model.getX()+model.getWidth(),
 			   model.getY()+model.getHeight());
     }
 

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import java.awt.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Canvas extends Pane
@@ -145,7 +145,7 @@ public class Canvas extends Pane
 	
 	DShape newSelection = null;
 	for (DShape shape : shapes) {
-	    if(shape.getBounds().contains(location)) 
+	    if(shape.getBounds().contains(Adapters.awtToFx(location)))
 		newSelection = shape;
 	}
 	
@@ -162,7 +162,7 @@ public class Canvas extends Pane
      */
     public boolean detectKnobClick(Point2D location) {
 	for(Rectangle knob: knobs) {
-	    if(knob.contains(location)){
+	    if(knob.contains(Adapters.awtToFx(location))) {
 		return true;
 	    }
 	}
@@ -201,12 +201,13 @@ public class Canvas extends Pane
 			selected.moveBy(deltaX, deltaY);
 			setupShapeKnobs();
 		    }
-		    mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+		    mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 		    selected.draw();
 		    gui.updateTable();
 		}
-	    });
+	    });	
     }
+
     
     /**
      * Clear the selection.
@@ -248,7 +249,7 @@ public class Canvas extends Pane
      * Create knobs and set up the dragging feature.
      *
      */
-    private void addKnobs() {
+    public void addKnobs() {
 	
 	if (selected instanceof DLine) {
 	    DLine line = (DLine) selected;
@@ -279,7 +280,7 @@ public class Canvas extends Pane
     }
     
     private void createLineKnob(Rectangle knob, Point2D point) {
-	knob.setFill(Color.BLACK);
+	knob.setFill(javafx.scene.paint.Color.BLACK);
 	knob.setX(point.getX()-(knobSize/2.0));
 	knob.setY(point.getY()-(knobSize/2.0));
 	knob.setWidth(knobSize);
@@ -316,8 +317,10 @@ public class Canvas extends Pane
     
     private void setupKnobDrag(Rectangle knob, Point2D anchor) {				  	 
 	knob.setOnMouseDragged(event -> {
-		Point2D result = knob.sceneToLocal(event.getSceneX(),
-						   event.getSceneY());
+		javafx.geometry.Point2D temp = knob.sceneToLocal(event.getSceneX(),
+								   event.getSceneY());
+		Point2D.Double result = new Point2D.Double(temp.getX(), temp.getY());
+
 		if(result.getX() > 0 && result.getY() > 0) {
 		    dragKnob(anchor, result);
 		}
@@ -337,7 +340,7 @@ public class Canvas extends Pane
     }
     
     private void setupTopLeft(Rectangle bounds) {
-	topLeft.setFill(Color.BLACK);
+	topLeft.setFill(javafx.scene.paint.Color.BLACK);
 	topLeft.setX(bounds.getX()-(knobSize/2.0));
 	topLeft.setY(bounds.getY()-(knobSize/2.0));
 	topLeft.setWidth(knobSize);
@@ -345,6 +348,7 @@ public class Canvas extends Pane
     }
 
     private void setupTopRight(Rectangle bounds) {
+	topRight.setFill(javafx.scene.paint.Color.BLACK);
 	topRight.setX(bounds.getX()+bounds.getWidth()-(knobSize/2.0));
 	topRight.setY(bounds.getY()-(knobSize/2.0));
 	topRight.setWidth(knobSize);
@@ -352,6 +356,7 @@ public class Canvas extends Pane
     }
     
     private void setupBottomLeft(Rectangle bounds) {
+	bottomLeft.setFill(javafx.scene.paint.Color.BLACK);
 	bottomLeft.setX(bounds.getX()-(knobSize/2.0));
 	bottomLeft.setY(bounds.getY()+bounds.getHeight()-(knobSize/2.0));
 	bottomLeft.setWidth(knobSize);
@@ -359,6 +364,7 @@ public class Canvas extends Pane
     }
     
     private void setupBottomRight(Rectangle bounds) {
+	bottomRight.setFill(javafx.scene.paint.Color.BLACK);
 	bottomRight.setX(bounds.getX()+bounds.getWidth()-(knobSize/2.0));
 	bottomRight.setY(bounds.getY()+bounds.getHeight()-(knobSize/2.0));
 	bottomRight.setWidth(knobSize);
@@ -369,7 +375,7 @@ public class Canvas extends Pane
     private void enableShapeDragging(Shape shape) {
 	shape.setOnDragDetected(event -> {
 		shape.getParent().setCursor(Cursor.CLOSED_HAND);
-		mouseLocation.value = new Point2D(event.getSceneX(),
+		mouseLocation.value = new Point2D.Double(event.getSceneX(),
 						  event.getSceneY());
 	    });
 
@@ -420,7 +426,7 @@ public class Canvas extends Pane
     /**
      * Remove the knobs from the pane.
      */
-    private void removeKnobs() {
+    public void removeKnobs() {
 	for (int i = 0; i < knobs.size(); i++) 
 	    this.getChildren().remove(knobs.get(i));       
 	knobs.clear();
@@ -456,10 +462,11 @@ public class Canvas extends Pane
 	return selected;
     }
     
+      
     public void clearCanvas() {
 	shapes.clear();
 	models.clear();
-	this.getChildren().remove(selected.getShape());
+	this.getChildren().clear();
 	removeKnobs();
 	selected = null;
     }

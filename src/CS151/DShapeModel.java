@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
+import java.awt.geom.Point2D;
+import java.awt.Color;
+
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class DShapeModel {
@@ -38,7 +40,7 @@ public class DShapeModel {
 		height = new SimpleDoubleProperty(rectangle.getHeight());
 		x = new SimpleDoubleProperty(rectangle.getX());
 		y = new SimpleDoubleProperty(rectangle.getY());
-		point = new Point2D(0, 0);
+		point = new Point2D.Double(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
 	}
@@ -91,6 +93,7 @@ public class DShapeModel {
 	public Color getColor() {
 		return color;
 	}
+	
 
 
 	public void setColor(Color color) {
@@ -153,6 +156,15 @@ public class DShapeModel {
 		this.x.setValue(getX());
 		this.y.setValue(getY());
 	}
+
+
+	public Paint translateColor(Color awtColor) {
+		javafx.scene.paint.Color fxColor 
+		= javafx.scene.paint.Color.rgb(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue(), awtColor.getAlpha()/255.0);
+		return fxColor;
+	}
+	
+	
 
 
 }
