@@ -1,8 +1,8 @@
 package CS151;
 
-import java.awt.geom.Point2D;
+import java.awt.Color;
 
-public class DLineModel extends DShapeModel implements java.io.Serializable {
+public class DLineModel extends DShapeModel {
 
 	private double startX, startY;
 	private double endX, endY;
@@ -49,6 +49,18 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
 	public void setEndY(double endY) {
 		this.endY = endY;
 		updateBounds();
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+
+
+	public void setColor(Color color) {
+		this.color = color;
+		
+		notifyListeners();
 	}
 
 	

@@ -54,6 +54,7 @@ public class Whiteboard extends Application {
 	private MenuItem close;
 	private Color color;
 	private Stage primaryStage;
+	private boolean canUse;
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
@@ -61,6 +62,7 @@ public class Whiteboard extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		canUse = true;
 		primaryStage = stage;
 		VBox main = new VBox();
 		main.setPrefSize(950, 400);
@@ -74,43 +76,53 @@ public class Whiteboard extends Application {
 		// use this information to select the correct shape in the
 		// view 
 		canvas.setOnMouseClicked(e -> {
-			handleClick(new Point2D.Double(e.getX(), e.getY()));
+			if (canUse)
+				handleClick(new Point2D.Double(e.getX(), e.getY()));
 		});
 
 		rect.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				canvas.addShape(new DRectModel());
-				tv.setItems(canvas.getShapeModels());
+				if (canUse) {
+					canvas.addShape(new DRectModel());
+					tv.setItems(canvas.getShapeModels());
+				}
 			}
 		});
 
 		oval.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DOvalModel());
 				disableTextControls();
+				}
 			}
 		});
 
 		line.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DLineModel());
 				disableTextControls();
+				}
 			}
 		});
 
 		text.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DTextModel());
 				enableTextControls();
 				DShape text = canvas.getSelected();
 				setTextInput( ((DText) text).getText());
 				setFontText( ((DText) text).getFont());
+				}
 			}
 		});
 
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				if (canUse) {
 				ColorPickerWindow colorPick;
 				if (canvas.getSelected() != null)
 					colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
@@ -119,22 +131,27 @@ public class Whiteboard extends Application {
 				color = colorPick.display();
 				canvas.updateColor(color);
 				canvas.paintComponent();
+				}
 
 			}
 		});
 
 
 		fontButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {		    
-				displayFonts(stage);		    
+			public void handle(ActionEvent event) {
+				if (canUse) {
+				displayFonts(stage);
+				}
 			}
 		});
 
 		toFront.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					canvas.moveToFront();
+				}
 				}
 
 			}
@@ -142,9 +159,11 @@ public class Whiteboard extends Application {
 
 		toBack.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					canvas.moveToBack();
+				}
 				}
 
 			}
@@ -152,8 +171,10 @@ public class Whiteboard extends Application {
 
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.deleteSelected();
 				disableTextControls();
+				}
 			}
 		});
 
@@ -171,7 +192,9 @@ public class Whiteboard extends Application {
 
 		open.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				new OpenFile(getGui());
+				}
 			}
 		});
 
@@ -186,6 +209,7 @@ public class Whiteboard extends Application {
 
 		textInput.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					if(selected instanceof DText) {
@@ -193,6 +217,7 @@ public class Whiteboard extends Application {
 						selected.draw();
 					}
 				}
+			}
 			}
 		});
 
@@ -497,6 +522,7 @@ public class Whiteboard extends Application {
 
 
 	public static void main(String[] args) {
+		
 		launch(args);
 	}
 

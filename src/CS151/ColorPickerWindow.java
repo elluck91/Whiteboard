@@ -31,14 +31,14 @@ public class ColorPickerWindow {
 		stage.initOwner(gui.getPrimaryStage());
 		stage.setTitle("Color Picker");
 		final ColorPicker colorPicker = new ColorPicker();
-		colorPicker.setValue(translateColor(startColor));         
+		colorPicker.setValue(Adapters.awtToFx(startColor));         
 		final Circle circle = new Circle(50);
 		circle.setFill(colorPicker.getValue());
 
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Color color = fxToSwingColor(colorPicker.getValue());
+				Color color = Adapters.fxToAwt(colorPicker.getValue());
 				circle.setFill(colorPicker.getValue());
 				finalColor = color;
 			}
@@ -60,18 +60,5 @@ public class ColorPickerWindow {
 		stage.showAndWait();
 		System.out.println(finalColor.toString());
 		return finalColor;
-	}
-
-	public static javafx.scene.paint.Color translateColor(java.awt.Color startColor2) {
-		javafx.scene.paint.Color fxColor 
-		= javafx.scene.paint.Color.rgb(startColor2.getRed(), startColor2.getGreen(), startColor2.getBlue(), startColor2.getAlpha()/255.0);
-		return fxColor;
-	}
-
-	public static java.awt.Color fxToSwingColor(javafx.scene.paint.Color fxColor) {
-		return new java.awt.Color((float) fxColor.getRed(),
-				(float) fxColor.getGreen(),
-				(float) fxColor.getBlue(),
-				(float) fxColor.getOpacity());
 	}
 }
