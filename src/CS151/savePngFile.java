@@ -84,7 +84,8 @@ public class savePngFile {
 	public void save(File file) {
 		gui.getCanvas().removeKnobs();
 		WritableImage image = gui.getCanvas().snapshot(new SnapshotParameters(), null);
-		gui.getCanvas().addKnobs(gui.getCanvas().getSelected().getBounds());
+		if (canvas.getSelected() != null)
+			gui.getCanvas().addKnobs(gui.getCanvas().getSelected().getBounds());
 	    // TODO: probably use a file chooser here
 
 	    try {

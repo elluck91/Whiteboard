@@ -37,21 +37,34 @@ public class DLine extends DShape implements ModelListener
 	private void updateModel()
 	{
 
-		Point2D.Double start = new Point2D.Double(line.getStartX(), line.getStartY());
-		Point2D.Double end = new Point2D.Double(line.getEndX(), line.getEndY());
-
-		((DLineModel) model).setStart(start);
-		((DLineModel) model).setEnd(end);
+		double startX = model.getX();
+		double startY = model.getY();
+		
+		double endX = model.getX() + model.getWidth();
+		double endY = model.getY() + model.getHeight();
+		
+		((DLineModel) model).setStartX(startX);
+		((DLineModel) model).setStartY(startY);
+		
+		((DLineModel) model).setEndX(endX);
+		((DLineModel) model).setEndY(endY);
 
 	}
 
 	public void setModel(DShapeModel model)
 	{
 		this.model = model;
-		Point2D.Double start = new Point2D.Double(model.getX(), model.getY());
-		Point2D.Double end = new Point2D.Double(model.getX() + model.getWidth(), model.getY() + model.getWidth());
-		((DLineModel) model).setStart(start);
-		((DLineModel) model).setEnd(end);
+		double startX = model.getX();
+		double startY = model.getY();
+		
+		double endX = model.getX() + model.getWidth();
+		double endY = model.getY() + model.getHeight();
+		
+		((DLineModel) model).setStartX(startX);
+		((DLineModel) model).setStartY(startY);
+		
+		((DLineModel) model).setEndX(endX);
+		((DLineModel) model).setEndY(endY);
 	}
 
 	public Line getShape()

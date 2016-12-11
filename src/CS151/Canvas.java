@@ -178,16 +178,17 @@ public class Canvas extends Pane
 					System.out.println("HERE!!!!!!!!!!!!!!!!!!!!!");
 					double deltaX = event.getSceneX() - mouseLocation.value.getX();
 					double deltaY = event.getSceneY() - mouseLocation.value.getY();
-					double newX = selected.getModel().getX() + deltaX;
-					double newY = selected.getModel().getY() + deltaY;
-					double newMaxY = newY + selected.getModel().getHeight();
+					double newX = lineModel.getX() + deltaX;
+					double newY = lineModel.getY() + deltaY;
+					double newMaxY = newY + lineModel.getHeight();
 					if (newX >= 9
 							&& 9 <= selected.getShape().getParent().getBoundsInParent().getWidth() - 9
 							&& newY >= 9 && newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9)  {
-						lineModel.setStart(new Point2D.Double(lineModel.getStartX()
-								+ deltaX, lineModel.getStartY() + deltaY));
-						lineModel.setEnd(new Point2D.Double(lineModel.getEndX() 
-								+ deltaX, lineModel.getEndY() + deltaY));
+						lineModel.setStartX(lineModel.getStartX() + deltaX);
+						lineModel.setStartY(lineModel.getStartY() + deltaY);
+						
+						lineModel.setEndX(lineModel.getEndX() + deltaX);
+						lineModel.setEndY(lineModel.getEndY() + deltaY);
 
 						knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 						knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
@@ -303,8 +304,9 @@ public class Canvas extends Pane
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setStart(new Point2D.Double(lineModel.getStartX() + deltaX,
-										lineModel.getStartY() + deltaY));
+								lineModel.setStartX(lineModel.getStartX() + deltaX);
+								lineModel.setStartY(lineModel.getStartY() + deltaY);
+								
 								knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 								knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
 
@@ -335,8 +337,9 @@ public class Canvas extends Pane
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setEnd(new Point2D.Double(lineModel.getEndX() + deltaX,
-										lineModel.getEndY() + deltaY));
+								
+								lineModel.setEndX(lineModel.getEndX() + deltaX);
+								lineModel.setEndY(lineModel.getEndY() + deltaY);
 								knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
 								knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
 

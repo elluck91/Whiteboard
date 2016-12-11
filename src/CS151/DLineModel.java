@@ -4,49 +4,65 @@ import java.awt.geom.Point2D;
 
 public class DLineModel extends DShapeModel implements java.io.Serializable {
 
-	private Point2D.Double start;
-	private Point2D.Double end;
+	private double startX, startY;
+	private double endX, endY;
 
 	public DLineModel() {
-		start = new Point2D.Double(getX(), getY());
-		end = new Point2D.Double(getX() + getWidth(), getY() + getHeight());
+		startX = getX();
+		startY = getY();
+		endX = getX() + getWidth();
+		endY = getY() + getHeight();
 	}
 
 	public double getStartX() {
-		return start.getX();	
+		return startX;	
 	}
 	
 	public double getStartY() {
-		return start.getY();	
+		return startY;	
 	}
 
 	public double getEndX() {
-		return end.getX();
+		return endX;
 	}
 	
 	public double getEndY() {
-		return end.getY();
+		return endY;
 	}
 
-	public void setStart(Point2D.Double start) {
-		this.start = new Point2D.Double(start.getX(), start.getY());
+	public void setStartX(double startX) {
+		this.startX = startX;
+		updateBounds();
+	}
+	
+	public void setStartY(double startY) {
+		this.startY = startY;
+		updateBounds();
+	}
+	
+
+	public void setEndX(double endX) {
+		this.endX = endX;
+		updateBounds();
+	}
+	
+	public void setEndY(double endY) {
+		this.endY = endY;
 		updateBounds();
 	}
 
-	public void setEnd(Point2D.Double end) {
-		this.end = new Point2D.Double(end.getX(), end.getY());
-		updateBounds();
-	}
+	
+	
 
 	public void updateBounds() {
-		if(start.getY() > end.getY()) {
-			if(start.getX() > end.getX()) {
+		if(startY > endY) {
+			if(startX > endX) {
 				updateBoundsCase1();
 			} else {
 				updateBoundsCase2();
 			}
 		} else {
-			if(start.getX() > end.getX()) {
+			if(startX > endX) {
 				updateBoundsCase3();
 			} else {
 				updateBoundsCase4();
@@ -55,31 +71,31 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
 	}
 
 	private void updateBoundsCase1() {
-		setX(end.getX());
-		setY(end.getY());
-		setWidth(start.getX() - end.getX());
-		setHeight(start.getY() - end.getY());
+		setX(endX);
+		setY(endY);
+		setWidth(startX - endX);
+		setHeight(startY - endY);
 	}
 
 	private void updateBoundsCase2() {
-		setX(start.getX());
-		setY(end.getY());
-		setWidth(end.getX() - start.getX());
-		setHeight(start.getY() - end.getY());
+		setX(startX);
+		setY(endY);
+		setWidth(endX - startX);
+		setHeight(startY - endY);
 	}
 
 	private void updateBoundsCase3() {
-		setX(end.getX());
-		setY(start.getY());
-		setWidth(start.getX() - end.getX());
-		setHeight(end.getY() - start.getY());
+		setX(endX);
+		setY(startY);
+		setWidth(startX - endX);
+		setHeight(endY - startY);
 	}
 
 	private void updateBoundsCase4() {
-		setX(start.getX());
-		setY(start.getY());
-		setWidth(end.getX() - start.getX());
-		setHeight(end.getY() - start.getY());
+		setX(startX);
+		setY(startY);
+		setWidth(endX - startX);
+		setHeight(endY - startY);
 	}
 	
 	
