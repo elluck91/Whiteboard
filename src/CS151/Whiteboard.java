@@ -1,15 +1,16 @@
 package CS151;
 
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import java.awt.geom.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +21,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,7 +28,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.awt.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,22 +35,12 @@ import javafx.stage.Stage;
 public class Whiteboard extends Application {
 
 	private Canvas canvas;
-	private Button rect;
-	private Button oval;
-	private Button line;
-	private Button text;
-	private Button colorPicker;
-	private Button toFront;
-	private Button toBack;
-	private Button remove;
+	private ArrayList<Button> buttons;
+	private Button rect, oval, line, text, colorPicker, toFront, toBack, remove, fontButton;
 	private TextField textInput;
-	private Button fontButton;
 	private ComboBox<String> fonts;
 	private TableView<DShapeModel> tv;
-	private MenuItem save;
-	private MenuItem open;
-	private MenuItem savePng;
-	private MenuItem close;
+	private MenuItem save, open, savePng, close, startServ, stopServ, startCli, stopCli;
 	private Color color;
 	private Stage primaryStage;
 	private boolean canUse;
@@ -62,6 +51,7 @@ public class Whiteboard extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		buttons = new ArrayList<Button>();
 		canUse = true;
 		primaryStage = stage;
 		VBox main = new VBox();
@@ -197,7 +187,35 @@ public class Whiteboard extends Application {
 				}
 			}
 		});
+		
+		startServ.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		
+		stopServ.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
+			}
+		});
 
+		startCli.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				if (canUse) {
+					for (Button btn : buttons)
+						btn.setDisable(true);
+				}
+			}
+		});
+
+		stopCli.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+					for (Button btn : buttons)
+						btn.setDisable(false);
+			}
+		});
+		
 		close.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (ConfirmBox.display("ConfirmBox", "Are you sure that you want to close this window?")) 
@@ -298,6 +316,15 @@ public class Whiteboard extends Application {
 		topLeft.setPadding(new Insets(20, 10, 10, 20));
 
 		topLeft.getChildren().addAll(line1, line2, line3, line4);
+		buttons.add(rect);
+		buttons.add(oval);
+		buttons.add(line);
+		buttons.add(text);
+		buttons.add(colorPicker);
+		buttons.add(fontButton);
+		buttons.add(toFront);
+		buttons.add(toBack);
+		buttons.add(remove);
 		return topLeft;	
 	}
 
@@ -367,14 +394,22 @@ public class Whiteboard extends Application {
 		VBox menu = new VBox();
 		MenuBar menuBar = new MenuBar();
 		Menu menuFile = new Menu("File");
+		Menu serverMenu = new Menu("Server");
 
 		save = new MenuItem("Save");
 		open = new MenuItem("Open");
 		savePng = new MenuItem("Save to PNG");
 		close = new MenuItem("Close");
+		
+		startServ = new MenuItem("Start server");
+		stopServ = new MenuItem("Stop server");
+		startCli = new MenuItem("Start client");
+		stopCli = new MenuItem("Stop client");
 
 		menuFile.getItems().addAll(save, open, savePng, close);
-		menuBar.getMenus().add(menuFile);
+		serverMenu.getItems().addAll(startServ, stopServ, startCli, stopCli);
+		
+		menuBar.getMenus().addAll(menuFile, serverMenu);
 		menu.getChildren().add(menuBar);
 		return menu;
 	}
