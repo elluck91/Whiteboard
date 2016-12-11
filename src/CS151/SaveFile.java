@@ -33,6 +33,8 @@ public class SaveFile {
 	private void display() {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(gui.getPrimaryStage());
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setMinWidth(250);
 		stage.setTitle("Open File");
 		Label instruction = new Label();

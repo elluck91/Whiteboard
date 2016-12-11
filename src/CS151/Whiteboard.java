@@ -52,10 +52,15 @@ public class Whiteboard extends Application {
 	private MenuItem open;
 	private MenuItem close;
 	private Color color;
+	private Stage primaryStage;
+
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-
+		primaryStage = stage;
 		VBox main = new VBox();
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
@@ -107,9 +112,9 @@ public class Whiteboard extends Application {
 			public void handle(ActionEvent arg0) {
 				ColorPickerWindow colorPick;
 				if (canvas.getSelected() != null)
-					colorPick = new ColorPickerWindow(canvas.getSelected().getModel().getColor());
+					colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
 				else
-					colorPick = new ColorPickerWindow(Color.GRAY);
+					colorPick = new ColorPickerWindow(getGui(), Color.GRAY);
 				color = colorPick.display();
 				canvas.updateColor(color);
 				canvas.paintComponent();

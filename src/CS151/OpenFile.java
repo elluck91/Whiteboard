@@ -30,6 +30,7 @@ public class OpenFile {
 	private void display() {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(gui.getPrimaryStage());
 		stage.setMinWidth(250);
 		stage.setTitle("Open File");
 		Label instruction = new Label();
@@ -51,7 +52,7 @@ public class OpenFile {
 				} catch (IOException e1) {
 					Warning.display();
 				}
-				stage.close();
+				
 			}
 
 		});

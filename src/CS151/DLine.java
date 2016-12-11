@@ -15,7 +15,7 @@ public class DLine extends DShape implements ModelListener
 
 		line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
 				((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
-		line.setStroke(model.translateColor(Color.BLACK));
+		line.setStroke(model.translateColor(Color.GRAY));
 		line.setStrokeWidth(5);
 	}
 

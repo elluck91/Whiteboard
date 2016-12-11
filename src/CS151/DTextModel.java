@@ -7,7 +7,7 @@ public class DTextModel extends DShapeModel {
 
 	public DTextModel() {
 		text = "Hello";
-		font = "Dialog";	    
+		font = "Dialog";
 	}
 
 	public String getText() {
