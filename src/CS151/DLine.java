@@ -1,7 +1,7 @@
 package CS151;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javafx.scene.shape.Line;
 
 public class DLine extends DShape implements ModelListener
@@ -15,14 +15,14 @@ public class DLine extends DShape implements ModelListener
 
 		line = new Line(((DLineModel) model).getStart().getX(), ((DLineModel) model).getStart().getY(),
 				((DLineModel) model).getEnd().getX(), ((DLineModel) model).getEnd().getY());
-		line.setStroke(Color.BLACK);
+		line.setStroke(model.translateColor(Color.BLACK));
 		line.setStrokeWidth(5);
 	}
 
 	@Override
 	public void draw()
 	{
-		line.setStroke(model.getColor());
+		line.setStroke(model.translateColor(model.getColor()));
 		double startX = ((DLineModel) model).getStart().getX();
 		double startY = ((DLineModel) model).getStart().getY();
 		double endX = ((DLineModel) model).getEnd().getX();

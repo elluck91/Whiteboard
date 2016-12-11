@@ -1,10 +1,8 @@
 package CS151;
 
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public class DRect extends DShape implements ModelListener {
-
 
     private Rectangle rect;
     
@@ -23,7 +21,7 @@ public class DRect extends DShape implements ModelListener {
      */
     public void draw() {
     	//System.out.println("I am drawing myself on line 25 in DRect");
-        rect.setFill(model.getColor());
+        rect.setFill(model.translateColor(model.getColor()));
         rect.setX((double) model.getX());
         rect.setY((double) model.getY());
         rect.setWidth((double) model.getWidth());

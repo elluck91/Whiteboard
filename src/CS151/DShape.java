@@ -1,6 +1,6 @@
 package CS151;
 
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 

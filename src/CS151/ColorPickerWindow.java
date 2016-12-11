@@ -1,5 +1,7 @@
 package CS151;
 
+import java.awt.Color;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -8,32 +10,31 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class ColorPickerWindow {
 
     static Color finalColor = Color.GRAY;
-    static Color startColor;
+    static java.awt.Color startColor;
     
-    public ColorPickerWindow(Color color) {
-		startColor = color;
+    public ColorPickerWindow(java.awt.Color gray) {
+		startColor = gray;
 	}
 
-	public static Color display() {		
+	public static java.awt.Color display() {		
 	Stage stage = new Stage();
         stage.setTitle("Color Picker");
         final ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setValue(startColor);         
+        colorPicker.setValue(translateColor(startColor));         
         final Circle circle = new Circle(50);
         circle.setFill(colorPicker.getValue());
  
         colorPicker.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	Color color = colorPicker.getValue();
-                circle.setFill(color);
+            	Color color = fxToSwingColor(colorPicker.getValue());
+                circle.setFill(colorPicker.getValue());
                 finalColor = color;
             }
         });
@@ -55,4 +56,17 @@ public class ColorPickerWindow {
         System.out.println(finalColor.toString());
         return finalColor;
     }
+	
+	public static javafx.scene.paint.Color translateColor(java.awt.Color startColor2) {
+		javafx.scene.paint.Color fxColor 
+		= javafx.scene.paint.Color.rgb(startColor2.getRed(), startColor2.getGreen(), startColor2.getBlue(), startColor2.getAlpha()/255.0);
+		return fxColor;
+	}
+	
+	public static java.awt.Color fxToSwingColor(javafx.scene.paint.Color fxColor) {
+		return new java.awt.Color((float) fxColor.getRed(),
+                (float) fxColor.getGreen(),
+                (float) fxColor.getBlue(),
+                (float) fxColor.getOpacity());
+	}
 }

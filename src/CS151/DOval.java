@@ -1,11 +1,6 @@
 package CS151;
-
-
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class DOval extends DShape implements ModelListener {
 
@@ -20,7 +15,7 @@ public class DOval extends DShape implements ModelListener {
 
     // Draw the oval
     public void draw() {
-        oval.setFill(model.getColor());
+        oval.setFill(model.translateColor(model.getColor()));
         // Casts are necessary because model does not know it's 
         // a DOvalModel. It only knows it is a DShapeModel
 	double x = ( (DOvalModel) model).getXCenter();

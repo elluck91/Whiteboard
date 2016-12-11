@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Canvas extends Pane
@@ -554,7 +554,7 @@ public class Canvas extends Pane
 	public void clearCanvas() {
 		shapes.clear();
 		models.clear();
-		this.getChildren().removeAll();
+		this.getChildren().clear();
 		removeKnobs();
 		selected = null;
 	}
