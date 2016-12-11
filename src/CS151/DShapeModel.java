@@ -101,16 +101,13 @@ public class DShapeModel {
 
 	public void setBounds(Rectangle rect) {
 		// do something
-		notifyListeners();
+	    rectangle = rect;
+	    notifyListeners();
 	}
 
 
-	public void moveBy(double dx, double dy) {
 
-	}
-
-
-	/**
+    /**
 	 * Register a shape as a listener of the model.
 	 * @param DShape shape
 	 */
