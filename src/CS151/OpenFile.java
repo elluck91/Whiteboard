@@ -49,6 +49,7 @@ public class OpenFile {
 				File f = new File(input.getText());
 				try {
 					open(f);
+					stage.close();
 				} catch (IOException e1) {
 					Warning.display();
 				}

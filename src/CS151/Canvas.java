@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -130,7 +130,7 @@ public class Canvas extends Pane
 
 		DShape newSelection = null;
 		for (DShape shape : shapes) {
-			if(shape.getBounds().contains(location)) 
+			if(shape.getBounds().contains(Adapters.awtToFx(location))) 
 				newSelection = shape;
 		}
 
@@ -147,7 +147,7 @@ public class Canvas extends Pane
 	 */
 	public boolean detectKnobClick(Point2D location) {
 		for(DRect knob: knobs) {
-			if(knob.getShape().contains(location)){
+			if(knob.getShape().contains(Adapters.awtToFx(location))) { 
 				return true;
 			}
 		}
@@ -168,7 +168,7 @@ public class Canvas extends Pane
 		gui.updateTable();
 		moveToFront();
 
-		if (selected instanceof DLine) {
+		if (selected instanceof DLine && selected != null) {
 			DLine selectedLine = (DLine) selected;
 			DLineModel lineModel = (DLineModel) selectedLine.getModel();
 			setUpDragging(selectedLine, mouseLocation);
@@ -182,9 +182,9 @@ public class Canvas extends Pane
 					if (newX >= 9
 							&& 9 <= selected.getShape().getParent().getBoundsInParent().getWidth() - 9
 							&& newY >= 9 && newMaxY <= selected.getShape().getParent().getBoundsInLocal().getHeight() - 9)  {
-						lineModel.setStart(new Point2D(lineModel.getStart().getX() 
+						lineModel.setStart(new Point2D.Double(lineModel.getStart().getX() 
 								+ deltaX, lineModel.getStart().getY() + deltaY));
-						lineModel.setEnd(new Point2D(lineModel.getEnd().getX() 
+						lineModel.setEnd(new Point2D.Double(lineModel.getEnd().getX() 
 								+ deltaX, lineModel.getEnd().getY() + deltaY));
 
 						knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
@@ -193,7 +193,7 @@ public class Canvas extends Pane
 						knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
 					}
 
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 					paintComponent();
 					gui.updateTable();
 				}
@@ -226,7 +226,7 @@ public class Canvas extends Pane
 						knobs.get(2).getShape().setY(knobs.get(2).getShape().getY() + deltaY);
 						knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
 					}
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 
 					paintComponent();
 					gui.updateTable();
@@ -301,7 +301,7 @@ public class Canvas extends Pane
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setStart(new Point2D(lineModel.getStart().getX() + deltaX,
+								lineModel.setStart(new Point2D.Double(lineModel.getStart().getX() + deltaX,
 										lineModel.getStart().getY() + deltaY));
 								knobs.get(0).getShape().setX(knobs.get(0).getShape().getX() + deltaX);
 								knobs.get(0).getShape().setY(knobs.get(0).getShape().getY() + deltaY);
@@ -309,7 +309,7 @@ public class Canvas extends Pane
 
 
 							}
-							mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+							mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 							paintComponent();
 							gui.updateTable();
 
@@ -333,14 +333,14 @@ public class Canvas extends Pane
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinY() +  9 <= newMaxY
 									&& selectedLine.getShape().getParent().getBoundsInLocal().getMinX() +  9 <= newMaxX) {
 								
-								lineModel.setEnd(new Point2D(lineModel.getEnd().getX() + deltaX,
+								lineModel.setEnd(new Point2D.Double(lineModel.getEnd().getX() + deltaX,
 										lineModel.getEnd().getY() + deltaY));
 								knobs.get(1).getShape().setX(knobs.get(1).getShape().getX() + deltaX);
 								knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
 
 
 							}
-							mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+							mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 							paintComponent();
 							gui.updateTable();
 
@@ -385,7 +385,7 @@ public class Canvas extends Pane
 
 					selected.draw();
 					gui.updateTable();
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 				}
 			});
 
@@ -412,7 +412,7 @@ public class Canvas extends Pane
 					knobs.get(1).getShape().setY(knobs.get(1).getShape().getY() + deltaY);
 					//				}
 
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 					selected.draw();
 					gui.updateTable();
 
@@ -442,7 +442,7 @@ public class Canvas extends Pane
 					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
 					//}
 
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 					selected.draw();
 					gui.updateTable();
 
@@ -473,7 +473,7 @@ public class Canvas extends Pane
 					knobs.get(3).getShape().setY(knobs.get(3).getShape().getY() + deltaY);
 					//}
 
-					mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+					mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 					selected.draw();
 					gui.updateTable();
 
@@ -501,7 +501,7 @@ public class Canvas extends Pane
 
 		r.getShape().setOnDragDetected(event -> {
 			r.getShape().getParent().setCursor(Cursor.CLOSED_HAND);
-			mouseLocation.value = new Point2D(event.getSceneX(), event.getSceneY());
+			mouseLocation.value = new Point2D.Double(event.getSceneX(), event.getSceneY());
 		});
 
 		r.getShape().setOnMouseReleased(event -> {

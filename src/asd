@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_111" class="java.beans.XMLDecoder">
+ <array class="CS151.DShapeModel" length="4">
+  <void index="0">
+   <object class="CS151.DRectModel" id="DRectModel0">
+    <void id="Rectangle0" property="bounds">
+     <void property="height">
+      <double>132.0</double>
+     </void>
+     <void property="width">
+      <double>181.0</double>
+     </void>
+     <void property="x">
+      <double>93.0</double>
+     </void>
+     <void property="y">
+      <double>78.0</double>
+     </void>
+    </void>
+    <void property="bounds">
+     <object idref="Rectangle0"/>
+    </void>
+    <void property="color">
+     <object class="java.awt.Color">
+      <int>255</int>
+      <int>179</int>
+      <int>102</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="height">
+     <double>132.0</double>
+    </void>
+    <void property="width">
+     <double>181.0</double>
+    </void>
+    <void property="x">
+     <double>93.0</double>
+    </void>
+    <void property="y">
+     <double>78.0</double>
+    </void>
+   </object>
+  </void>
+  <void index="1">
+   <object class="CS151.DOvalModel" id="DOvalModel0">
+    <void id="Rectangle1" property="bounds">
+     <void property="height">
+      <double>159.0</double>
+     </void>
+     <void property="width">
+      <double>142.0</double>
+     </void>
+    </void>
+    <void property="bounds">
+     <object idref="Rectangle1"/>
+    </void>
+    <void property="color">
+     <object class="java.awt.Color">
+      <int>255</int>
+      <int>179</int>
+      <int>128</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="height">
+     <double>159.0</double>
+    </void>
+    <void property="width">
+     <double>142.0</double>
+    </void>
+   </object>
+  </void>
+  <void index="2">
+   <object class="CS151.DTextModel" id="DTextModel0">
+    <void id="Rectangle2" property="bounds">
+     <void property="height">
+      <double>89.0</double>
+     </void>
+     <void property="width">
+      <double>250.0</double>
+     </void>
+     <void property="x">
+      <double>48.0</double>
+     </void>
+     <void property="y">
+      <double>247.0</double>
+     </void>
+    </void>
+    <void property="bounds">
+     <object idref="Rectangle2"/>
+    </void>
+    <void property="font">
+     <string>DejaVu Sans Mono</string>
+    </void>
+    <void property="height">
+     <double>89.0</double>
+    </void>
+    <void property="width">
+     <double>250.0</double>
+    </void>
+    <void property="x">
+     <double>48.0</double>
+    </void>
+    <void property="y">
+     <double>247.0</double>
+    </void>
+   </object>
+  </void>
+  <void index="3">
+   <object class="CS151.DLineModel" id="DLineModel0">
+    <void id="Rectangle3" property="bounds">
+     <void property="height">
+      <double>259.0</double>
+     </void>
+     <void property="width">
+      <double>30.0</double>
+     </void>
+     <void property="x">
+      <double>350.0</double>
+     </void>
+     <void property="y">
+      <double>53.0</double>
+     </void>
+    </void>
+    <void property="bounds">
+     <object idref="Rectangle3"/>
+    </void>
+    <void property="color">
+     <object class="java.awt.Color">
+      <int>255</int>
+      <int>128</int>
+      <int>128</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="height">
+     <double>259.0</double>
+    </void>
+    <void property="width">
+     <double>30.0</double>
+    </void>
+    <void property="x">
+     <double>350.0</double>
+    </void>
+    <void property="y">
+     <double>53.0</double>
+    </void>
+   </object>
+  </void>
+ </array>
+</java>

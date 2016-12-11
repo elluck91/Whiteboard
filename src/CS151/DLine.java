@@ -1,6 +1,6 @@
 package CS151;
 
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 import java.awt.Color;
 import javafx.scene.shape.Line;
 
@@ -37,8 +37,8 @@ public class DLine extends DShape implements ModelListener
 	private void updateModel()
 	{
 
-		Point2D start = new Point2D(line.getStartX(), line.getStartY());
-		Point2D end = new Point2D(line.getEndX(), line.getEndY());
+		Point2D.Double start = new Point2D.Double(line.getStartX(), line.getStartY());
+		Point2D.Double end = new Point2D.Double(line.getEndX(), line.getEndY());
 
 		((DLineModel) model).setStart(start);
 		((DLineModel) model).setEnd(end);
@@ -48,8 +48,8 @@ public class DLine extends DShape implements ModelListener
 	public void setModel(DShapeModel model)
 	{
 		this.model = model;
-		Point2D start = new Point2D(model.getX(), model.getY());
-		Point2D end = new Point2D(model.getX() + model.getWidth(), model.getY() + model.getWidth());
+		Point2D.Double start = new Point2D.Double(model.getX(), model.getY());
+		Point2D.Double end = new Point2D.Double(model.getX() + model.getWidth(), model.getY() + model.getWidth());
 		((DLineModel) model).setStart(start);
 		((DLineModel) model).setEnd(end);
 	}
