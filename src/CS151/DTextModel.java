@@ -33,11 +33,19 @@ public class DTextModel extends DShapeModel {
 	public Color getColor() {
 		return color;
 	}
-	
-
 
 	public void setColor(Color color) {
 		this.color = color;
 		notifyListeners();
+	}
+	
+	public DTextModel getModel() {
+		return this;
+	}
+
+	public void mimic(DShapeModel other) {
+		setText(((DTextModel) other).getText());
+		setFont(((DTextModel) other).getFont());
+		setColor(((DTextModel) other).getColor());
 	}
 }

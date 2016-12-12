@@ -61,6 +61,10 @@ public class Whiteboard extends Application {
 	private Stage primaryStage;
 	private String status;
 
+	public String getStatus() {
+		return status;
+	}
+
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
@@ -93,9 +97,10 @@ public class Whiteboard extends Application {
 		rect.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
-					canvas.addShape(new DRectModel());
-					doSend("add", canvas.getSelected().getModel());
-
+					DRectModel model = new DRectModel();
+					canvas.addShape(model);
+					doSend("add", model);
+					disableTextControls();
 				}
 			}
 		});
@@ -103,7 +108,9 @@ public class Whiteboard extends Application {
 		oval.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
-					canvas.addShape(new DOvalModel());
+					DOvalModel model = new DOvalModel();
+					canvas.addShape(model);
+					doSend("add", model);
 					disableTextControls();
 				}
 			}
@@ -112,7 +119,9 @@ public class Whiteboard extends Application {
 		line.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
-					canvas.addShape(new DLineModel());
+					DLineModel model = new DLineModel();
+					canvas.addShape(model);
+					doSend("add", model);
 					disableTextControls();
 				}
 			}
@@ -121,11 +130,14 @@ public class Whiteboard extends Application {
 		text.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
-					canvas.addShape(new DTextModel());
+					DTextModel model = new DTextModel();
+					canvas.addShape(model);
+					doSend("add", model);
 					enableTextControls();
 					DShape text = canvas.getSelected();
 					setTextInput( ((DText) text).getText());
 					setFontText( ((DText) text).getFont());
+					
 				}
 			}
 		});
@@ -141,6 +153,7 @@ public class Whiteboard extends Application {
 						colorPick = new ColorPickerWindow(getGui(), Color.GRAY);
 					color = colorPick.display();
 					canvas.updateColor(color);
+					doSend("change", canvas.getSelected().getModel());
 					canvas.paintComponent();
 				}
 
@@ -161,6 +174,7 @@ public class Whiteboard extends Application {
 				if (!status.equals("client")) {
 					DShape selected = canvas.getSelected();
 					if(selected != null) {
+						doSend("front", selected.getModel());
 						canvas.moveToFront();
 					}
 				}
@@ -173,6 +187,7 @@ public class Whiteboard extends Application {
 				if (!status.equals("client")) {
 					DShape selected = canvas.getSelected();
 					if(selected != null) {
+						doSend("back", selected.getModel());
 						canvas.moveToBack();
 					}
 				}
@@ -183,6 +198,7 @@ public class Whiteboard extends Application {
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
+					doSend("remove", canvas.getSelected().getModel());
 					canvas.deleteSelected();
 					disableTextControls();
 				}
@@ -260,6 +276,7 @@ public class Whiteboard extends Application {
 					if(selected != null) {
 						if(selected instanceof DText) {
 							((DText)selected).setText(textInput.getText());
+							doSend("change", selected.getModel());
 							selected.draw();
 						}
 					}
@@ -449,12 +466,15 @@ public class Whiteboard extends Application {
 	 * @param Point2D location
 	 */
 	public void handleClick(Point2D location) {
-		canvas.makeSelection(location);
-		if(canvas.getSelected() instanceof DText)
-			enableTextControls();
-		else
-			disableTextControls();
+		if (!status.equals("client")) {
+			canvas.makeSelection(location);
+			if(canvas.getSelected() instanceof DText)
+				enableTextControls();
+			else
+				disableTextControls();
+		}
 	}
+
 
 
 	/**
@@ -541,6 +561,7 @@ public class Whiteboard extends Application {
 		if(selected != null) {
 			if(selected instanceof DText) {
 				( (DText) selected).setFont(font);
+				doSend("change", selected.getModel());
 				canvas.paintComponent();
 			}
 
@@ -629,16 +650,35 @@ public class Whiteboard extends Application {
 		}
 
 		private void invokeToGUI(String message, DShapeModel model) {
+			DShapeModel current = canvas.findById(model);
 			if (message.equals("add")) {
 				Platform.runLater( new Runnable() {
 					public void run() {
-						System.out.println("Im trying to add on line 634");
+						System.out.println("add");
 						canvas.addShape(model);
 					}
 				});
-
 			}
-
+			else if (message.equals("remove")) {
+				System.out.println("remove");
+				canvas.removeShape(model);
+			}
+			else if (message.equals("front")) {
+				System.out.println("front");
+				canvas.setSelected(canvas.findShapeByID(current));
+				canvas.moveToFront();
+			}
+			else if (message.equals("back")) {
+				System.out.println("back");
+				canvas.setSelected(canvas.findShapeByID(current));
+				canvas.moveToBack();
+			}
+			else if (message.equals("change")) {
+				DShapeModel shape = canvas.findById(model);
+				System.out.println("In change");
+				shape.mimic(model.getModel());
+			}
+				
 		}
 	}
 

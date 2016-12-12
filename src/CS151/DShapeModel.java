@@ -27,11 +27,6 @@ public class DShapeModel {
 	DoubleProperty y;
 	private String id;
 
-	public String getId() {
-		return id;
-	}
-
-
 	public DShapeModel() {
 		id = UUID.randomUUID().toString();
 		rectangle = new Rectangle(10, 10, 20, 20);
@@ -41,6 +36,21 @@ public class DShapeModel {
 		y = new SimpleDoubleProperty(rectangle.getY());
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	public DShapeModel getModel() {
+		return this;
+	}
+	
+	public void setModel() {
+		
 	}
 
 
@@ -153,7 +163,11 @@ public class DShapeModel {
 		this.height.setValue(hei);
 		this.x.setValue(getX());
 		this.y.setValue(getY());
-	}	
+	}
+	
+	public void mimic(DShapeModel other) {
+		
+	}
 
 
 }
