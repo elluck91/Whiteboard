@@ -35,6 +35,7 @@ public class DTextModel extends DShapeModel {
 	}
 
 	public void setColor(Color color) {
+		System.out.println("In set COlor");
 		this.color = color;
 		notifyListeners();
 	}
@@ -44,6 +45,7 @@ public class DTextModel extends DShapeModel {
 	}
 
 	public void mimic(DShapeModel other) {
+		System.out.println("Inside mimic in DTextModel");
 		setText(((DTextModel) other).getText());
 		setFont(((DTextModel) other).getFont());
 		setColor(((DTextModel) other).getColor());

@@ -76,7 +76,11 @@ public class Canvas extends Pane
 	 */
 	public void addShape(DShapeModel model)
 	{
-		model.setId(UUID.randomUUID().toString());
+		if (gui.getStatus().equals("server")) {
+			System.out.println("Berfore change: " + model.getId());
+			model.setId(UUID.randomUUID().toString());
+		}
+			
 		DShape shape = getDShape(model);
 		shape.setModel(model);
 		shapes.add(shape);
@@ -231,12 +235,13 @@ public class Canvas extends Pane
 	public void deleteSelected()
 	{
 		if (selected != null) {
+			if (gui.getStatus().equals("server"))
+				gui.doSend("delete", selected.getModel());
 			shapes.remove(selected);
 			models.remove(selected.getModel());
 			selected.getModel().removeListener(selected);
 			this.getChildren().remove(selected.getShape());
 			removeKnobs();
-			gui.doSend("delete", selected.getModel());
 			selected = null;
 		}
 	}
@@ -503,8 +508,8 @@ public class Canvas extends Pane
 		
 		for (DShapeModel x : models) {
 			System.out.println("Array ID: " + x.getModel().getId());
-			if (model.getId() == x.getId())
-				return x;
+			if (model.getId().equals(x.getId()))
+				someModel = x;
 		}
 		
 		return someModel;

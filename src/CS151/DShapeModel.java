@@ -39,6 +39,7 @@ public class DShapeModel {
 	}
 	
 	public void setId(String id) {
+		System.out.println("When setting second time: " + id);
 		this.id = id;
 	}
 	
@@ -49,10 +50,6 @@ public class DShapeModel {
 		return this;
 	}
 	
-	public void setModel() {
-		
-	}
-
 
 	public double getX() {
 		return rectangle.getX();
@@ -143,7 +140,9 @@ public class DShapeModel {
 	 * methods of the model
 	 */
 	protected void notifyListeners() {
+
 		for(ModelListener listener: listeners) {
+			
 			listener.modelChanged(this);
 		}
 	}
@@ -166,7 +165,7 @@ public class DShapeModel {
 	}
 	
 	public void mimic(DShapeModel other) {
-		
+		System.out.println("Inside mimic");
 	}
 
 

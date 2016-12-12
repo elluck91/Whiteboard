@@ -98,6 +98,7 @@ public class Whiteboard extends Application {
 			public void handle(ActionEvent event) {
 				if (!status.equals("client")) {
 					DRectModel model = new DRectModel();
+					System.out.println("When creating: " + model.getId());
 					canvas.addShape(model);
 					doSend("add", model);
 					disableTextControls();
@@ -625,6 +626,7 @@ public class Whiteboard extends Application {
 		// Connect to the server, loop getting messages
 		public void run() {
 			try {
+				System.out.println("My status is: " + status);
 				// make connection to the server name/port
 				Socket toServer = new Socket(name, port);
 				// get input stream to read from server and wrap in object input stream
@@ -640,6 +642,7 @@ public class Whiteboard extends Application {
 					XMLDecoder decoder = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
 					String instruction = (String) decoder.readObject();
 					DShapeModel message = (DShapeModel) decoder.readObject();
+					System.out.println("WHen cline receives: " + message.getId());
 
 					invokeToGUI(instruction, message);
 				}
@@ -650,6 +653,7 @@ public class Whiteboard extends Application {
 		}
 
 		private void invokeToGUI(String message, DShapeModel model) {
+			System.out.println("Inside the invokeToGui " + model.getId());
 			DShapeModel current = canvas.findById(model);
 			if (message.equals("add")) {
 				Platform.runLater( new Runnable() {
@@ -660,8 +664,13 @@ public class Whiteboard extends Application {
 				});
 			}
 			else if (message.equals("remove")) {
-				System.out.println("remove");
-				canvas.removeShape(model);
+				Platform.runLater( new Runnable() {
+					public void run() {
+						System.out.println("remove");
+						canvas.removeShape(model);
+					}
+				});
+				
 			}
 			else if (message.equals("front")) {
 				System.out.println("front");
@@ -674,9 +683,15 @@ public class Whiteboard extends Application {
 				canvas.moveToBack();
 			}
 			else if (message.equals("change")) {
-				DShapeModel shape = canvas.findById(model);
-				System.out.println("In change");
-				shape.mimic(model.getModel());
+				Platform.runLater( new Runnable() {
+					public void run() {
+						System.out.println("before findById call: " + current.getId());
+						System.out.println("In change");
+						current.mimic(model.getModel());
+						canvas.paintComponent();
+					}
+				});
+				
 			}
 				
 		}
@@ -697,6 +712,7 @@ public class Whiteboard extends Application {
 	}
 
 	public void doSend(String instruction, DShapeModel model) {
+		System.out.println("ID in doSend: " + model.getId());
 		sendRemote(instruction, model);
 	}
 
@@ -708,11 +724,13 @@ public class Whiteboard extends Application {
 		OutputStream memStream = new ByteArrayOutputStream();
 		XMLEncoder encoder = new XMLEncoder(memStream);
 		encoder.writeObject(instruction);
+		System.out.println("Before writing out: " + model.getId());
 		encoder.writeObject(model);
 		encoder.close();
 		String xmlString = memStream.toString();
 		// Now write that xml string to all the clients.
 		Iterator<ObjectOutputStream> it = outputs.iterator();
+		System.out.println("My status is: " + status);
 		while (it.hasNext()) {
 			ObjectOutputStream out = it.next();
 			try {
