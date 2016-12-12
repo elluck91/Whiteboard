@@ -147,6 +147,8 @@ public class Canvas extends Pane
 	for (DShape shape : shapes) {
 	    if(shape.getBounds().contains(Adapters.awtToFx(location)))
 		newSelection = shape;
+	    if(shape.getShape().contains(Adapters.awtToFx(location)))
+		newSelection = shape;			
 	}
 	
 	if (newSelection == null) 
@@ -300,8 +302,8 @@ public class Canvas extends Pane
     }
     
 
-    public void moveLine(Point2D start, Point2D end) {
-	((DLine)selected).moveTo(start, end);
+    public void moveLine(Point2D anchor, Point2D result) {
+	((DLine)selected).moveTo(anchor, result);
 	((DLine)selected).draw();
     }
     
@@ -320,7 +322,6 @@ public class Canvas extends Pane
 		javafx.geometry.Point2D temp = knob.sceneToLocal(event.getSceneX(),
 								   event.getSceneY());
 		Point2D.Double result = new Point2D.Double(temp.getX(), temp.getY());
-
 		if(result.getX() > 0 && result.getY() > 0) {
 		    dragKnob(anchor, result);
 		}

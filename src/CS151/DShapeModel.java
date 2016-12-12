@@ -19,7 +19,6 @@ public class DShapeModel {
 	 * document recommended using Rectangle & Point classes
 	 */
 	protected Rectangle rectangle;
-	protected Point2D point;
 	protected Color color;
 	protected ArrayList<ModelListener> listeners;
 	DoubleProperty width;
@@ -40,7 +39,6 @@ public class DShapeModel {
 		height = new SimpleDoubleProperty(rectangle.getHeight());
 		x = new SimpleDoubleProperty(rectangle.getX());
 		y = new SimpleDoubleProperty(rectangle.getY());
-		point = new Point2D.Double(0, 0);
 		color = Color.GRAY;
 		listeners = new ArrayList<ModelListener>();
 	}
@@ -97,8 +95,8 @@ public class DShapeModel {
 
 
 	public void setColor(Color color) {
-		this.color = color;
-		notifyListeners();
+	    this.color = color;
+	    notifyListeners();
 	}
 
 
