@@ -190,7 +190,8 @@ public class Canvas extends Pane
 		models.add(selection.getModel());
 		gui.updateTable();
 		moveToFront();
-		if (gui.getStatus().equals("server")) {
+		if (gui.getStatus().equals("server") ||
+		    gui.getStatus().equals("normal")) {
 		    handleShapeDrag();
 		}
 	}
@@ -424,9 +425,10 @@ public class Canvas extends Pane
 
 
 	private void addToPane() {
-	    if(gui.getStatus().equals("server") ){
-		    for(int i = 0; i < knobs.size(); i++) 
-			this.getChildren().add(knobs.get(i));
+	    if(gui.getStatus().equals("server") ||
+	       gui.getStatus().equals("normal") ){
+		for(int i = 0; i < knobs.size(); i++) 
+		    this.getChildren().add(knobs.get(i));
 	    }
 	}
 

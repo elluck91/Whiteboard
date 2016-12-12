@@ -469,6 +469,7 @@ public class Whiteboard extends Application {
 	public void handleClick(Point2D location) {
 		if (!status.equals("client")) {
 			canvas.makeSelection(location);
+			doSend("select", canvas.getSelected().getModel());
 			if(canvas.getSelected() instanceof DText)
 				enableTextControls();
 			else
@@ -653,47 +654,53 @@ public class Whiteboard extends Application {
 		}
 
 		private void invokeToGUI(String message, DShapeModel model) {
-			System.out.println("Inside the invokeToGui " + model.getId());
-			DShapeModel current = canvas.findById(model);
-			if (message.equals("add")) {
-				Platform.runLater( new Runnable() {
-					public void run() {
-						System.out.println("add");
-						canvas.addShape(model);
-					}
-				});
-			}
-			else if (message.equals("remove")) {
-				Platform.runLater( new Runnable() {
-					public void run() {
-						System.out.println("remove");
-						canvas.removeShape(model);
-					}
-				});
-				
-			}
-			else if (message.equals("front")) {
-				System.out.println("front");
-				canvas.setSelected(canvas.findShapeByID(current));
-				canvas.moveToFront();
-			}
-			else if (message.equals("back")) {
-				System.out.println("back");
-				canvas.setSelected(canvas.findShapeByID(current));
-				canvas.moveToBack();
-			}
-			else if (message.equals("change")) {
-				Platform.runLater( new Runnable() {
-					public void run() {
-						System.out.println("before findById call: " + current.getId());
-						System.out.println("In change");
-						current.mimic(model.getModel());
-						canvas.paintComponent();
-					}
-				});
-				
-			}
-				
+		    System.out.println("Inside the invokeToGUI " + model.getId());
+		    DShapeModel current = canvas.findById(model);
+		    if (message.equals("add")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    System.out.println("add");
+				    canvas.addShape(model);
+				}
+			    });
+		    }
+		    else if (message.equals("remove")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    System.out.println("remove");
+				    canvas.removeShape(current);
+				}
+			    });
+		    }
+		    else if (message.equals("front")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    canvas.moveToFront();
+				}
+			    });
+		    }
+		    else if (message.equals("back")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    canvas.moveToBack();
+				}
+			    });
+		    }
+		    else if (message.equals("change")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    current.mimic(model.getModel());
+				}
+			    });
+		    }
+		    else if (message.equals("select")) {
+			Platform.runLater( new Runnable() {
+				public void run() {
+				    DShape shape = canvas.findShapeByID(current);
+				    canvas.setSelected(shape);
+				}
+			    });
+		    }
 		}
 	}
 
@@ -769,6 +776,9 @@ public class Whiteboard extends Application {
 					// the list of outputs
 					// (our server only uses the output stream of the connection)
 					addOutput(new ObjectOutputStream(toClient.getOutputStream()));
+					for(int i = 0; i < canvas.getShapeModels().size(); i++) {
+					    doSend("add", canvas.getShapeModels().get(i));
+					}
 				}
 			} catch (IOException ex) {
 				ex.printStackTrace(); 
