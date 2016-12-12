@@ -51,14 +51,16 @@ public class Whiteboard extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		VBox main = new VBox();
+		canvas = new Canvas(main, this);
 		buttons = new ArrayList<Button>();
 		canUse = true;
 		primaryStage = stage;
-		VBox main = new VBox();
+		
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
 		GridPane gp = new GridPane();
-		canvas = new Canvas(main, this);
+		
 		VBox leftColumn = getLeftColumn(main);
 		setFontBox();
 
@@ -170,20 +172,20 @@ public class Whiteboard extends Application {
 
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				new SaveFile(getGui());
+				new SaveFile(getGui(), "Save file", "Enter file file:", "Save", "");
 			}
 		});
 		
 		savePng.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				new savePngFile(getGui());
+				new savePngFile(getGui(), "Save file as PNG", "Enter file name:", "Save", "");
 			}
 		});
 
 		open.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (canUse) {
-				new OpenFile(getGui());
+				new OpenFile(getGui(), "Open file", "Enter file name:", "Open", "");
 				}
 			}
 		});
