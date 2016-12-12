@@ -2,10 +2,21 @@ package CS151;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +44,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Whiteboard extends Application {
-
+	// The are thread inner classes to handle
+	// the networking.
+	private ClientHandler clientHandler;
+	private ServerAccepter serverAccepter;
+	// List of object streams to which we send data
+	private java.util.List<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
 	private Canvas canvas;
 	private ArrayList<Button> buttons;
 	private Button rect, oval, line, text, colorPicker, toFront, toBack, remove, fontButton;
@@ -43,7 +59,7 @@ public class Whiteboard extends Application {
 	private MenuItem save, open, savePng, close, startServ, stopServ, startCli, stopCli;
 	private Color color;
 	private Stage primaryStage;
-	private boolean canUse;
+	private String status;
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
@@ -54,13 +70,13 @@ public class Whiteboard extends Application {
 		VBox main = new VBox();
 		canvas = new Canvas(main, this);
 		buttons = new ArrayList<Button>();
-		canUse = true;
+		status = "normal";
 		primaryStage = stage;
-		
+
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
 		GridPane gp = new GridPane();
-		
+
 		VBox leftColumn = getLeftColumn(main);
 		setFontBox();
 
@@ -68,45 +84,48 @@ public class Whiteboard extends Application {
 		// use this information to select the correct shape in the
 		// view 
 		canvas.setOnMouseClicked(e -> {
-			if (canUse)
+			System.out.println(status);
+			System.out.println("Is status clinet: " + status.equals("client"));
+			if (!status.equals("client"))
 				handleClick(new Point2D.Double(e.getX(), e.getY()));
 		});
 
 		rect.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
+				if (!status.equals("client")) {
 					canvas.addShape(new DRectModel());
-					tv.setItems(canvas.getShapeModels());
+					doSend("add", canvas.getSelected().getModel());
+
 				}
 			}
 		});
 
 		oval.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				canvas.addShape(new DOvalModel());
-				disableTextControls();
+				if (!status.equals("client")) {
+					canvas.addShape(new DOvalModel());
+					disableTextControls();
 				}
 			}
 		});
 
 		line.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				canvas.addShape(new DLineModel());
-				disableTextControls();
+				if (!status.equals("client")) {
+					canvas.addShape(new DLineModel());
+					disableTextControls();
 				}
 			}
 		});
 
 		text.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				canvas.addShape(new DTextModel());
-				enableTextControls();
-				DShape text = canvas.getSelected();
-				setTextInput( ((DText) text).getText());
-				setFontText( ((DText) text).getFont());
+				if (!status.equals("client")) {
+					canvas.addShape(new DTextModel());
+					enableTextControls();
+					DShape text = canvas.getSelected();
+					setTextInput( ((DText) text).getText());
+					setFontText( ((DText) text).getFont());
 				}
 			}
 		});
@@ -114,15 +133,15 @@ public class Whiteboard extends Application {
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (canUse) {
-				ColorPickerWindow colorPick;
-				if (canvas.getSelected() != null)
-					colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
-				else
-					colorPick = new ColorPickerWindow(getGui(), Color.GRAY);
-				color = colorPick.display();
-				canvas.updateColor(color);
-				canvas.paintComponent();
+				if (!status.equals("client")) {
+					ColorPickerWindow colorPick;
+					if (canvas.getSelected() != null)
+						colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
+					else
+						colorPick = new ColorPickerWindow(getGui(), Color.GRAY);
+					color = colorPick.display();
+					canvas.updateColor(color);
+					canvas.paintComponent();
 				}
 
 			}
@@ -131,19 +150,19 @@ public class Whiteboard extends Application {
 
 		fontButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				displayFonts(stage);
+				if (!status.equals("client")) {
+					displayFonts(stage);
 				}
 			}
 		});
 
 		toFront.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				DShape selected = canvas.getSelected();
-				if(selected != null) {
-					canvas.moveToFront();
-				}
+				if (!status.equals("client")) {
+					DShape selected = canvas.getSelected();
+					if(selected != null) {
+						canvas.moveToFront();
+					}
 				}
 
 			}
@@ -151,11 +170,11 @@ public class Whiteboard extends Application {
 
 		toBack.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				DShape selected = canvas.getSelected();
-				if(selected != null) {
-					canvas.moveToBack();
-				}
+				if (!status.equals("client")) {
+					DShape selected = canvas.getSelected();
+					if(selected != null) {
+						canvas.moveToBack();
+					}
 				}
 
 			}
@@ -163,9 +182,9 @@ public class Whiteboard extends Application {
 
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				canvas.deleteSelected();
-				disableTextControls();
+				if (!status.equals("client")) {
+					canvas.deleteSelected();
+					disableTextControls();
 				}
 			}
 		});
@@ -175,7 +194,7 @@ public class Whiteboard extends Application {
 				new SaveFile(getGui(), "Save file", "Enter file file:", "Save", "");
 			}
 		});
-		
+
 		savePng.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				new savePngFile(getGui(), "Save file as PNG", "Enter file name:", "Save", "");
@@ -184,27 +203,33 @@ public class Whiteboard extends Application {
 
 		open.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
-				new OpenFile(getGui(), "Open file", "Enter file name:", "Open", "");
+				if (!status.equals("client")) {
+					new OpenFile(getGui(), "Open file", "Enter file name:", "Open", "");
 				}
 			}
 		});
-		
+
 		startServ.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				
+				if (!status.equals("server")) {
+					status = "server";
+					new ServerWindow(getGui(), "Launch Server", "Enter port number:", "Start", "8008");
+				}
 			}
 		});
-		
+
 		stopServ.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				
+				status = "normal";
+
 			}
 		});
 
 		startCli.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (canUse) {
+				if (!status.equals("client")) {
+					status = "client";
+					new ClientWindow(getGui(), "Start Client", "Enter IP and port number:", "Start", "127.0.0.1:8008");
 					for (Button btn : buttons)
 						btn.setDisable(true);
 				}
@@ -213,11 +238,12 @@ public class Whiteboard extends Application {
 
 		stopCli.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-					for (Button btn : buttons)
-						btn.setDisable(false);
+				status = "normal";
+				for (Button btn : buttons)
+					btn.setDisable(false);
 			}
 		});
-		
+
 		close.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (ConfirmBox.display("ConfirmBox", "Are you sure that you want to close this window?")) 
@@ -229,15 +255,15 @@ public class Whiteboard extends Application {
 
 		textInput.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
-				if (canUse) {
-				DShape selected = canvas.getSelected();
-				if(selected != null) {
-					if(selected instanceof DText) {
-						((DText)selected).setText(textInput.getText());
-						selected.draw();
+				if (!status.equals("client")) {
+					DShape selected = canvas.getSelected();
+					if(selected != null) {
+						if(selected instanceof DText) {
+							((DText)selected).setText(textInput.getText());
+							selected.draw();
+						}
 					}
 				}
-			}
 			}
 		});
 
@@ -249,7 +275,7 @@ public class Whiteboard extends Application {
 
 		stage.setOnCloseRequest(e -> {
 			e.consume();
-			if (ConfirmBox.display("ConfirmBox", "Are you sure that you want to close this window?")) 
+			if (ConfirmBox.display("ConfirmBox", "Are you sure?")) 
 				stage.close();
 			else	
 				return;
@@ -402,7 +428,7 @@ public class Whiteboard extends Application {
 		open = new MenuItem("Open");
 		savePng = new MenuItem("Save to PNG");
 		close = new MenuItem("Close");
-		
+
 		startServ = new MenuItem("Start server");
 		stopServ = new MenuItem("Stop server");
 		startCli = new MenuItem("Start client");
@@ -410,7 +436,7 @@ public class Whiteboard extends Application {
 
 		menuFile.getItems().addAll(save, open, savePng, close);
 		serverMenu.getItems().addAll(startServ, stopServ, startCli, stopCli);
-		
+
 		menuBar.getMenus().addAll(menuFile, serverMenu);
 		menu.getChildren().add(menuBar);
 		return menu;
@@ -482,7 +508,7 @@ public class Whiteboard extends Application {
 	public Canvas getCanvas() {
 		return canvas;
 	}
-	
+
 	public Whiteboard getGui() {
 		return this;
 	}
@@ -559,8 +585,139 @@ public class Whiteboard extends Application {
 
 
 	public static void main(String[] args) {
-		
 		launch(args);
 	}
 
+
+	/*
+	 * ***********************************************************************************************************	
+	 */
+	private class ClientHandler extends Thread {
+		private String name;
+		private int port;
+
+		ClientHandler(String name, int port) {
+			this.name = name;
+			this.port = port;
+		}
+
+		// Connect to the server, loop getting messages
+		public void run() {
+			try {
+				// make connection to the server name/port
+				Socket toServer = new Socket(name, port);
+				// get input stream to read from server and wrap in object input stream
+				ObjectInputStream in = new ObjectInputStream(toServer.getInputStream());
+				System.out.println("client: connected!");
+				// we could do this if we wanted to write to server in addition
+				// to reading
+				// out = new ObjectOutputStream(toServer.getOutputStream());
+				while (true) {
+					// Get the xml string, decode to a Message object.
+					// Blocks in readObject(), waiting for server to send something.
+					String xmlString = (String) in.readObject();
+					XMLDecoder decoder = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
+					String instruction = (String) decoder.readObject();
+					DShapeModel message = (DShapeModel) decoder.readObject();
+
+					invokeToGUI(instruction, message);
+				}
+			}
+			catch (Exception ex) { // IOException and ClassNotFoundException
+				ex.printStackTrace();
+			}
+		}
+
+		private void invokeToGUI(String message, DShapeModel model) {
+			if (message.equals("add")) {
+				Platform.runLater( new Runnable() {
+					public void run() {
+						System.out.println("Im trying to add on line 634");
+						canvas.addShape(model);
+					}
+				});
+
+			}
+
+		}
+	}
+
+	// Runs a client handler to connect to a server.
+	// Wired to Client button.
+	public void startClient(String ip, int port) {
+		clientHandler = new ClientHandler(ip, port);
+		clientHandler.start();
+	}
+
+	/**************************************************SERVER PART******START***********************************/
+
+	// (this and sendToOutputs() are synchronzied to avoid conflicts)
+	public synchronized void addOutput(ObjectOutputStream out) {
+		outputs.add(out);
+	}
+
+	public void doSend(String instruction, DShapeModel model) {
+		sendRemote(instruction, model);
+	}
+
+	// Sends a message to all of the outgoing streams.
+	// Writing rarely blocks, so doing this on the swing thread is ok,
+	// although could fork off a worker to do it.
+	public synchronized void sendRemote(String instruction, DShapeModel model) {
+		// Convert the message object into an xml string.
+		OutputStream memStream = new ByteArrayOutputStream();
+		XMLEncoder encoder = new XMLEncoder(memStream);
+		encoder.writeObject(instruction);
+		encoder.writeObject(model);
+		encoder.close();
+		String xmlString = memStream.toString();
+		// Now write that xml string to all the clients.
+		Iterator<ObjectOutputStream> it = outputs.iterator();
+		while (it.hasNext()) {
+			ObjectOutputStream out = it.next();
+			try {
+				out.writeObject(xmlString);
+				out.flush();
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				it.remove();
+			}
+		}
+	}
+
+
+	public void startServer(int port) {
+		serverAccepter = new ServerAccepter(port);
+		serverAccepter.start();
+	}
+
+	// Server thread accepts incoming client connections
+	class ServerAccepter extends Thread {
+		private int port;
+		ServerAccepter(int port) {
+			this.port = port;
+		}
+		public void run() {
+			try {
+				System.out.println("Server Started");
+				ServerSocket serverSocket = new ServerSocket(port);
+				while (true) {
+					Socket toClient = null;
+					// this blocks, waiting for a Socket to the client
+					toClient = serverSocket.accept();
+					System.out.println("server: got client");
+					// Get an output stream to the client, and add it to
+					// the list of outputs
+					// (our server only uses the output stream of the connection)
+					addOutput(new ObjectOutputStream(toClient.getOutputStream()));
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace(); 
+			}
+		}
+	}
+	/**************************************************SERVER PART******END***********************************/
 }
+
+
