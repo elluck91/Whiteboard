@@ -190,7 +190,9 @@ public class Canvas extends Pane
 		models.add(selection.getModel());
 		gui.updateTable();
 		moveToFront();
-		handleShapeDrag();
+		if (gui.getStatus().equals("server")) {
+		    handleShapeDrag();
+		}
 	}
 
 
@@ -260,7 +262,7 @@ public class Canvas extends Pane
 	 *
 	 */
 	public void addKnobs() {
-
+	    System.out.println("Adding knobs");
 		if (selected instanceof DLine) {
 			DLine line = (DLine) selected;
 			setupLineKnobs();
@@ -422,8 +424,10 @@ public class Canvas extends Pane
 
 
 	private void addToPane() {
-		for(int i = 0; i < knobs.size(); i++) 
-			this.getChildren().add(knobs.get(i));	
+	    if(gui.getStatus().equals("server") ){
+		    for(int i = 0; i < knobs.size(); i++) 
+			this.getChildren().add(knobs.get(i));
+	    }
 	}
 
 
@@ -529,7 +533,7 @@ public class Canvas extends Pane
 
 
 	public void removeShape(DShapeModel model) {
-		selected = getDShape(findById(model));
+	    //		selected = getDShape(findById(model));
 		deleteSelected();
 	}
 	

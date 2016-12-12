@@ -140,5 +140,18 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
 	setWidth(endX - startX);
 	setHeight(endY - startY);	
     }
+
+    public void mimic(DShapeModel other) {
+	startX = ((DLineModel) other).getStartX();
+	startY = ((DLineModel) other).getStartY();
+	endX = ((DLineModel) other).getEndX();
+	endY = ((DLineModel) other).getEndY();
+
+	setX(other.getX());
+	setY(other.getY());
+	setWidth(other.getWidth());
+	setHeight(other.getHeight());
+	setColor(other.getColor());
+    }
     
  }

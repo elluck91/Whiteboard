@@ -49,5 +49,9 @@ public class DTextModel extends DShapeModel {
 		setText(((DTextModel) other).getText());
 		setFont(((DTextModel) other).getFont());
 		setColor(((DTextModel) other).getColor());
+		setX(other.getX());
+		setY(other.getY());
+		setWidth(other.getWidth());
+		setHeight(other.getHeight());
 	}
 }

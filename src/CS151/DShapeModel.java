@@ -165,7 +165,12 @@ public class DShapeModel {
 	}
 	
 	public void mimic(DShapeModel other) {
-		System.out.println("Inside mimic");
+		System.out.println("Inside mimic dshapeModel");
+		this.setX(other.getX());
+		this.setY(other.getY());
+		this.setWidth(other.getWidth());
+		this.setHeight(other.getHeight());
+		this.setColor(other.getColor());				
 	}
 
 
