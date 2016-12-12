@@ -1,15 +1,16 @@
 package CS151;
 
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import java.awt.geom.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +21,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,7 +28,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.awt.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,24 +35,15 @@ import javafx.stage.Stage;
 public class Whiteboard extends Application {
 
 	private Canvas canvas;
-	private Button rect;
-	private Button oval;
-	private Button line;
-	private Button text;
-	private Button colorPicker;
-	private Button toFront;
-	private Button toBack;
-	private Button remove;
+	private ArrayList<Button> buttons;
+	private Button rect, oval, line, text, colorPicker, toFront, toBack, remove, fontButton;
 	private TextField textInput;
-	private Button fontButton;
 	private ComboBox<String> fonts;
 	private TableView<DShapeModel> tv;
-	private MenuItem save;
-	private MenuItem open;
-	private MenuItem savePng;
-	private MenuItem close;
+	private MenuItem save, open, savePng, close, startServ, stopServ, startCli, stopCli;
 	private Color color;
 	private Stage primaryStage;
+	private boolean canUse;
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
@@ -61,12 +51,16 @@ public class Whiteboard extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		primaryStage = stage;
 		VBox main = new VBox();
+		canvas = new Canvas(main, this);
+		buttons = new ArrayList<Button>();
+		canUse = true;
+		primaryStage = stage;
+		
 		main.setPrefSize(950, 400);
 		VBox menu = getMenu();
 		GridPane gp = new GridPane();
-		canvas = new Canvas(main, this);
+		
 		VBox leftColumn = getLeftColumn(main);
 		setFontBox();
 
@@ -74,43 +68,53 @@ public class Whiteboard extends Application {
 		// use this information to select the correct shape in the
 		// view 
 		canvas.setOnMouseClicked(e -> {
-			handleClick(new Point2D.Double(e.getX(), e.getY()));
+			if (canUse)
+				handleClick(new Point2D.Double(e.getX(), e.getY()));
 		});
 
 		rect.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				canvas.addShape(new DRectModel());
-				tv.setItems(canvas.getShapeModels());
+				if (canUse) {
+					canvas.addShape(new DRectModel());
+					tv.setItems(canvas.getShapeModels());
+				}
 			}
 		});
 
 		oval.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DOvalModel());
 				disableTextControls();
+				}
 			}
 		});
 
 		line.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DLineModel());
 				disableTextControls();
+				}
 			}
 		});
 
 		text.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.addShape(new DTextModel());
 				enableTextControls();
 				DShape text = canvas.getSelected();
 				setTextInput( ((DText) text).getText());
 				setFontText( ((DText) text).getFont());
+				}
 			}
 		});
 
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				if (canUse) {
 				ColorPickerWindow colorPick;
 				if (canvas.getSelected() != null)
 					colorPick = new ColorPickerWindow(getGui(), canvas.getSelected().getModel().getColor());
@@ -119,22 +123,27 @@ public class Whiteboard extends Application {
 				color = colorPick.display();
 				canvas.updateColor(color);
 				canvas.paintComponent();
+				}
 
 			}
 		});
 
 
 		fontButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {		    
-				displayFonts(stage);		    
+			public void handle(ActionEvent event) {
+				if (canUse) {
+				displayFonts(stage);
+				}
 			}
 		});
 
 		toFront.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					canvas.moveToFront();
+				}
 				}
 
 			}
@@ -142,9 +151,11 @@ public class Whiteboard extends Application {
 
 		toBack.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					canvas.moveToBack();
+				}
 				}
 
 			}
@@ -152,29 +163,61 @@ public class Whiteboard extends Application {
 
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if (canUse) {
 				canvas.deleteSelected();
 				disableTextControls();
+				}
 			}
 		});
 
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				new SaveFile(getGui());
+				new SaveFile(getGui(), "Save file", "Enter file file:", "Save", "");
 			}
 		});
 		
 		savePng.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				new savePngFile(getGui());
+				new savePngFile(getGui(), "Save file as PNG", "Enter file name:", "Save", "");
 			}
 		});
 
 		open.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				new OpenFile(getGui());
+				if (canUse) {
+				new OpenFile(getGui(), "Open file", "Enter file name:", "Open", "");
+				}
+			}
+		});
+		
+		startServ.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		
+		stopServ.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
 			}
 		});
 
+		startCli.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				if (canUse) {
+					for (Button btn : buttons)
+						btn.setDisable(true);
+				}
+			}
+		});
+
+		stopCli.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+					for (Button btn : buttons)
+						btn.setDisable(false);
+			}
+		});
+		
 		close.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if (ConfirmBox.display("ConfirmBox", "Are you sure that you want to close this window?")) 
@@ -186,6 +229,7 @@ public class Whiteboard extends Application {
 
 		textInput.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
+				if (canUse) {
 				DShape selected = canvas.getSelected();
 				if(selected != null) {
 					if(selected instanceof DText) {
@@ -193,6 +237,7 @@ public class Whiteboard extends Application {
 						selected.draw();
 					}
 				}
+			}
 			}
 		});
 
@@ -273,6 +318,15 @@ public class Whiteboard extends Application {
 		topLeft.setPadding(new Insets(20, 10, 10, 20));
 
 		topLeft.getChildren().addAll(line1, line2, line3, line4);
+		buttons.add(rect);
+		buttons.add(oval);
+		buttons.add(line);
+		buttons.add(text);
+		buttons.add(colorPicker);
+		buttons.add(fontButton);
+		buttons.add(toFront);
+		buttons.add(toBack);
+		buttons.add(remove);
 		return topLeft;	
 	}
 
@@ -342,14 +396,22 @@ public class Whiteboard extends Application {
 		VBox menu = new VBox();
 		MenuBar menuBar = new MenuBar();
 		Menu menuFile = new Menu("File");
+		Menu serverMenu = new Menu("Server");
 
 		save = new MenuItem("Save");
 		open = new MenuItem("Open");
 		savePng = new MenuItem("Save to PNG");
 		close = new MenuItem("Close");
+		
+		startServ = new MenuItem("Start server");
+		stopServ = new MenuItem("Stop server");
+		startCli = new MenuItem("Start client");
+		stopCli = new MenuItem("Stop client");
 
 		menuFile.getItems().addAll(save, open, savePng, close);
-		menuBar.getMenus().add(menuFile);
+		serverMenu.getItems().addAll(startServ, stopServ, startCli, stopCli);
+		
+		menuBar.getMenus().addAll(menuFile, serverMenu);
 		menu.getChildren().add(menuBar);
 		return menu;
 	}
@@ -497,6 +559,7 @@ public class Whiteboard extends Application {
 
 
 	public static void main(String[] args) {
+		
 		launch(args);
 	}
 

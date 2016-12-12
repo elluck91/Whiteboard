@@ -3,6 +3,7 @@ package CS151;
 
 import javafx.scene.shape.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.Color;
 
 
 public class DLineModel extends DShapeModel implements java.io.Serializable {
@@ -25,9 +26,9 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
     }
 
     public Point2D getEnd() {
-	return new Point2D.Double(endX, endY);
-	
+	return new Point2D.Double(endX, endY);	
     }
+    
     public double getStartX() {
 	return startX;	
     }
@@ -36,12 +37,23 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
 	return startY;	
     }
 
+
     public double getEndX() {
 	return endX;
     }
     
     public double getEndY() {
 	return endY;
+    }
+	
+    public Color getColor() {
+	return color;
+    }
+
+    
+    public void setColor(Color color) {
+	this.color = color;	
+	notifyListeners();
     }
 
     
@@ -97,7 +109,7 @@ public class DLineModel extends DShapeModel implements java.io.Serializable {
 	
     }
 
-    
+
     private void updateBoundsCase1() {
 	setX(endX);
 	setY(endY);

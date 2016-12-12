@@ -153,16 +153,7 @@ public class DShapeModel {
 		this.height.setValue(hei);
 		this.x.setValue(getX());
 		this.y.setValue(getY());
-	}
-
-
-	public Paint translateColor(Color awtColor) {
-		javafx.scene.paint.Color fxColor 
-		= javafx.scene.paint.Color.rgb(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue(), awtColor.getAlpha()/255.0);
-		return fxColor;
-	}
-	
-	
+	}	
 
 
 }

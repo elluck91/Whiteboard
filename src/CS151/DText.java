@@ -15,7 +15,7 @@ public class DText extends DShape implements ModelListener {
 	public DText() {
 		model = new DTextModel();
 		text = new Text();
-		text.setFill(ColorPickerWindow.translateColor(Color.GRAY));
+		text.setFill(Adapters.awtToFx(Color.GRAY));
 	}
 
 	public void draw() {
@@ -24,7 +24,8 @@ public class DText extends DShape implements ModelListener {
 		text.setClip(clip);
 		text.setText( ((DTextModel) model).getText());
 		Font f = new Font( ((DTextModel) model).getFont(), (model.getHeight()+model.getHeight()*.5)/2);
-		text.setFont(f);		
+		text.setFont(f);
+		text.setFill(Adapters.awtToFx(model.getColor()));
 		text.setX(model.getX());
 		text.setY(model.getY()+model.getHeight()*.77);
 	}
@@ -47,10 +48,6 @@ public class DText extends DShape implements ModelListener {
 
 	public Text getShape() {
 		return text;
-	}
-	
-	public void setColor(Color color) {
-		text.setFill(ColorPickerWindow.translateColor(color));
 	}
 	
 	

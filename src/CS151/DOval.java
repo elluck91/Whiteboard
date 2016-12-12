@@ -15,7 +15,7 @@ public class DOval extends DShape implements ModelListener {
 
     // Draw the oval
     public void draw() {
-        oval.setFill(model.translateColor(model.getColor()));
+        oval.setFill(Adapters.awtToFx(model.getColor()));
         // Casts are necessary because model does not know it's 
         // a DOvalModel. It only knows it is a DShapeModel
 	double x = ( (DOvalModel) model).getXCenter();

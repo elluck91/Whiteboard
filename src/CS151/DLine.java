@@ -1,27 +1,28 @@
 package CS151;
 
-import java.awt.geom.Point2D;
 import java.awt.Color;
 import javafx.scene.shape.Line;
+import java.awt.geom.Point2D;
 
 public class DLine extends DShape implements ModelListener
 {
 
-
     private Line line;
 
+    
     public DLine() {
 	model = new DLineModel();       
 	line = new Line(((DLineModel) model).getStartX(), ((DLineModel) model).getStartY(),
 			((DLineModel) model).getEndX(), ((DLineModel) model).getEndY());
-	line.setStroke(model.translateColor(Color.GRAY));
+	line.setStroke(Adapters.awtToFx(Color.GRAY));;
 	line.setStrokeWidth(5);
     }
+
     
     @Override
     public void draw()
     {
-	line.setStroke(model.translateColor(model.getColor()));
+	line.setStroke(Adapters.awtToFx(model.getColor()));
 	double startX = ((DLineModel) model).getStartX();
 	double startY = ((DLineModel) model).getStartY();
 	double endX = ((DLineModel) model).getEndX();

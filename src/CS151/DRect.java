@@ -21,7 +21,7 @@ public class DRect extends DShape implements ModelListener {
      */
     public void draw() {
     	//System.out.println("I am drawing myself on line 25 in DRect");
-        rect.setFill(model.translateColor(model.getColor()));
+        rect.setFill(Adapters.awtToFx(model.getColor()));
         rect.setX((double) model.getX());
         rect.setY((double) model.getY());
         rect.setWidth((double) model.getWidth());
