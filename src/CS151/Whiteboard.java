@@ -689,7 +689,9 @@ public class Whiteboard extends Application {
 		    else if (message.equals("change")) {
 			Platform.runLater( new Runnable() {
 				public void run() {
-				    current.mimic(model.getModel());
+					canvas.removeShape(model);
+					current.mimic(model.getModel());
+					canvas.addShape(current);
 				}
 			    });
 		    }
